@@ -1,0 +1,170 @@
+body {
+    font-size: 14px;
+}
+/* Breadcrumb Styles */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.nav-item {
+    color: #007bff;
+    margin-right: 20px;
+    position: relative;
+}
+
+.breadcrumb .nav-item + .nav-item::before {
+    content: "/";
+    color: #6c757d;
+    margin: 0 8px;
+    position: absolute;
+    left: -20px;
+}
+
+.nav-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.nav-item a:hover {
+    text-decoration: underline;
+}
+
+.nav-item.active {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+
+/* Sidebar Styles */
+.admin-sidebar {
+    width: 250px;
+    background-color: #343a40 !important; /* Màu nền sidebar */
+    padding: 20px;
+    height: 100vh; /* Đảm bảo chiều cao luôn bằng với trang */
+    transition: width 0.3s ease; /* Thêm hiệu ứng chuyển tiếp khi sidebar thay đổi */
+    border-top: 1px solid #596b7e !important;
+}
+.navbar-dark.bg-dark {
+    background-color: #343a40 !important; /* Màu nền sidebar */
+}
+
+.admin-sidebar .nav-link {
+    color: white;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center; /* Để icon và text ngang hàng */
+    transition: background-color 0.3s ease;
+    margin: 0 0 10px 0;
+}
+
+.admin-sidebar .nav-link .me-2 {
+    margin-right: 10px; /* Khoảng cách giữa icon và text */
+}
+
+.admin-sidebar .nav-link:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+
+.admin-sidebar .nav-link.active {
+    background-color: #007bff; /* Màu nền khi active */
+    color: white; /* Màu chữ khi active */
+    border-radius: 5px;
+}
+
+.admin-sidebar .nav-link.active:hover {
+    background-color: #0056b3; /* Màu nền khi hover và active */
+}
+
+/* Content Styles */
+.admin-content {
+    background-color: #f8f9fa; /* Màu nền phần nội dung */
+    flex-grow: 1;
+}
+
+.admin-content.with-sidebar {
+    transition: margin-left 0.3s ease; /* Hiệu ứng khi nội dung di chuyển */
+}
+
+.admin-content.no-sidebar {
+    margin-left: 0; /* Nếu sidebar đang ẩn */
+}
+
+/* Footer Styles */
+.admin-footer {
+    background-color: #343a40;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+}
+
+.admin-footer .footer-links a {
+    color: #f8f9fa;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+/* Sidebar Toggle Icon */
+.toggle-sidebar-icon {
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* Avatar Styles */
+.avatar-img {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Ensure Full Height Layout */
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+.sidebar-toggle {
+    width: 255px;
+    justify-content: end;
+}
+.dropdown.nav-item {
+    margin-right: 0;
+}
+
+.customer-table {
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.customer-table th, .customer-table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.customer-table thead {
+    background-color: #f8f9fa;
+}
+
+.customer-table th {
+    font-weight: bold;
+    color: #495057;
+}
+
+.customer-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.customer-table .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 8px;
+}
+

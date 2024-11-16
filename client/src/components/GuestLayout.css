@@ -1,0 +1,14 @@
+.navbar-expand .navbar-nav .dropdown-menu {
+    background: #eb9e31;
+    border: none;
+}
+.dropdown-item {
+    color: white;
+}
+.dropdown-item .nav-item {
+    margin-right: 0;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: #eb9e31;
+}
