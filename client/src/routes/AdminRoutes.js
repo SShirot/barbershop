@@ -65,6 +65,7 @@ const AdminRoutes = () => {
                         <Route path="ecommerce/categories" element={<CategoryManager />} />
                         <Route path="ecommerce/product-labels" element={<ProductLabelManager />} />
                         <Route path="ecommerce/product" element={<ProductManager />} />
+                        <Route path="ecommerce/order" element={<OrderManager />} />
                         <Route path="services/manage" element={<ServiceManager />} />
                         <Route path="services/order" element={<ServiceManager />} />
 

@@ -1,82 +1,96 @@
-const Order = require('../../models/Order');
-const Transaction = require('../../models/Transaction');
-const formatResponse = require("../../utils/response");
+const Model = require('../../models/Order');
+const { successResponse, errorResponse } = require("../../utils/response");
+// const Model = require("../../models/Product");
 
-exports.getAllOrder = async (req, res) => {
+// Lấy tất cả đơn hàng
+exports.getAll = async (req, res) => {
     try {
-        const params = req.query;
-        const query = {};
-        const page = Number(req.query.page) || 1;
-        const pageSize = Number(req.query.page_size) || 10;
+        const { page, page_size: pageSize, name } = req.query;
+        const result = await Model.getAll(Number(page), Number(pageSize), name);
 
-        if (params.customerName) {
-            query['guestInfo.name'] = { $regex: params.customerName, $options: 'i' }; // Tìm kiếm không phân biệt hoa thường
-        }
-        if (params.status) {
-            query.status = params.status;
-        }
+        return successResponse(res, { meta: result.meta, data: result.data }, 'Get list of data successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+};
 
-        const total = await Order.countDocuments(query);
-        const orders = await Order.find(query)
-            .skip((page - 1) * pageSize)
-            .limit(pageSize)
-            .populate({
-                path: 'user',
-                select: 'name'
-            }) // Populate user information if any
+// Lấy đơn hàng theo ID
+exports.getById = async (req, res) => {
+    try {
+        const order = await Model.findById(req.params.id)
+            .populate('user', 'name')
             .populate({
                 path: 'transactions',
                 populate: { path: 'product', select: 'name price' }
             });
 
-        const meta = {
-            total,
-            total_page: Math.ceil(total / pageSize),
-            page,
-            page_size: pageSize
-        };
-        res.json(formatResponse('success', { orders, meta }, 'Get list of orders successfully'));
+        if (!order) {
+            return errorResponse(res, 'Order not found', 404);
+        }
+
+        return successResponse(res, { data: order }, 'Order found successfully');
     } catch (err) {
-        res.status(500).json(formatResponse('error', [], 'Server error'));
+        console.error(err);
+        return errorResponse(res, 'Server error');
     }
 };
 
-
-// Xóa bài viết
-exports.deleteOrder = async (req, res) => {
+// Tạo mới đơn hàng
+exports.create = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
-        if (!order) return res.status(404).json({ message: 'Post not found' });
+        const orderData = req.body;
+        const newOrder = await Model.create(orderData);
 
-        // Xóa tất cả các giao dịch liên quan đến đơn hàng
-        await Transaction.deleteMany({ order: req.params.id });
-        await Order.findByIdAndDelete(req.params.id);
-        res.json(formatResponse('success', [], 'Post deleted successfully'));
+        return successResponse(res, { data: newOrder }, 'Order created successfully', 201);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error(err);
+        return errorResponse(res, 'Server error');
     }
 };
 
-exports.updateOrderStatus = async (req, res) => {
+// Cập nhật trạng thái đơn hàng
+exports.updateStatus = async (req, res) => {
     try {
         const { status } = req.body;
 
-        // Kiểm tra nếu trạng thái là hợp lệ
-        const validStatuses = ['pending', 'completed', 'canceled'];
+        // Kiểm tra trạng thái hợp lệ
+        const validStatuses = ['pending', 'completed', 'processing', 'canceled'];
         if (!validStatuses.includes(status)) {
-            return res.status(400).json({ message: 'Invalid status' });
+            return errorResponse(res, 'Invalid status', 400);
         }
 
-        const order = await Order.findById(req.params.id);
-        if (!order) return res.status(404).json({ message: 'Order not found' });
+        const order = await Model.findById(req.params.id);
+        if (!order) {
+            return errorResponse(res, 'Order not found', 404);
+        }
 
-        // Cập nhật trạng thái đơn hàng
+        // Cập nhật trạng thái
         order.status = status;
         await order.save();
 
-        res.json(formatResponse('success', order, 'Order status updated successfully'));
+        return successResponse(res, { data: order }, 'Order status updated successfully');
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error(err);
+        return errorResponse(res, 'Server error');
     }
 };
 
+// Xóa đơn hàng
+exports.delete = async (req, res) => {
+    try {
+        const order = await Model.findById(req.params.id);
+        if (!order) {
+            return errorResponse(res, 'Order not found', 404);
+        }
+
+        // Xóa các giao dịch liên quan
+        // await Transaction.deleteMany({ order: req.params.id });
+        // await Model.findByIdAndDelete(req.params.id);
+
+        return successResponse(res, {}, 'Order deleted successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, 'Server error');
+    }
+};

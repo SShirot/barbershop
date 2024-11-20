@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, ButtonGroup, Dropdown, Table, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, ButtonGroup, Dropdown, Table, Pagination } from 'react-bootstrap';
 import { useSearchParams } from "react-router-dom";
 import OrderBreadcrumbs from '../components/order/OrderBreadcrumbs';
 import apiOrderService from "../../../api/apiOrderService";
-import { FaListUl } from "react-icons/fa";
+import {FaEdit, FaListUl, FaPlusCircle, FaTrash} from "react-icons/fa";
 import OrderDetailsModal from '../components/order/OrderDetailsModal';
 import DeleteConfirmationModal from '../components/order/DeleteConfirmationModal';
 import UpdateOrderStatus from '../components/order/UpdateOrderStatus';
+import NewOrderModal from '../components/order/NewOrderModal';
 
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -19,13 +20,14 @@ const OrderManager = () => {
     const [orderToDelete, setOrderToDelete] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);
+    const [showNewOrderModal, setShowNewOrderModal] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const user = JSON.parse(localStorage.getItem('user'));
 
     const fetchOrdersWithParams = async (params) => {
         try {
             const response = await apiOrderService.getListsAdmin(params);
-            setOrders(response.data.orders);
+            setOrders(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
             console.error("Error fetching orders:", error);
@@ -34,7 +36,7 @@ const OrderManager = () => {
 
     useEffect(() => {
         const params = Object.fromEntries([...searchParams]);
-        fetchOrdersWithParams({ ...params, page: params.page || 1 });
+        fetchOrdersWithParams({ ...params, page: params.page || 1, page_size : params.page_size || 10 });
     }, [searchParams]);
 
     const handleOrderClick = (order) => {
@@ -79,58 +81,44 @@ const OrderManager = () => {
             <Row className="gutters">
                 <Col>
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h2>Manage Orders</h2>
+                        <h2>Quản lý đơn hàng</h2>
+                        <Button size={'sm'} variant="primary" onClick={() => setShowNewOrderModal(true)}>
+                            Thêm mới <FaPlusCircle className={'mx-1'} />
+                        </Button>
                     </div>
                     <Table striped bordered hover>
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Customer Name</th>
-                            <th>Customer Phone</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Mã ĐH</th>
+                            <th>Khách hàng</th>
+                            <th>SĐT</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
                         </tr>
                         </thead>
                         <tbody>
                         {orders.map((order, idx) => (
                             <tr key={order._id} style={{ cursor: 'pointer' }}>
                                 <td onClick={() => handleOrderClick(order)}>{idx + 1}</td>
-                                <td onClick={() => handleOrderClick(order)}>{order.guestInfo?.name}</td>
-                                <td onClick={() => handleOrderClick(order)}>{order.guestInfo?.phone}</td>
-                                <td onClick={() => handleOrderClick(order)}>{formatCurrency(order.totalAmount)}</td>
-                                <td>
-                                    {user.role === 'admin' ? (
-                                        <>
-                                            {order.status !== 'completed' && (
-                                                <UpdateOrderStatus orderId={order._id} currentStatus={order.status} />
-                                            )}
-                                            {order.status === 'completed' && (
-                                                <span className={'btn btn-sm btn-success'}>completed</span>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <span className={`btn btn-sm btn-${getVariant(order.status)}`}>{order.status}</span>
-                                    )}
-
+                                <td onClick={() => handleOrderClick(order)}>{order.code}</td>
+                                <td onClick={() => handleOrderClick(order)}>{order.user?.name}</td>
+                                <td onClick={() => handleOrderClick(order)}>{order.user?.phone}</td>
+                                <td onClick={() => handleOrderClick(order)}>{formatCurrency(order.sub_total)}</td>
+                                <td onClick={() => handleOrderClick(order)}>
+                                    <span className={`btn btn-sm btn-${getVariant(order.status)}`}>{order.status}</span>
                                 </td>
                                 <td>
-                                    {user.role === 'admin' && (
-                                        <>
-                                            <Dropdown as={ButtonGroup}>
-                                                <Dropdown.Toggle variant="link" id="dropdown-basic">
-                                                    <FaListUl />
-                                                </Dropdown.Toggle>
+                                    <Button size="sm" variant="primary" onClick={() => {}}
+                                            title="Cập nhật">
+                                        <FaEdit/>
+                                    </Button>
+                                    <Button size="sm" className={'ms-2'} variant="danger" onClick={() => {
 
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item disabled={order.status === 'completed'} onClick={() => {
-                                                        setOrderToDelete(order);
-                                                        setShowDeleteModal(true);
-                                                    }}>Delete</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </>
-                                    )}
+                                    }} title="Xoá">
+                                        <FaTrash/>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
@@ -145,7 +133,7 @@ const OrderManager = () => {
                             onClick={() => handlePageChange(meta.page - 1)}
                             disabled={meta.page === 1}
                         />
-                        {Array.from({ length: meta.total_page }, (_, index) => (
+                        {Array.from({length: meta.total_page}, (_, index) => (
                             <Pagination.Item
                                 key={index + 1}
                                 active={index + 1 === meta.page}
@@ -176,6 +164,11 @@ const OrderManager = () => {
                 show={showDeleteModal}
                 onHide={() => setShowDeleteModal(false)}
                 onConfirm={handleDeleteOrder}
+            />
+
+            <NewOrderModal
+                show={showNewOrderModal}
+                onHide={() => setShowNewOrderModal(false)}
             />
         </Container>
     );
