@@ -34,7 +34,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, email, password, avatar } = req.body;
+    const { name, email, password, avatar, phone } = req.body;
 
     try {
         // Check if user exists
@@ -44,7 +44,7 @@ exports.updateUser = async (req, res) => {
         }
 
         // Hash new password if provided
-        let updatedData = { name, email, avatar };
+        let updatedData = { name, email, avatar, phone };
         if (password) {
             const salt = await bcrypt.genSalt(10);
             updatedData.password = await bcrypt.hash(password, salt);

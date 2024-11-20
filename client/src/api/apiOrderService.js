@@ -18,6 +18,9 @@ const apiOrderService = {
     deleteOrder: (id) => {
         return apiHelper.delete(`user/order/${id}`);
     },
+    delete: (id) => {
+        return apiHelper.delete(`admin/order/${id}`);
+    },
     updateOrderStatus: (id, data) => {
         return apiHelper.post(`admin/order/update-status/${id}`,data);
     }

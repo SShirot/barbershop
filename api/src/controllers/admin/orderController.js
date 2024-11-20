@@ -76,21 +76,48 @@ exports.updateStatus = async (req, res) => {
     }
 };
 
-// Xóa đơn hàng
 exports.delete = async (req, res) => {
     try {
-        const order = await Model.findById(req.params.id);
-        if (!order) {
-            return errorResponse(res, 'Order not found', 404);
+        const id = req.params.id;
+
+        const isDeleted = await Model.deleteById(id);
+
+        if (!isDeleted) {
+            return errorResponse(res, 'Data not found', 404, 404);
         }
 
-        // Xóa các giao dịch liên quan
-        // await Transaction.deleteMany({ order: req.params.id });
-        // await Model.findByIdAndDelete(req.params.id);
-
-        return successResponse(res, {}, 'Order deleted successfully');
+        return successResponse(res, {}, 'Data deleted successfully');
     } catch (err) {
         console.error(err);
-        return errorResponse(res, 'Server error');
+        return errorResponse(res);
     }
 };
+//
+//
+// // Xóa đơn hàng
+// exports.delete = async (req, res) => {
+//     try {
+//         // Tìm đơn hàng theo ID
+//         const order = await Model.findById(req.params.id);
+//         if (!order) {
+//             return errorResponse(res, 'Order not found', 404);
+//         }
+//
+//         // Xóa các bản ghi trong `ec_transactions` dựa vào `order_id`
+//         const deleteTransactionsQuery = `DELETE FROM ec_transactions WHERE order_id = ?`;
+//         await db.query(deleteTransactionsQuery, [req.params.id]);
+//
+//         // Xóa đơn hàng trong `ec_orders`
+//         const deleteOrderQuery = `DELETE FROM ${Model.tableName} WHERE id = ?`;
+//         const [result] = await db.query(deleteOrderQuery, [req.params.id]);
+//
+//         if (result.affectedRows > 0) {
+//             return successResponse(res, {}, 'Order deleted successfully');
+//         } else {
+//             return errorResponse(res, 'Failed to delete order', 500);
+//         }
+//     } catch (err) {
+//         console.error('Error deleting order and transactions:', err);
+//         return errorResponse(res, 'Server error');
+//     }
+// };

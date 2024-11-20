@@ -8,6 +8,7 @@ import OrderDetailsModal from '../components/order/OrderDetailsModal';
 import DeleteConfirmationModal from '../components/order/DeleteConfirmationModal';
 import UpdateOrderStatus from '../components/order/UpdateOrderStatus';
 import NewOrderModal from '../components/order/NewOrderModal';
+import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
 
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -44,10 +45,11 @@ const OrderManager = () => {
         setShowOrderModal(true);
     };
 
-    const handleDeleteOrder = async () => {
+    const handleDeleteData = async () => {
         try {
-            await apiOrderService.deleteOrder(orderToDelete._id);
-            setOrders((prevOrders) => prevOrders?.filter((order) => order._id !== orderToDelete._id));
+            await apiOrderService.delete(orderToDelete.id);
+            const params = Object.fromEntries([...searchParams]);
+            await fetchOrdersWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
             setShowDeleteModal(false);
         } catch (error) {
             console.error("Error deleting order:", error);
@@ -100,14 +102,14 @@ const OrderManager = () => {
                         </thead>
                         <tbody>
                         {orders.map((order, idx) => (
-                            <tr key={order._id} style={{ cursor: 'pointer' }}>
+                            <tr key={order.id} style={{ cursor: 'pointer' }}>
                                 <td onClick={() => handleOrderClick(order)}>{idx + 1}</td>
                                 <td onClick={() => handleOrderClick(order)}>{order.code}</td>
                                 <td onClick={() => handleOrderClick(order)}>{order.user?.name}</td>
                                 <td onClick={() => handleOrderClick(order)}>{order.user?.phone}</td>
                                 <td onClick={() => handleOrderClick(order)}>{formatCurrency(order.sub_total)}</td>
                                 <td onClick={() => handleOrderClick(order)}>
-                                    <span className={`btn btn-sm btn-${getVariant(order.status)}`}>{order.status}</span>
+                                    <span className={`text-${getVariant(order.status)}`}>{order.status}</span>
                                 </td>
                                 <td>
                                     <Button size="sm" variant="primary" onClick={() => {}}
@@ -115,7 +117,8 @@ const OrderManager = () => {
                                         <FaEdit/>
                                     </Button>
                                     <Button size="sm" className={'ms-2'} variant="danger" onClick={() => {
-
+                                        setOrderToDelete(order);
+                                        setShowDeleteModal(true);
                                     }} title="Xoá">
                                         <FaTrash/>
                                     </Button>
@@ -160,15 +163,14 @@ const OrderManager = () => {
                 order={selectedOrder}
             />
 
-            <DeleteConfirmationModal
-                show={showDeleteModal}
-                onHide={() => setShowDeleteModal(false)}
-                onConfirm={handleDeleteOrder}
-            />
-
             <NewOrderModal
                 show={showNewOrderModal}
                 onHide={() => setShowNewOrderModal(false)}
+            />
+            <ModelConfirmDeleteData
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+                handleDeleteData={handleDeleteData}
             />
         </Container>
     );
