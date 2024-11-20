@@ -10,7 +10,7 @@
 }
 
 .card-title  a {
-    font-size: 13px;
+    font-size: 14px;
     color: #272727;
     line-height: 20px;
     overflow: hidden;
@@ -40,13 +40,13 @@
     background-size: 50% 100%;
 }
 .carousel-title {
-    color: #222;
-    font-size: 20px;
+    color: #e89305;
+    font-size: 32px;
     text-transform: uppercase;
-    /*padding-bottom: 33px;*/
+    padding-bottom: 33px;
     margin-bottom: 20px;
-    /*line-height: 1.5;*/
-    /*background: url(./../../../assets/images/tieude_giua.png) no-repeat bottom center;*/
+    line-height: 1.5;
+    background: url(./../../../assets/images/tieude_giua.png) no-repeat bottom center;
     text-align: center !important;
 }
 .card-prod {

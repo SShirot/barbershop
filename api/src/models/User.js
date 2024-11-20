@@ -9,7 +9,6 @@ const User = {
         email: 'varchar(255)',
         email_verified_at: 'timestamp NULL',
         password: 'varchar(255)',
-        user_type: "enum('USER', 'ADMIN') DEFAULT 'USER'",
         phone: 'varchar(255)',
         provider: 'varchar(255) NULL',
         provider_id: 'varchar(255) NULL',
@@ -62,9 +61,9 @@ const User = {
 
     // Tạo phương thức create để tạo người dùng mới
     create: async (userData) => {
-        const query = `INSERT INTO ${User.tableName} (name, email, password, avatar, phone, user_type) VALUES (?, ?, ?, ?, ?, ?)`;
-        const { name, email, password, avatar, phone, user_type } = userData;
-        const [result] = await db.query(query, [name, email, password, avatar, phone, user_type]);
+        const query = `INSERT INTO ${User.tableName} (name, email, password, avatar, phone) VALUES (?, ?, ?, ?, ?)`;
+        const { name, email, password, avatar, phone } = userData;
+        const [result] = await db.query(query, [name, email, password, avatar, phone]);
         return result.insertId;
     },
     update: async (id, updatedData) => {

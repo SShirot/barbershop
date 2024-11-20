@@ -15,7 +15,6 @@ const Product = {
         price: 'int(11) DEFAULT 0',
         sale: 'int(11) DEFAULT 0',
         contents: 'text',
-        images: 'json',
         length: 'double(8,2)',
         width: 'double(8,2)',
         height: 'double(8,2)',
@@ -25,80 +24,24 @@ const Product = {
         updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     },
 
-    getAll: async (page = 1, pageSize = 10, name = null,
-                   category_id = null, sort = 'newest', rating = null, label_id = null) => {
+    // Phương thức lấy tất cả sản phẩm với phân trang và tìm kiếm
+    getAll: async (page = 1, pageSize = 10, name = null) => {
         const offset = (page - 1) * pageSize;
-        let query = `SELECT p.* FROM ${Product.tableName} p`;
-        let countQuery = `SELECT COUNT(*) as total FROM ${Product.tableName} p`;
+        let query = `SELECT * FROM ${Product.tableName}`;
+        let countQuery = `SELECT COUNT(*) as total FROM ${Product.tableName}`;
         const queryParams = [];
 
-        // Điều kiện để join bảng nhãn khi lọc theo label_id
-        if (label_id && label_id !== 'null' && label_id !== null) {
-            console.info("===========[1] ===========[label_id] : ",label_id);
-            query += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
-            countQuery += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
-        }
-
-        // Điều kiện tìm kiếm theo tên
         if (name) {
-            query += ' WHERE p.name LIKE ?';
-            countQuery += ' WHERE p.name LIKE ?';
+            query += ' WHERE name LIKE ?';
+            countQuery += ' WHERE name LIKE ?';
             queryParams.push(`%${name}%`);
         }
 
-        // Điều kiện lọc theo category_id
-        if (category_id) {
-            query += name ? ' AND' : ' WHERE';
-            query += ` p.category_id = ?`;
-            countQuery += name ? ' AND' : ' WHERE';
-            countQuery += ` p.category_id = ?`;
-            queryParams.push(category_id);
-        }
-
-        // Điều kiện lọc theo rating
-        // if (rating) {
-        //     query += (name || category_id) ? ' AND' : ' WHERE';
-        //     query += ` p.rating = ?`;
-        //     countQuery += (name || category_id) ? ' AND' : ' WHERE';
-        //     countQuery += ` p.rating = ?`;
-        //     queryParams.push(rating);
-        // }
-
-        // Điều kiện lọc theo label_id
-        if (label_id && label_id !== 'null' && label_id !== null) {
-            console.info("===========[2] ===========[label_id] : ",label_id);
-            query += (name || category_id || rating) ? ' AND' : ' WHERE';
-            query += ` pl.product_label_id = ?`;
-            countQuery += (name || category_id || rating) ? ' AND' : ' WHERE';
-            countQuery += ` pl.product_label_id = ?`;
-            queryParams.push(label_id);
-        }
-
-        // Điều kiện sắp xếp
-        switch (sort) {
-            case 'newest':
-                query += ' ORDER BY p.created_at DESC';
-                break;
-            case 'oldest':
-                query += ' ORDER BY p.created_at ASC';
-                break;
-            case 'price-asc':
-                query += ' ORDER BY p.price ASC';
-                break;
-            case 'price-desc':
-                query += ' ORDER BY p.price DESC';
-                break;
-            default:
-                query += ' ORDER BY p.created_at DESC';
-                break;
-        }
-
-        // Giới hạn và offset cho phân trang
-        query += ' LIMIT ? OFFSET ?';
+        query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
-        console.info("===========[] ===========[query] : ",query);
+
         const [products] = await db.query(query, queryParams);
-        const [countResult] = await db.query(countQuery, queryParams.slice(0, -2));
+        const [countResult] = await db.query(countQuery, name ? [`%${name}%`] : []);
         const total = countResult[0].total;
 
         // Lấy thông tin category và tags cho từng sản phẩm
@@ -108,14 +51,14 @@ const Product = {
             const [categoryResult] = await db.query(categoryQuery, [product.category_id]);
             product.category = categoryResult[0] || null;
 
-            // Lấy các labels của sản phẩm
             const labelsQuery = `
-        SELECT l.id, l.name, l.slug, l.description, l.status, l.created_at, l.updated_at
-        FROM ec_product_labels l
-        INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
-        WHERE pl.product_id = ?`;
+            SELECT l.id, l.name, l.slug, l.description, l.status, l.created_at, l.updated_at
+            FROM ec_product_labels l
+            INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
+            WHERE pl.product_id = ?`;
             const [labels] = await db.query(labelsQuery, [product.id]);
             product.labels = labels;
+
         }
 
         return {
@@ -130,7 +73,6 @@ const Product = {
             }
         };
     },
-
 
     // Phương thức lấy sản phẩm theo ID cùng với tags
     findById: async (id) => {
@@ -154,13 +96,12 @@ const Product = {
 
     // Phương thức tạo mới sản phẩm cùng với tags
     create: async (productData, LabelsIds = []) => {
-        const query = `INSERT INTO ${Product.tableName} (name, slug, description, avatar, images, status, number, price, sale, contents, length, width, height, category_id, brand_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO ${Product.tableName} (name, slug, description, avatar, status, number, price, sale, contents, length, width, height, category_id, brand_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             productData.name,
             productData.slug,
             productData.description || null,
             productData.avatar || null,
-            JSON.stringify(productData.images || []),
             productData.status || 'pending',
             productData.number || 0,
             productData.price || 0,
@@ -184,14 +125,13 @@ const Product = {
     updateById: async (id, updateData, LabelsIds = []) => {
         const query = `
             UPDATE ${Product.tableName} 
-            SET name = ?, slug = ?, description = ?, avatar = ?,images = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
+            SET name = ?, slug = ?, description = ?, avatar = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
             WHERE id = ?`;
         const values = [
             updateData.name,
             updateData.slug,
             updateData.description || null,
             updateData.avatar || null,
-            JSON.stringify(updateData.images || []),
             updateData.status || 'pending',
             updateData.number || 0,
             updateData.price || 0,

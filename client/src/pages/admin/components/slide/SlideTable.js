@@ -14,7 +14,6 @@ const SlideTable = ({ slides, openCategoryModal, setCategoryToDelete, setShowDel
                 <th>Hình ảnh</th>
                 <th>Tiêu đề</th>
                 <th>Link</th>
-                <th>Page</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
                 <th>Thao tác</th>
@@ -31,7 +30,6 @@ const SlideTable = ({ slides, openCategoryModal, setCategoryToDelete, setShowDel
                     <td>
                         <Link to={item?.link}>Click tại đây</Link>
                     </td>
-                    <td>{item.page}</td>
                     <td><StatusLabel status={item?.status} /></td>
                     <td>{moment(item?.created_at).format('DD-MM-YYYY')}</td>
                     <td>

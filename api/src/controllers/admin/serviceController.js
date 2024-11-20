@@ -1,5 +1,4 @@
 const Service = require('../../models/Service');
-const ServiceUser = require('../../models/ServiceUser');
 const { successResponse, errorResponse } = require("../../utils/response");
 
 // Get all menus
@@ -7,18 +6,6 @@ exports.getAllServices = async (req, res) => {
     try {
         const { page, page_size: pageSize, name } = req.query;
         const result = await Service.getAll(Number(page), Number(pageSize), name);
-
-        return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res);
-    }
-};
-
-exports.getAllServicesRegister = async (req, res) => {
-    try {
-        const { page, page_size: pageSize, name } = req.query;
-        const result = await ServiceUser.getAll(Number(page), Number(pageSize), name);
 
         return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
     } catch (err) {
@@ -84,24 +71,6 @@ exports.deleteService = async (req, res) => {
 
         // Xóa menu
         const isDeleted = await Service.deleteById(id);
-
-        if (!isDeleted) {
-            return errorResponse(res, 'Service not found', 404, 404);
-        }
-
-        return successResponse(res, {}, 'Service deleted successfully');
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res);
-    }
-};
-
-exports.deleteServiceUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-
-        // Xóa menu
-        const isDeleted = await ServiceUser.deleteById(id);
 
         if (!isDeleted) {
             return errorResponse(res, 'Service not found', 404, 404);

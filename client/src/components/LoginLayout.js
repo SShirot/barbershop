@@ -1,8 +1,9 @@
+// components/LoginLayout.js
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
-const AuthLayout = () => {
+const LoginLayout = () => {
     return (
         <Container fluid>
             <Outlet />
@@ -10,4 +11,4 @@ const AuthLayout = () => {
     );
 };
 
-export default AuthLayout;
+export default LoginLayout;

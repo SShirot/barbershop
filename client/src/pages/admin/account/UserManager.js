@@ -61,16 +61,15 @@ const UserManager = () => {
     };
 
     const handleAddEditUser = async (values) => {
-
+        console.log("user-------> ", values);
 		try {
-            const modelData = {
-                ...values,
-                avatar: "https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg"
-            };
-            console.log("modelData-------> ", modelData);
             if (editingUser) {
-                const response = await userService.update(editingUser.id, modelData);
+                const response = await userService.update(editingUser.id, values);
             } else {
+                const modelData = {
+                    ...values,
+                    avatar: "https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg"
+                };
                 const response = await userService.add(modelData);
             }
             const params = Object.fromEntries([...searchParams]);

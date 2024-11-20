@@ -1,137 +1,82 @@
-const Model = require('../../models/Order');
-const { successResponse, errorResponse } = require("../../utils/response");
-const Article = require("../../models/Post");
-// const Model = require("../../models/Product");
+const Order = require('../../models/Order');
+const Transaction = require('../../models/Transaction');
+const formatResponse = require("../../utils/response");
 
-// Lấy tất cả đơn hàng
-exports.getAll = async (req, res) => {
+exports.getAllOrder = async (req, res) => {
     try {
-        const { page, page_size: pageSize, name } = req.query;
-        const result = await Model.getAll(Number(page), Number(pageSize), name);
+        const params = req.query;
+        const query = {};
+        const page = Number(req.query.page) || 1;
+        const pageSize = Number(req.query.page_size) || 10;
 
-        return successResponse(res, { meta: result.meta, data: result.data }, 'Get list of data successfully');
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res);
-    }
-};
+        if (params.customerName) {
+            query['guestInfo.name'] = { $regex: params.customerName, $options: 'i' }; // Tìm kiếm không phân biệt hoa thường
+        }
+        if (params.status) {
+            query.status = params.status;
+        }
 
-// Lấy đơn hàng theo ID
-exports.getById = async (req, res) => {
-    try {
-        const order = await Model.findById(req.params.id)
-            .populate('user', 'name')
+        const total = await Order.countDocuments(query);
+        const orders = await Order.find(query)
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .populate({
+                path: 'user',
+                select: 'name'
+            }) // Populate user information if any
             .populate({
                 path: 'transactions',
                 populate: { path: 'product', select: 'name price' }
             });
 
-        if (!order) {
-            return errorResponse(res, 'Order not found', 404);
-        }
-
-        return successResponse(res, { data: order }, 'Order found successfully');
+        const meta = {
+            total,
+            total_page: Math.ceil(total / pageSize),
+            page,
+            page_size: pageSize
+        };
+        res.json(formatResponse('success', { orders, meta }, 'Get list of orders successfully'));
     } catch (err) {
-        console.error(err);
-        return errorResponse(res, 'Server error');
+        res.status(500).json(formatResponse('error', [], 'Server error'));
     }
 };
 
-// Tạo mới đơn hàng
-exports.create = async (req, res) => {
+
+// Xóa bài viết
+exports.deleteOrder = async (req, res) => {
     try {
-        const orderData = req.body;
-        const newOrder = await Model.create(orderData);
+        const order = await Order.findById(req.params.id);
+        if (!order) return res.status(404).json({ message: 'Post not found' });
 
-        return successResponse(res, { data: newOrder }, 'Order created successfully', 201);
+        // Xóa tất cả các giao dịch liên quan đến đơn hàng
+        await Transaction.deleteMany({ order: req.params.id });
+        await Order.findByIdAndDelete(req.params.id);
+        res.json(formatResponse('success', [], 'Post deleted successfully'));
     } catch (err) {
-        console.error(err);
-        return errorResponse(res, 'Server error');
+        res.status(500).json({ message: err.message });
     }
 };
 
-exports.update = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const orderData = req.body;
-        const newOrder = await Model.updateById(id, orderData);
-
-        return successResponse(res, { data: newOrder }, 'Order update successfully', 201);
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res, 'Server error');
-    }
-};
-
-// Cập nhật trạng thái đơn hàng
-exports.updateStatus = async (req, res) => {
+exports.updateOrderStatus = async (req, res) => {
     try {
         const { status } = req.body;
 
-        // Kiểm tra trạng thái hợp lệ
-        const validStatuses = ['pending', 'completed', 'processing', 'canceled'];
+        // Kiểm tra nếu trạng thái là hợp lệ
+        const validStatuses = ['pending', 'completed', 'canceled'];
         if (!validStatuses.includes(status)) {
-            return errorResponse(res, 'Invalid status', 400);
+            return res.status(400).json({ message: 'Invalid status' });
         }
 
-        const order = await Model.findById(req.params.id);
-        if (!order) {
-            return errorResponse(res, 'Order not found', 404);
-        }
+        const order = await Order.findById(req.params.id);
+        if (!order) return res.status(404).json({ message: 'Order not found' });
 
-        // Cập nhật trạng thái
+        // Cập nhật trạng thái đơn hàng
         order.status = status;
         await order.save();
 
-        return successResponse(res, { data: order }, 'Order status updated successfully');
+        res.json(formatResponse('success', order, 'Order status updated successfully'));
     } catch (err) {
-        console.error(err);
-        return errorResponse(res, 'Server error');
+        res.status(500).json({ message: err.message });
     }
 };
 
-exports.delete = async (req, res) => {
-    try {
-        const id = req.params.id;
-
-        const isDeleted = await Model.deleteById(id);
-
-        if (!isDeleted) {
-            return errorResponse(res, 'Data not found', 404, 404);
-        }
-
-        return successResponse(res, {}, 'Data deleted successfully');
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res);
-    }
-};
-//
-//
-// // Xóa đơn hàng
-// exports.delete = async (req, res) => {
-//     try {
-//         // Tìm đơn hàng theo ID
-//         const order = await Model.findById(req.params.id);
-//         if (!order) {
-//             return errorResponse(res, 'Order not found', 404);
-//         }
-//
-//         // Xóa các bản ghi trong `ec_transactions` dựa vào `order_id`
-//         const deleteTransactionsQuery = `DELETE FROM ec_transactions WHERE order_id = ?`;
-//         await db.query(deleteTransactionsQuery, [req.params.id]);
-//
-//         // Xóa đơn hàng trong `ec_orders`
-//         const deleteOrderQuery = `DELETE FROM ${Model.tableName} WHERE id = ?`;
-//         const [result] = await db.query(deleteOrderQuery, [req.params.id]);
-//
-//         if (result.affectedRows > 0) {
-//             return successResponse(res, {}, 'Order deleted successfully');
-//         } else {
-//             return errorResponse(res, 'Failed to delete order', 500);
-//         }
-//     } catch (err) {
-//         console.error('Error deleting order and transactions:', err);
-//         return errorResponse(res, 'Server error');
-//     }
-// };

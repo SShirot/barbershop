@@ -8,7 +8,6 @@ import MenuDeleteModal from '../components/menu/MenuDeleteModal';
 import MenuSearchModal from '../components/menu/MenuSearchModal';
 import {FaPlusCircle} from "react-icons/fa";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
-import {createSlug} from "../../../helpers/formatters";
 
 const MenuManager = () => {
     const [menus, setMenus] = useState([]);
@@ -61,16 +60,11 @@ const MenuManager = () => {
     };
 
     const handleAddEditMenu = async (values) => {
-
-        const dataModel = {
-            ...values,
-            slug : createSlug(values.name)
-        };
         try {
             if (editingMenu) {
-                const response = await menuService.update(editingMenu.id, dataModel);
+                const response = await menuService.update(editingMenu.id, values);
             } else {
-                const response = await menuService.add(dataModel);
+                const response = await menuService.add(values);
             }
             const params = Object.fromEntries([...searchParams]);
             fetchMenusWithParams({ ...params, page: params.page || 1, page_size: params.page_size || 10 });

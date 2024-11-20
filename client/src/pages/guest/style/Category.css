@@ -21,7 +21,7 @@
 }
 
 .category-container h4 {
-    color: #222;
+    color: #e89305;
     font-weight: bold;
 }
 
@@ -37,8 +37,3 @@
 .pagination {
     margin-top: 20px;
 }
-.category-list li.active a {
-    font-weight: bold;
-    color: #007bff;
-}
-

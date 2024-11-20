@@ -6,33 +6,32 @@ const formatCurrency = (value) => {
 };
 
 const OrderDetailsModal = ({ show, onHide, order }) => {
-    console.info("===========[] ===========[order] : ",order);
     return (
         <Modal show={show} onHide={onHide} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>Chi tiết đơn hàng</Modal.Title>
+                <Modal.Title>Order Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h5>Customer: {order?.user?.name}</h5>
-                <h5>Phone: {order?.user?.phone}</h5>
+                <h5>Customer: {order?.guestInfo?.name}</h5>
+                <h5>Phone: {order?.guestInfo?.phone}</h5>
                 <Table striped bordered hover>
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Số lượng</th>
-                        <th>Giá</th>
-                        <th>Tổng tiền</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {order?.products?.map((item, idx) => (
-                        <tr key={item.id}>
+                    {order?.transactions?.map((transaction, idx) => (
+                        <tr key={transaction._id}>
                             <td>{idx + 1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.qty}</td>
-                            <td>{formatCurrency(item.price)}</td>
-                            <td>{formatCurrency(item.price * item.qty)}</td>
+                            <td>{transaction.product?.name}</td>
+                            <td>{transaction.quantity}</td>
+                            <td>{formatCurrency(transaction.price)}</td>
+                            <td>{formatCurrency(transaction.price * transaction.quantity)}</td>
                         </tr>
                     ))}
                     </tbody>

@@ -21,7 +21,6 @@ import {FaEdit, FaListUl, FaPlusCircle, FaTrash} from "react-icons/fa";
 import moment from "moment";
 import StatusLabel from "../../../helpers/StatusLabel";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
-import {createSlug} from "../../../helpers/formatters";
 
 const ArticleManager = () => {
     const [articles, setArticles] = useState([]);
@@ -65,7 +64,6 @@ const ArticleManager = () => {
             avatar: imageData || defaultImage,
             content: contentArticle,
             tags: tagIds,
-            slug : createSlug(values.name)
         };
         console.info("===========[] ===========[dataModel] : ",dataModel);
 

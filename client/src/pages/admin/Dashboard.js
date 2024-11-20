@@ -224,8 +224,8 @@ const AdminDashboard = () => {
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Order Number</th>
-                                    <th>Customer</th>
+                                    {/*<th>Order Number</th>*/}
+                                    {/*<th>Customer</th>*/}
                                     <th>Total Amount</th>
                                     <th>Date</th>
                                 </tr>
@@ -234,8 +234,8 @@ const AdminDashboard = () => {
                                 {newOrders.map((order) => (
                                     <tr key={order.id}>
                                         <td>{order.id}</td>
-                                        <td>{order.code}</td>
-                                        <td>{order.customer}</td>
+                                        {/*<td>{order.orderNumber}</td>*/}
+                                        {/*<td>{order.customer}</td>*/}
                                         <td>{order.totalAmount}</td>
                                         <td>{order.date}</td>
                                     </tr>

@@ -1,19 +1,19 @@
-const express = require("express");
-const swaggerSetup = require("./config/swagger");
-require("dotenv").config(); // Load environment variables
-const cors = require("cors");
+const express = require('express');
+const swaggerSetup = require('./config/swagger');
+require('dotenv').config(); // Load environment variables
+const cors = require('cors');
 const app = express();
+
 
 // Init Middleware
 app.use(express.json({ extended: false }));
 app.use(cors()); // Thêm dòng này
 
 // Define Routes
-app.use("/api/v1", require("./routes"));
-app.use("/api/v1/uploads", require("./routes/base/upload"));
-app.use("/uploads/images", express.static("uploads/images"));
-app.use("/api/orders", require("./routes/user/order"));
-app.use("/api/items", require("./item"));
+app.use('/api/v1', require('./routes'));
+app.use('/api/v1/uploads', require('./routes/base/upload'));
+app.use('/uploads/images', express.static('uploads/images'));
+app.use('/api/orders', require('./routes/user/order'));
 
 // Setup Swagger
 swaggerSetup(app);

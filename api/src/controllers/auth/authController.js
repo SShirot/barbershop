@@ -1,11 +1,8 @@
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const {validationResult} = require('express-validator');
 const {successResponse, errorResponse} = require("../../utils/response");
-const db = require('./../../config/dbMysql');
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -76,8 +73,7 @@ exports.login = async (req, res) => {
         // Tạo token
         const payload = {
             user: {
-                id: user.id,
-                user_type: user.user_type
+                id: user.id
             }
         };
 
@@ -85,88 +81,6 @@ exports.login = async (req, res) => {
 
         // Trả về token và thông tin người dùng
         return successResponse(res, {token, user}, 'Login thành công');
-    } catch (err) {
-        console.error(err.message);
-        return errorResponse(res);
-    }
-};
-exports.forgotPassword = async (req, res) => {
-    const {email} = req.body;
-
-    try {
-        // Kiểm tra email tồn tại
-        let user = await User.findOne(email);
-        if (!user) {
-            return errorResponse(res, 'Email không tồn tại', 400, 1);
-        }
-
-        // Tạo token và thời gian hết hạn
-        const resetToken = crypto.randomBytes(32).toString('hex');
-        let dataUpdate = {
-            remember_token: resetToken,
-            email_verified_at: new Date(Date.now() + 3600000)
-        }
-        await User.update(user.id, dataUpdate);
-
-        // Gửi email chứa token
-        const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: { user: 'svdtxl123@gmail.com', pass: 'jruejvxlzzejhzjd' }
-        });
-
-        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
-        const htmlTemplate = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-                <h2 style="color: #333;">Đặt lại mật khẩu của bạn</h2>
-                <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
-                <p>Nhấn vào nút bên dưới để tiến hành đặt lại mật khẩu:</p>
-                <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; margin-top: 20px; color: #fff; background-color: #007bff; border-radius: 5px; text-decoration: none;">Đặt lại mật khẩu</a>
-                <p style="margin-top: 20px;">Hoặc, bạn có thể sao chép và dán đường link sau vào trình duyệt của mình:</p>
-                <p><a href="${resetUrl}" style="color: #007bff;">${resetUrl}</a></p>
-                <p>Nếu bạn không yêu cầu thay đổi mật khẩu, vui lòng bỏ qua email này.</p>
-                <p>Trân trọng,<br/>Đội ngũ hỗ trợ của chúng tôi</p>
-            </div>
-        `;
-
-        const mailOptions = {
-            to: user.email,
-            from: 'codethue94@gmail.com',
-            subject: 'Đặt lại mật khẩu',
-            html: htmlTemplate
-        };
-
-        transporter.sendMail(mailOptions);
-
-        // Trả về token và thông tin người dùng
-        return successResponse(res, {user}, 'Vui lòng kiểm tra email của bạn');
-    } catch (err) {
-        console.error(err.message);
-        return errorResponse(res);
-    }
-};
-exports.resetPassword = async (req, res) => {
-    try {
-        const { token, password } = req.body;
-        const [rows] = await db.execute(
-            `SELECT * FROM users WHERE remember_token = ? AND email_verified_at > ?`,
-            [token, new Date()]
-        );
-
-
-        if (rows.length === 0) {
-            return res.status(400).json({ message: 'Token không hợp lệ hoặc đã hết hạn' });
-        }
-        const user = rows[0];
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        // Cập nhật mật khẩu và xóa token
-        await db.execute(
-            `UPDATE users SET password = ?, remember_token = NULL, email_verified_at = NULL WHERE id = ?`,
-            [hashedPassword, user.id]
-        );
-
-        // Trả về token và thông tin người dùng
-        return successResponse(res, {user}, 'Đổi mật khẩu thành công, xin vui lòng đăng nhập');
     } catch (err) {
         console.error(err.message);
         return errorResponse(res);
@@ -199,7 +113,6 @@ exports.me = async (req, res) => {
             name: user.name,
             avatar: user.avatar,
             phone: user.phone,
-            user_type: user.user_type,
         }, 'User details fetched successfully');
     } catch (err) {
         console.error(err.message);

@@ -135,6 +135,5 @@ router.post(
     orderController.createOrder
 );
 
-router.get('/', auth, orderController.getAll);
 
 module.exports = router;

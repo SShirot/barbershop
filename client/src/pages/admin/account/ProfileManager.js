@@ -16,6 +16,7 @@ const ProfileManager = () => {
         const fetchUserData = async () => {
             try {
                 const response = await userService.getProfile();
+                console.info("===========[] ===========[] : ",response);
                 setUser(response.data);
                 setPreviewAvatar(response.data.avatar); // Hiển thị avatar hiện tại
             } catch (error) {

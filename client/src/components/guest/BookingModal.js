@@ -3,19 +3,17 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import axios from 'axios';
-import serviceService from "../../api/serviceService";
+import appointmentService from "../../api/appointmentService";
 import toastr from 'toastr';
-import {useSelector} from "react-redux";
 
 const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
     const [services, setServices] = useState([]);
-    const [is_home_service, setIsHomeVisit] = useState(false);
-    const user = useSelector((state) => state.auth.user);
+    const [isHomeVisit, setIsHomeVisit] = useState(false);
 
     useEffect(() => {
-        axios.get(`${API}service`)
+        axios.get(`${API}user/services`)
             .then(response => {
-                setServices(response.data.data.data);
+                setServices(response.data.data.services);
             })
             .catch(error => {
                 console.error("There was an error fetching the services!", error);
@@ -24,25 +22,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
 
     const handleBookingSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            // Tìm kiếm dịch vụ đã chọn từ danh sách dịch vụ
-
-            const selectedService = services.find(service => service.id === parseInt(values.service));
-            console.info("===========[] ===========[services] : ",services);
-            // Tạo dữ liệu để gửi đến API, bao gồm các thông tin cần thiết
-            const bookingData = {
-                user_id: user.id,
-                service_id: values.service,
-                name: selectedService.name,
-                price: selectedService.price,
-                status: 'pending',
-                date: values.date,
-                is_home_service: values.is_home_service,
-                address: values.is_home_service ? values.address : null
-            };
-
-            // Gọi API với dữ liệu đã chuẩn bị
-            console.info("===========[] ===========[values] : ",bookingData);
-            const response = await serviceService.register(bookingData);
+            const response = await appointmentService.add(values);
             handleClose();
             resetForm();
             toastr.success('Đặt lịch thành công!', 'Success');
@@ -57,7 +37,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
     const validationSchema = Yup.object().shape({
         service: Yup.string().required('Vui lòng chọn dịch vụ'),
         date: Yup.date().required('Vui lòng chọn ngày khám'),
-        address: Yup.string().when('is_home_service', {
+        address: Yup.string().when('isHomeVisit', {
             is: true,
             then: (schema) => schema.required('Vui lòng nhập địa chỉ nếu chọn khám tại nhà'),
             otherwise: (schema) => schema.notRequired(),
@@ -67,14 +47,14 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Đăng ký dịch vụ</Modal.Title>
+                <Modal.Title>Đặt lịch khám</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Formik
                     initialValues={{
                         service: '',
                         date: '',
-                        is_home_service: false,
+                        isHomeVisit: false,
                         address: ''
                     }}
                     validationSchema={validationSchema}
@@ -102,7 +82,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                                 >
                                     <option value="">Chọn dịch vụ...</option>
                                     {services.map(service => (
-                                        <option key={service.id} value={service.id}>{service.name}</option>
+                                        <option key={service._id} value={service._id}>{service.name}</option>
                                     ))}
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
@@ -111,7 +91,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                             </Form.Group>
 
                             <Form.Group controlId="date" className={'mb-2'}>
-                                <Form.Label>Chọn ngày </Form.Label>
+                                <Form.Label>Chọn ngày khám</Form.Label>
                                 <Form.Control
                                     type="date"
                                     name="date"
@@ -125,12 +105,12 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                            <Form.Group controlId="is_home_service" className={'mb-2'}>
+                            <Form.Group controlId="isHomeVisit" className={'mb-2'}>
                                 <Form.Check
                                     type="checkbox"
-                                    name="is_home_service"
-                                    label="Đến tại nhà"
-                                    checked={values.is_home_service}
+                                    name="isHomeVisit"
+                                    label="Khám tại nhà"
+                                    checked={values.isHomeVisit}
                                     onChange={(e) => {
                                         handleChange(e);
                                         setIsHomeVisit(e.target.checked);
@@ -138,7 +118,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                                 />
                             </Form.Group>
 
-                            {values.is_home_service && (
+                            {values.isHomeVisit && (
                                 <Form.Group controlId="address" className={'mb-2'}>
                                     <Form.Label>Địa chỉ</Form.Label>
                                     <Form.Control

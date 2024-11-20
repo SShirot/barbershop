@@ -1,28 +1,23 @@
-const Model = require("../../models/Order");
-const {successResponse, errorResponse} = require("../../utils/response");
+const orderService = require('../../services/orderService');
+const formatResponse = require('../../utils/response');
 
 exports.createOrder = async (req, res) => {
     try {
-        const orderData = req.body;
-        const newOrder = await Model.create(orderData);
+        const { transactions, ...orderData } = req.body;
 
-        return successResponse(res, { data: newOrder }, 'Order created successfully', 201);
+        if (!req.user) {
+            // Nếu người dùng không đăng nhập, yêu cầu thông tin khách
+            if (!orderData.guestInfo || !orderData.guestInfo.name || !orderData.guestInfo.email || !orderData.guestInfo.phone) {
+                return res.status(400).json(formatResponse('error', [], 'Guest information is required'));
+            }
+        } else {
+            orderData.user = req.user.id; // Nếu người dùng đã đăng nhập, lưu ID người dùng
+        }
+
+        const { order, transactions: createdTransactions } = await orderService.createOrder(orderData, transactions);
+
+        res.status(201).json(formatResponse('success', { order, transactions: createdTransactions }, 'Order created successfully'));
     } catch (err) {
-        console.error(err);
-        return errorResponse(res, 'Server error');
-    }
-};
-
-exports.getAll = async (req, res) => {
-    try {
-        const { page, page_size: pageSize, code } = req.query;
-        const userId = req.user.id;
-        console.info("===========[] ===========[user] : ",userId);
-        const result = await Model.getAll(Number(page), Number(pageSize), code,userId);
-
-        return successResponse(res, { meta: result.meta, data: result.data }, 'Get list of data successfully');
-    } catch (err) {
-        console.error(err);
-        return errorResponse(res);
+        res.status(500).json(formatResponse('error', [], 'Server error'));
     }
 };
