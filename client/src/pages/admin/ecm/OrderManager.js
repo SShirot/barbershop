@@ -165,7 +165,10 @@ const OrderManager = () => {
 
             <NewOrderModal
                 show={showNewOrderModal}
-                onHide={() => setShowNewOrderModal(false)}
+                onHide={() => {
+					setShowNewOrderModal(false);
+					fetchOrdersWithParams({page: meta.page || 1});
+				}}
             />
             <ModelConfirmDeleteData
                 showDeleteModal={showDeleteModal}
