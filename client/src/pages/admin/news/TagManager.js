@@ -7,6 +7,7 @@ import TagFormModal from "../components/tag/TagFormModal";
 import tagService from "../../../api/tagService";
 import {FaPlusCircle} from "react-icons/fa";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
+import {createSlug} from "../../../helpers/formatters";
 
 const MenuManager = () => {
     const [tags, setTags] = useState([]);
@@ -63,7 +64,8 @@ const MenuManager = () => {
 			values = {
 				...values,
 				status: values?.status || 'pending',
-				is_featured: values?.is_featured || 1
+				is_featured: values?.is_featured || 1,
+                slug : createSlug(values.name)
 			}
             if (editingMenu) {
                 const response = await tagService.update(editingMenu.id, values);

@@ -18,6 +18,7 @@ import ProductModal from '../components/product/ProductModal';
 import DeleteConfirmationModal from '../components/product/ProductDeleteConfirmationModal';
 import apiUpload from "../../../api/apiUpload";
 import {FaEdit, FaListUl, FaPlusCircle, FaTrash} from "react-icons/fa";
+import {createSlug} from "../../../helpers/formatters";
 
 const ProductManager = () => {
     const [products, setProducts] = useState([]);
@@ -59,6 +60,7 @@ const ProductManager = () => {
             avatar: productImage || defaultImage,
             content: description,
             categoryId: values.category,
+            slug : createSlug(values.name)
         };
         console.info("===========[] ===========[productData] : ",productData);
         try {

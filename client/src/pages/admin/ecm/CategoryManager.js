@@ -7,6 +7,7 @@ import CategoryModal from '../components/category/CategoryModal';
 import CategorySearchModal from '../components/category/CategorySearchModal';
 import {FaPlusCircle} from "react-icons/fa";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
+import {createSlug} from "../../../helpers/formatters";
 
 const CategoryManager = () => {
     const [categories, setCategories] = useState([]);
@@ -60,6 +61,10 @@ const CategoryManager = () => {
     const handleAddEditCategory = async (values) => {
         setLoading(true);
         try {
+            values = {
+                ...values,
+                slug : createSlug(values.name)
+            }
             if (editingCategory) {
                 const response = await categoryService.update(editingCategory.id, {...editingCategory, ...values});
                 const params = Object.fromEntries([...searchParams]);

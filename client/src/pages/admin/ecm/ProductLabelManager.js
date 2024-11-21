@@ -9,6 +9,7 @@ import ProductLabelTable from "../components/productLabel/ProductLabelTable";
 import {FaPlusCircle} from "react-icons/fa";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
 import moment from 'moment';
+import {createSlug} from "../../../helpers/formatters";
 
 const ProductLabelManager = () => {
     const [productLabels, setProductLabel] = useState([]);
@@ -62,6 +63,10 @@ const ProductLabelManager = () => {
     const handleAddEditCategory = async (values) => {
         setLoading(true);
         try {
+            values = {
+                ...values,
+                slug : createSlug(values.name)
+            }
             if (editingCategory) {
                 const response = await productLabelService.update(editingCategory.id, {...editingCategory,updated_at: moment().format('YYYY-MM-DD HH:mm:ss'), ...values } );
 
