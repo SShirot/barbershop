@@ -31,10 +31,15 @@ const ProductCarousel = (props) => {
         <Container>
             {showTitle && (
                 <div className={'carousel-title'}>
-                    <h2 className="text-center my-4">{title}</h2>
+                    <h6 className="text-start my-4">{title}</h6>
                 </div>
             )}
-            <p className="text-center mb-4">Các loại hạt, pate, bánh thưởng thơm ngon, bổ dưỡng cho Boss</p>
+            {/*{showTitle && (*/}
+            {/*    <div className={'carousel-title'}>*/}
+            {/*        <h2 className="text-center my-4">{title}</h2>*/}
+            {/*    </div>*/}
+            {/*)}*/}
+            {/*<p className="text-center mb-4">Các loại hạt, pate, bánh thưởng thơm ngon, bổ dưỡng cho Boss</p>*/}
             <Carousel>
                 {productChunks.map((productChunk, idx) => (
                     <Carousel.Item key={idx}>
@@ -42,10 +47,12 @@ const ProductCarousel = (props) => {
                             {productChunk.map((product, idx) => (
                                 <Col key={idx} md={2} className="d-flex align-items-stretch item-prod">
                                     <Card className="mb-3 card-prod">
-                                        <Card.Img variant="top" src={product.avatar} alt={product.name} />
+                                        <Nav.Link as={Link} to={`p/${createSlug(product.name)}-${product.id}`}>
+                                            <Card.Img variant="top" src={product.avatar} alt={product.name} style={{ height: '200px'}} />
+                                        </Nav.Link>
                                         <Card.Body>
                                             <Card.Title>
-                                                <Nav.Link as={Link} to={`p/${createSlug(product.name)}-${product._id}`}>{product.name}</Nav.Link>
+                                                <Nav.Link as={Link} to={`p/${createSlug(product.name)}-${product.id}`}>{product.name}</Nav.Link>
                                             </Card.Title>
                                             <Card.Text>{formatPrice(product.price)}</Card.Text>
                                         </Card.Body>

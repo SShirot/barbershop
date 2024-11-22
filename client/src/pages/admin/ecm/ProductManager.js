@@ -57,7 +57,7 @@ const ProductManager = () => {
         const productData = {
             ...values,
             price: Number(values.price, 10),
-            avatar: productImage || defaultImage,
+            avatar: productImage || editingProduct?.avatar || defaultImage,
             content: description,
             categoryId: values.category,
             slug : createSlug(values.name)
@@ -66,14 +66,8 @@ const ProductManager = () => {
         try {
             if (editingProduct) {
                 const response = await productService.update(editingProduct.id, productData);
-                // setProducts((prevProducts) =>
-                //     prevProducts.map((product) =>
-                //         product.id === editingProduct.id ? response.data.product : product
-                //     )
-                // );
             } else {
                 const response = await productService.add(productData);
-                // setProducts((prevProducts) => [...prevProducts, response.data.product]);
             }
             setEditingProduct(null);
             setShowProductModal(false);
@@ -165,7 +159,10 @@ const ProductManager = () => {
                                 <td>
                                     <Image src={product?.avatar || "https://via.placeholder.com/150"} alt="Promotion" rounded style={{width: '50px', height: '50px'}} />
                                 </td>
-                                <td>{product?.name}</td>
+                                <td>
+                                    {product?.name} <br/>
+                                    <span>{product?.slug}</span>
+                                </td>
                                 <td>{product?.category?.name}</td>
                                 <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.price)}</td>
                                 <td>{product?.number}</td>

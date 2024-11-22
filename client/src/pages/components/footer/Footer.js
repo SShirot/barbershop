@@ -49,8 +49,8 @@ const Footer = () => {
                 </Row>
                 <Row className="justify-content-center mt-3">
                     <Col md={12} className="text-center">
-                        <p>© 2020 Copyright PET STATION. All rights reserved.</p>
-                        <p>Đang online: 5 | Tháng: 7339 | Tổng truy cập: 1530656</p>
+                        <p>© 2024 Copyright Đồ Án CNTT. All rights reserved.</p>
+                        {/*<p>Đang online: 5 | Tháng: 7339 | Tổng truy cập: 1530656</p>*/}
                     </Col>
                 </Row>
             </Container>

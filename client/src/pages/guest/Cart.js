@@ -3,17 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Table, Form, Modal } from 'react-bootstrap';
 import apiOrderService from "./../../api/apiOrderService";
 import {addToCart, setAllCart} from "../../redux/slices/cartSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [itemCount, setItemCount] = useState(0); // Thêm state cho itemCount
     const [showCheckout, setShowCheckout] = useState(false);
+    const user = useSelector((state) => state.auth.user);
+
     const dispatch = useDispatch();
+    // Khởi tạo `userInfo` với thông tin user nếu đã đăng nhập
     const [userInfo, setUserInfo] = useState({
-        name: '',
-        phone: '',
-        address: ''
+        name: user?.name || '',
+        phone: user?.phone || '',
+        address: user?.address || ''
     });
     const navigate = useNavigate();
 
@@ -83,14 +86,16 @@ const Cart = () => {
 
     const handleConfirmPayment = async () => {
         try {
+            // Định dạng dữ liệu theo yêu cầu của API
             const orderData = {
-                guestInfo: userInfo,
-                totalAmount: getTotalPrice(),
-                transactions: cartItems.map(item => ({
-                    product: item._id,
-                    quantity: item.quantity,
-                    price: item.price
-                }))
+                user_id: user?.id, // Nếu bạn có lưu user_id trong Redux
+                products: cartItems.map(item => ({
+                    id: item.id, // ID sản phẩm
+                    quantity: item.quantity
+                })),
+                shipping_fee: 0, // Có thể điều chỉnh giá trị nếu cần
+                total_amount: getTotalPrice(),
+                payment_method_id: 1 // Giá trị ID phương thức thanh toán, thay đổi nếu cần
             };
 
             const response = await apiOrderService.add(orderData);

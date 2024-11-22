@@ -25,7 +25,7 @@ const Product = {
     },
 
     // Phương thức lấy tất cả sản phẩm với phân trang và tìm kiếm
-    getAll: async (page = 1, pageSize = 10, name = null) => {
+    getAll: async (page = 1, pageSize = 10, name = null, category_id = null) => {
         const offset = (page - 1) * pageSize;
         let query = `SELECT * FROM ${Product.tableName}`;
         let countQuery = `SELECT COUNT(*) as total FROM ${Product.tableName}`;
@@ -35,6 +35,12 @@ const Product = {
             query += ' WHERE name LIKE ?';
             countQuery += ' WHERE name LIKE ?';
             queryParams.push(`%${name}%`);
+        }
+
+        console.info("===========[] ===========[category_id] : ",category_id);
+        if (category_id) {
+            query += ` WHERE category_id = ${category_id}`;
+            countQuery += ` WHERE category_id = ${category_id}`;
         }
 
         query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';

@@ -40,13 +40,13 @@
     background-size: 50% 100%;
 }
 .carousel-title {
-    color: #e89305;
-    font-size: 32px;
+    color: #222;
+    font-size: 20px;
     text-transform: uppercase;
-    padding-bottom: 33px;
+    /*padding-bottom: 33px;*/
     margin-bottom: 20px;
-    line-height: 1.5;
-    background: url(./../../../assets/images/tieude_giua.png) no-repeat bottom center;
+    /*line-height: 1.5;*/
+    /*background: url(./../../../assets/images/tieude_giua.png) no-repeat bottom center;*/
     text-align: center !important;
 }
 .card-prod {

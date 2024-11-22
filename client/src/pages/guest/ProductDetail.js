@@ -7,6 +7,7 @@ import apiProductService from "./../../api/apiProductService";
 import {formatPrice} from "../../helpers/formatters";
 import {useDispatch} from "react-redux";
 import {addToCart} from "../../redux/slices/cartSlice";
+import {FaShoppingCart} from "react-icons/fa";
 
 const ProductDetail = () => {
     const { slug} = useParams();
@@ -21,8 +22,9 @@ const ProductDetail = () => {
             try {
                 const response = await apiProductService.showProductDetail(id);
                 console.info("===========[] ===========[response] : ",response);
-                setProduct(response.data.product);
-                setRelatedProducts(response.data.relatedProducts);
+                setProduct(response.data.data);
+                setRelatedProducts([]);
+                // setRelatedProducts(response.data.relatedProducts);
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
@@ -66,7 +68,9 @@ const ProductDetail = () => {
                 <Col md={6}>
                     <h1>{product.name}</h1>
                     <h2 className="text-danger">{formatPrice(product.price)}</h2>
-                    <Button variant="danger" className="mb-3" onClick={handleAddToCart}>Mua ngay</Button>
+                    <Button variant="danger" className="mb-3" onClick={handleAddToCart}>
+                        Mua ngay <FaShoppingCart size={16} />
+                    </Button>
                     <h4>Thông tin sản phẩm</h4>
                     <div dangerouslySetInnerHTML={{__html: product.content}}/>
                     {/*<h4>Thông số kỹ thuật</h4>*/}

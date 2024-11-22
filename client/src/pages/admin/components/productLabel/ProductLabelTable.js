@@ -11,6 +11,7 @@ const ProductLabelTable = ({productLabels, openCategoryModal, setCategoryToDelet
             <tr>
                 <th>#</th>
                 <th>Name</th>
+                <th>Slug</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>createdAt</th>
@@ -18,20 +19,21 @@ const ProductLabelTable = ({productLabels, openCategoryModal, setCategoryToDelet
             </tr>
             </thead>
             <tbody>
-            {productLabels.map((category, index) => (
-                <tr key={category?.id}>
+            {productLabels.map((item, index) => (
+                <tr key={item?.id}>
                     <td>{index + 1}</td>
-                    <td>{category?.name}</td>
-                    <td>{category?.description}</td>
-                    <td><StatusLabel status={category?.status}/></td>
-                    <td>{moment(category?.created_at).format('DD-MM-YYYY')}</td>
+                    <td>{item?.name}</td>
+                    <td>{item?.slug}</td>
+                    <td>{item?.description}</td>
+                    <td><StatusLabel status={item?.status}/></td>
+                    <td>{moment(item?.created_at).format('DD-MM-YYYY')}</td>
                     <td>
-                        <Button size="sm" variant="primary" onClick={() => openCategoryModal(category)}
+                        <Button size="sm" variant="primary" onClick={() => openCategoryModal(item)}
                                 title="Cập nhật">
                             <FaEdit/>
                         </Button>
                         <Button size="sm" className={'ms-2'} variant="danger" onClick={() => {
-                            setCategoryToDelete(category);
+                            setCategoryToDelete(item);
                             setShowDeleteModal(true);
                         }} title="Xoá">
                             <FaTrash/>

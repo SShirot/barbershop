@@ -11,6 +11,7 @@ const CategoryTable = ({ categories, openCategoryModal, setCategoryToDelete, set
             <tr>
                 <th>#</th>
                 <th className="text-start">Tên danh mục</th>
+                <th className="text-start">Đường dẫn</th>
                 <th className="text-start">Mô tả</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
@@ -22,6 +23,7 @@ const CategoryTable = ({ categories, openCategoryModal, setCategoryToDelete, set
                 <tr key={category?.id}>
                     <td>{index + 1}</td>
                     <td className="text-start">{category?.name}</td>
+                    <td className="text-start">{category?.slug}</td>
                     <td className="text-start">{category?.description}</td>
                     <td><StatusLabel status={category?.status} /></td>
                     <td>{moment(category?.created_at).format('DD-MM-YYYY')}</td>

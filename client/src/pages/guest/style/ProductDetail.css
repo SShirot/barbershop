@@ -69,3 +69,11 @@
     color: #ff4500;
     margin-bottom: 10px;
 }
+
+.carousel-item img {
+    height: 400px; /* Hoặc chiều cao mong muốn */
+    object-fit: cover; /* Đảm bảo hình ảnh giữ đúng tỷ lệ và cắt phần dư */
+    width: 100%;
+    border-radius: 8px; /* Thêm bo góc cho hình ảnh nếu muốn */
+}
+

@@ -5,7 +5,16 @@ export const formatPrice = (price) => {
 };
 
 export const createSlug = (name) => {
-    return name
+    // Bảng chuyển đổi ký tự tiếng Việt sang không dấu
+    const removeVietnameseTones = (str) => {
+        return str
+            .normalize('NFD') // Tách tổ hợp các ký tự Unicode
+            .replace(/[\u0300-\u036f]/g, '') // Xóa dấu kết hợp
+            .replace(/đ/g, 'd') // Chuyển 'đ' thành 'd'
+            .replace(/Đ/g, 'D'); // Chuyển 'Đ' thành 'D'
+    };
+
+    return removeVietnameseTones(name)
         .toLowerCase()
         .trim()
         .replace(/[^a-z0-9\s-]/g, '') // Xóa các ký tự không phải là chữ cái, số, dấu cách hoặc dấu gạch ngang

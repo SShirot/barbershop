@@ -6,8 +6,8 @@ const {successResponse, errorResponse} = require("../../utils/response");
 // Lấy danh sách sản phẩm
 exports.getListsProduct = async (req, res) => {
     try {
-        const { page = 1, page_size: pageSize = 10, name } = req.query;
-        const result = await Model.getAll(Number(page), Number(pageSize), name);
+        const { page = 1, page_size: pageSize = 10, name, category_id } = req.query;
+        const result = await Model.getAll(Number(page), Number(pageSize), name, category_id);
 
         return successResponse(res, { meta: result.meta, data: result.data }, 'Get list of data successfully');
     } catch (err) {
@@ -18,10 +18,12 @@ exports.getListsProduct = async (req, res) => {
 
 exports.showProductDetail = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('category', 'name');
-        if (!product) return res.status(404).json({ message: 'Product not found' });
-        return successResponse(res, { data: product}, 'Get list of data successfully');
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return errorResponse(res, 'Tag not found', 404, 404);
+        }
 
+        return successResponse(res, { data: product }, 'data found successfully');
     } catch (err) {
         console.error(err);
         return errorResponse(res);
