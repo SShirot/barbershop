@@ -5,6 +5,7 @@ const auth = require('../../middleware/auth');
 
 router.get('/', auth, orderController.getAll);
 router.post('/', auth, orderController.create);
+router.put('/:id', auth, orderController.update);
 router.post('/update-status/:id', auth, orderController.updateStatus);
 router.delete('/:id', auth, orderController.delete);
 

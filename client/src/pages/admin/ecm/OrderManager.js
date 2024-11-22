@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, ButtonGroup, Dropdown, Table, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, Table, Pagination } from 'react-bootstrap';
 import { useSearchParams } from "react-router-dom";
 import OrderBreadcrumbs from '../components/order/OrderBreadcrumbs';
 import apiOrderService from "../../../api/apiOrderService";
-import {FaEdit, FaListUl, FaPlusCircle, FaTrash} from "react-icons/fa";
+import { FaEdit, FaPlusCircle, FaTrash } from "react-icons/fa";
 import OrderDetailsModal from '../components/order/OrderDetailsModal';
-import DeleteConfirmationModal from '../components/order/DeleteConfirmationModal';
-import UpdateOrderStatus from '../components/order/UpdateOrderStatus';
-import NewOrderModal from '../components/order/NewOrderModal';
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
+import NewOrderModal from '../components/order/NewOrderModal';
 
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -21,9 +19,14 @@ const OrderManager = () => {
     const [orderToDelete, setOrderToDelete] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showOrderModal, setShowOrderModal] = useState(false);
-    const [showNewOrderModal, setShowNewOrderModal] = useState(false);
+    const [orderToUpdate, setOrderToUpdate] = useState(null); // State quản lý đơn hàng để cập nhật
     const [searchParams, setSearchParams] = useSearchParams();
-    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Hàm để gọi lại API và tải danh sách đơn hàng mới nhất
+    const refreshOrders = async () => {
+        const params = Object.fromEntries([...searchParams]);
+        await fetchOrdersWithParams({ ...params, page: params.page || 1, page_size: params.page_size || 10 });
+    };
 
     const fetchOrdersWithParams = async (params) => {
         try {
@@ -36,8 +39,7 @@ const OrderManager = () => {
     };
 
     useEffect(() => {
-        const params = Object.fromEntries([...searchParams]);
-        fetchOrdersWithParams({ ...params, page: params.page || 1, page_size : params.page_size || 10 });
+        refreshOrders();
     }, [searchParams]);
 
     const handleOrderClick = (order) => {
@@ -48,8 +50,7 @@ const OrderManager = () => {
     const handleDeleteData = async () => {
         try {
             await apiOrderService.delete(orderToDelete.id);
-            const params = Object.fromEntries([...searchParams]);
-            await fetchOrdersWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
+            await refreshOrders();
             setShowDeleteModal(false);
         } catch (error) {
             console.error("Error deleting order:", error);
@@ -58,6 +59,14 @@ const OrderManager = () => {
 
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
+    };
+
+    const handleUpdateOrderClick = (order) => {
+        if (order.status !== 'completed') {
+            setOrderToUpdate(order); // Mở modal ở chế độ cập nhật với order được chọn
+        } else {
+            alert("Không thể chỉnh sửa đơn hàng đã hoàn tất.");
+        }
     };
 
     const getVariant = (status) => {
@@ -84,8 +93,8 @@ const OrderManager = () => {
                 <Col>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h2>Quản lý đơn hàng</h2>
-                        <Button size={'sm'} variant="primary" onClick={() => setShowNewOrderModal(true)}>
-                            Thêm mới <FaPlusCircle className={'mx-1'} />
+                        <Button size="sm" variant="primary" onClick={() => setOrderToUpdate({})}>
+                            Thêm mới <FaPlusCircle className="mx-1" />
                         </Button>
                     </div>
                     <Table striped bordered hover>
@@ -112,15 +121,25 @@ const OrderManager = () => {
                                     <span className={`text-${getVariant(order.status)}`}>{order.status}</span>
                                 </td>
                                 <td>
-                                    <Button size="sm" variant="primary" onClick={() => {}}
-                                            title="Cập nhật">
-                                        <FaEdit/>
+                                    <Button
+                                        size="sm"
+                                        variant="primary"
+                                        onClick={() => handleUpdateOrderClick(order)}
+                                        title="Cập nhật"
+                                    >
+                                        <FaEdit />
                                     </Button>
-                                    <Button size="sm" className={'ms-2'} variant="danger" onClick={() => {
-                                        setOrderToDelete(order);
-                                        setShowDeleteModal(true);
-                                    }} title="Xoá">
-                                        <FaTrash/>
+                                    <Button
+                                        size="sm"
+                                        className="ms-2"
+                                        variant="danger"
+                                        onClick={() => {
+                                            setOrderToDelete(order);
+                                            setShowDeleteModal(true);
+                                        }}
+                                        title="Xoá"
+                                    >
+                                        <FaTrash />
                                     </Button>
                                 </td>
                             </tr>
@@ -136,7 +155,7 @@ const OrderManager = () => {
                             onClick={() => handlePageChange(meta.page - 1)}
                             disabled={meta.page === 1}
                         />
-                        {Array.from({length: meta.total_page}, (_, index) => (
+                        {Array.from({ length: meta.total_page }, (_, index) => (
                             <Pagination.Item
                                 key={index + 1}
                                 active={index + 1 === meta.page}
@@ -164,12 +183,12 @@ const OrderManager = () => {
             />
 
             <NewOrderModal
-                show={showNewOrderModal}
-                onHide={() => {
-					setShowNewOrderModal(false);
-					fetchOrdersWithParams({page: meta.page || 1});
-				}}
+                show={!!orderToUpdate}
+                onHide={() => setOrderToUpdate(null)}
+                orderToUpdate={orderToUpdate}
+                refreshOrders={refreshOrders} // Truyền hàm callback để làm mới danh sách đơn hàng
             />
+
             <ModelConfirmDeleteData
                 showDeleteModal={showDeleteModal}
                 setShowDeleteModal={setShowDeleteModal}

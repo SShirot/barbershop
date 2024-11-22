@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'toastr/build/toastr.min.css';
 import './App.css';
-import GuestLayout from './components/GuestLayout';
-import LoginLayout from './components/LoginLayout';
-import RegisterLayout from './components/RegisterLayout';
-
+// import GuestLayout from './components/GuestLayout';
+// import LoginLayout from './components/LoginLayout';
+// import RegisterLayout from './components/RegisterLayout';
 
 import Login from './pages/guest/Login';
 import Register from './pages/guest/Register';
@@ -17,6 +16,11 @@ import { loadUserFromLocalStorage } from "./redux/slices/authSlice";
 // Import các route đã tách
 import AdminRoutes from './routes/AdminRoutes';
 import UserRoutes from './routes/UserRoutes';
+
+
+const LoginLayout = React.lazy(() => import('./components/LoginLayout'));
+const RegisterLayout = React.lazy(() => import('./components/RegisterLayout'));
+const GuestLayout = React.lazy(() => import('./components/GuestLayout'));
 
 // Import các component sử dụng lazy loading
 const Home = React.lazy(() => import('./pages/guest/Home'));

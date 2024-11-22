@@ -7,6 +7,9 @@ const apiOrderService = {
     createOrder: (data) => {
         return apiHelper.post(`admin/order`,data);
     },
+    updateOrder: (id, data) => {
+        return apiHelper.put(`admin/order/${id}`,data);
+    },
     getListsAdmin: (params) => {
         const paramsSearch = new URLSearchParams(params);
         return apiHelper.get(`admin/order?${paramsSearch.toString()}`);

@@ -1,5 +1,6 @@
 const Model = require('../../models/Order');
 const { successResponse, errorResponse } = require("../../utils/response");
+const Article = require("../../models/Post");
 // const Model = require("../../models/Product");
 
 // Lấy tất cả đơn hàng
@@ -43,6 +44,19 @@ exports.create = async (req, res) => {
         const newOrder = await Model.create(orderData);
 
         return successResponse(res, { data: newOrder }, 'Order created successfully', 201);
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, 'Server error');
+    }
+};
+
+exports.update = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const orderData = req.body;
+        const newOrder = await Model.updateById(id, orderData);
+
+        return successResponse(res, { data: newOrder }, 'Order update successfully', 201);
     } catch (err) {
         console.error(err);
         return errorResponse(res, 'Server error');

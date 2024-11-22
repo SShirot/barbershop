@@ -184,6 +184,14 @@ const Order = {
     // Phương thức cập nhật đơn hàng theo ID
     updateById: async (id, updateData) => {
         try {
+            const existingOrder = await Order.findById(id);
+            if (!existingOrder) {
+                throw new Error('Order not found');
+            }
+
+            // Sử dụng giá trị `code` từ `updateData` nếu có, nếu không lấy từ `existingOrder`
+            const code = updateData.code || existingOrder.code;
+
             // Cập nhật thông tin đơn hàng trong bảng `ec_orders`
             const query = `
             UPDATE ${Order.tableName} 
@@ -192,13 +200,13 @@ const Order = {
             const values = [
                 updateData.user_id,
                 updateData.payment_method_id,
-                updateData.code || null,
-                updateData.total_shipping_fee || 0,
+                code,
+                updateData.shipping_fee || 0,
                 updateData.payment_status || 'pending',
                 updateData.status || 'pending',
                 updateData.coupon_code || null,
-                updateData.amount || 0,
-                updateData.shipping_amount || 0,
+                updateData.total_amount || 0,
+                updateData.shipping_fee || 0,
                 updateData.tax_amount || 0,
                 updateData.discount_amount || 0,
                 updateData.sub_total || 0,
