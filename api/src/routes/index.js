@@ -10,6 +10,7 @@ router.use('/user', require('./user'));
 router.use('/products', require('./guest/product'));
 router.use('/order', require('./user/order'));
 router.use('/categories', require('./guest/category'));
+router.use('/slides', require('./guest/slide'));
 
 // router.use('/guest', require('./guest/guest'));
 router.get(

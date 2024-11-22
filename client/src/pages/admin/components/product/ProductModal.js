@@ -109,20 +109,35 @@ const ProductModal = ({
                                                 <ErrorMessage name="name" component="div" className="text-danger" />
                                             </Form.Group>
 
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Price</Form.Label>
-                                                <Field
-                                                    name="price"
-                                                    type="text"
-                                                    className="form-control"
-                                                    value={formatCurrencyInput(values.price.toString())}
-                                                    onChange={(e) => {
-                                                        const rawValue = e.target.value.replace(/\./g, "");
-                                                        setFieldValue("price", rawValue);
-                                                    }}
-                                                />
-                                                <ErrorMessage name="price" component="div" className="text-danger" />
-                                            </Form.Group>
+                                            <Row>
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <Form.Label>Price</Form.Label>
+                                                        <Field
+                                                            name="price"
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={formatCurrencyInput(values.price.toString())}
+                                                            onChange={(e) => {
+                                                                const rawValue = e.target.value.replace(/\./g, "");
+                                                                setFieldValue("price", rawValue);
+                                                            }}
+                                                        />
+                                                        <ErrorMessage name="price" component="div" className="text-danger" />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <Form.Label>Số lượng</Form.Label>
+                                                        <Field
+                                                            name="number"
+                                                            type="number"
+                                                            className="form-control"
+                                                        />
+                                                        <ErrorMessage name="number" component="div" className="text-danger" />
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
 
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Category</Form.Label>

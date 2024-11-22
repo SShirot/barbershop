@@ -12,9 +12,11 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        navigate('/admin');
         const loadProducts = async () => {
-            const products = await apiProductService.getLists({});
+            const products = await apiProductService.getLists({
+                page: 1,
+                page_size: 10
+            });
             console.info("===========[] ===========[products] : ",products);
             // Giả sử bạn muốn lọc sản phẩm theo một tiêu chí nhất định
             const getPetProduct = products?.data?.products?.filter(product => product.category.name === 'Thức ăn hạt');

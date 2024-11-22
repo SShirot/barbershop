@@ -153,6 +153,7 @@ const ProductManager = () => {
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Giá</th>
+                            <th>Số Lượng</th>
                             <th>Nhãn</th>
                             <th>Thao tác</th>
                         </tr>
@@ -167,6 +168,7 @@ const ProductManager = () => {
                                 <td>{product?.name}</td>
                                 <td>{product?.category?.name}</td>
                                 <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product?.price)}</td>
+                                <td>{product?.number}</td>
                                 <td>
                                     {product?.labels && product.labels.length > 0 ? (
                                         product.labels.map((label) => (
