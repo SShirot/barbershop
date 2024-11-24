@@ -7,7 +7,6 @@ import PromotionManager from "../pages/admin/PromotionManager";
 import UserManager from "../pages/admin/account/UserManager";
 import MenuManager from "../pages/admin/news/MenuManager";
 import CategoryManager from "../pages/admin/ecm/CategoryManager";
-import AppointmentManager from "../pages/admin/AppointmentManager";
 import ProductManager from "../pages/admin/ecm/ProductManager";
 import OrderManager from "../pages/admin/ecm/OrderManager";
 import TagManager from "../pages/admin/news/TagManager";
@@ -16,6 +15,7 @@ import ProductLabelManager from "../pages/admin/ecm/ProductLabelManager";
 import SlideManager from "../pages/admin/slide/SlideManager";
 import ProfileManager from "../pages/admin/account/ProfileManager";
 import ServiceManager from "../pages/admin/service/ServiceManager";
+import ServiceUserManager from "../pages/admin/service/ServiceUserManager";
 
 const AdminRoutes = () => {
 
@@ -67,7 +67,7 @@ const AdminRoutes = () => {
                         <Route path="ecommerce/product" element={<ProductManager />} />
                         <Route path="ecommerce/order" element={<OrderManager />} />
                         <Route path="services/manage" element={<ServiceManager />} />
-                        <Route path="services/order" element={<ServiceManager />} />
+                        <Route path="services/order" element={<ServiceUserManager />} />
 
                         <Route path="slides" element={<SlideManager />} />
                         <Route path="profile" element={<ProfileManager />} />

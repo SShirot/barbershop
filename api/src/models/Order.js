@@ -35,30 +35,41 @@ const Order = {
     },
 
     // Phương thức lấy tất cả đơn hàng với phân trang và tìm kiếm
-    getAll: async (page = 1, pageSize = 10, code = null) => {
+    getAll: async (page = 1, pageSize = 10, code = null, user_id = null) => {
         const offset = (page - 1) * pageSize;
         let query = `
         SELECT o.*, u.id AS user_id, u.name AS user_name, u.email AS user_email, u.phone AS user_phone
         FROM ${Order.tableName} o
         LEFT JOIN users u ON o.user_id = u.id
     `;
-        let countQuery = `SELECT COUNT(*) as total FROM ${Order.tableName} o`;
+        let countQuery = `SELECT COUNT(*) as total FROM ${Order.tableName} o LEFT JOIN users u ON o.user_id = u.id`;
         const queryParams = [];
 
+        // Điều kiện tìm kiếm theo mã đơn hàng (code)
         if (code) {
             query += ' WHERE o.code LIKE ?';
             countQuery += ' WHERE o.code LIKE ?';
             queryParams.push(`%${code}%`);
         }
 
+        // Điều kiện lọc theo user_id
+        if (user_id) {
+            query += code ? ' AND' : ' WHERE';
+            query += ' o.user_id = ?';
+            countQuery += code ? ' AND' : ' WHERE';
+            countQuery += ' o.user_id = ?';
+            queryParams.push(user_id);
+        }
+
+        // Sắp xếp và phân trang
         query += ' ORDER BY o.created_at DESC LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
 
         const [orders] = await db.query(query, queryParams);
-        const [countResult] = await db.query(countQuery, code ? [`%${code}%`] : []);
+        const [countResult] = await db.query(countQuery, queryParams.slice(0, -2));
         const total = countResult[0].total;
 
-        // Lấy danh sách sản phẩm và thông tin người dùng cho từng đơn hàng
+        // Lấy danh sách sản phẩm cho từng đơn hàng
         for (let order of orders) {
             const productsQuery = `
             SELECT p.id, p.name, p.price, op.qty 
@@ -80,6 +91,7 @@ const Order = {
             // Xóa các cột thông tin người dùng không cần thiết ở cấp cao nhất
             delete order.user_id;
             delete order.user_name;
+            delete order.user_email;
             delete order.user_phone;
         }
 
@@ -95,6 +107,7 @@ const Order = {
             }
         };
     },
+
 
 
     // Phương thức lấy đơn hàng theo ID

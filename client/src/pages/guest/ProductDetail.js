@@ -16,6 +16,15 @@ const ProductDetail = () => {
     const dispatch = useDispatch();
 
     console.info("===========[ProductDetail] ===========[] : ",);
+
+    const getProducts = async () => {
+        const productsResponse = await apiProductService.getLists({
+            page: 1,
+            page_size: 10,
+        });
+        setRelatedProducts(productsResponse.data.data);
+    };
+
     useEffect(() => {
         // Hàm để gọi API lấy chi tiết sản phẩm dựa trên productId
         const fetchProductDetails = async (id) => {
@@ -34,6 +43,7 @@ const ProductDetail = () => {
             // Tách productId từ slug
             const id = slug.split('-').pop();
             fetchProductDetails(id);
+            getProducts().then(r => {});
         }
     }, [slug]);
 

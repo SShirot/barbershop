@@ -50,7 +50,6 @@ const SlideManager = () => {
             formData.append("file", file);
             try {
                 const response = await apiUpload.uploadImage(file);
-                console.info("===========[] ===========[] : ",response);
                 setFieldValue("image_url", response.data);
                 setImagePreview(response.data.url);
             } catch (error) {
@@ -144,7 +143,8 @@ const SlideManager = () => {
                             name: editingCategory?.name || '',
                             link: editingCategory?.link || '',
                             description: editingCategory?.description || '',
-                            image_url: editingCategory?.avatar || ''
+                            image_url: editingCategory?.avatar || '',
+                            page: editingCategory?.page || 'home',
                         }}
                         validationSchema={Yup.object({
                             name: Yup.string().required('Tên danh mục không được để trống'),
@@ -165,6 +165,11 @@ const SlideManager = () => {
                                     <Form.Label>Link</Form.Label>
                                     <Field name="link" className="form-control" />
                                     <ErrorMessage name="link" component="div" className="text-danger" />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Page</Form.Label>
+                                    <Field name="page" className="form-control" />
+                                    <ErrorMessage name="page" component="div" className="text-danger" />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">

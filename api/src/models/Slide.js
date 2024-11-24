@@ -17,23 +17,32 @@ const Slide = {
     },
 
     // Phương thức lấy danh sách slides với phân trang và tìm kiếm
-    getAll: async (page = 1, pageSize = 10, name = null) => {
+    getAll: async (page = 1, pageSize = 10, name = null, page_site) => {
         const offset = (page - 1) * pageSize;
         let query = `SELECT * FROM ${Slide.tableName}`;
         let countQuery = `SELECT COUNT(*) as total FROM ${Slide.tableName}`;
         const queryParams = [];
+        const countParams = [];
 
         if (name) {
             query += ' WHERE name LIKE ?';
             countQuery += ' WHERE name LIKE ?';
             queryParams.push(`%${name}%`);
+            countParams.push(`%${name}%`);
+        }
+
+        if (page_site) {
+            query += ' WHERE page LIKE ?';
+            countQuery += ' WHERE page LIKE ?';
+            queryParams.push(`%${page_site}%`);
+            countParams.push(`%${page_site}%`);
         }
 
         query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
 
         const [rows] = await db.query(query, queryParams);
-        const [countResult] = await db.query(countQuery, name ? [`%${name}%`] : []);
+        const [countResult] = await db.query(countQuery, countParams);
         const total = countResult[0].total;
 
         return {

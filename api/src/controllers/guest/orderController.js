@@ -12,3 +12,17 @@ exports.createOrder = async (req, res) => {
         return errorResponse(res, 'Server error');
     }
 };
+
+exports.getAll = async (req, res) => {
+    try {
+        const { page, page_size: pageSize, code } = req.query;
+        const userId = req.user.id;
+        console.info("===========[] ===========[user] : ",userId);
+        const result = await Model.getAll(Number(page), Number(pageSize), code,userId);
+
+        return successResponse(res, { meta: result.meta, data: result.data }, 'Get list of data successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+};

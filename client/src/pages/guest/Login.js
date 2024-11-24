@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {startTransition, useEffect, useState} from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {unwrapResult} from "@reduxjs/toolkit";
 import bgImage from '../../assets/images/bg-login.jpg';
 import toastr from 'toastr';
+import slideService from "../../api/slideService";
 
 const Login = () => {
     const initialValues = {
@@ -19,6 +20,10 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loading, error, isAuthenticated } = useSelector((state) => state.auth); // Add isAuthenticated
+    const [slides, setSlides] = useState([]);
+
+    // Lấy URL của hình ảnh từ slides (sử dụng hình ảnh đầu tiên trong danh sách)
+    const backgroundImageUrl = slides.length > 0 ? slides[0].avatar : '';
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -26,6 +31,23 @@ const Login = () => {
         }
         console.info("===========[] ===========[error] : ",error);
     }, [isAuthenticated, navigate]);
+
+    useEffect(() => {
+        // Hàm gọi API để lấy danh sách slide
+        const fetchSlides = async () => {
+            try {
+                const response = await slideService.getListsGuest({
+                    page_site: "auth"
+                });
+                setSlides(response.data.data);
+            } catch (error) {
+                console.error("Error fetching slides:", error);
+            }
+        };
+
+        fetchSlides();
+    }, []);
+
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Email không đúng định dạng').required('Email không được để trống'),
@@ -61,7 +83,10 @@ const Login = () => {
 
     return (
         <Row className="no-gutter">
-            <Col className="col-md-6 d-none d-md-flex bg-image" style={{ backgroundImage: `url(${bgImage})` }}></Col>
+            <Col
+                className="col-md-6 d-none d-md-flex bg-image"
+                style={{ backgroundImage: `url(${backgroundImageUrl || bgImage})` }}
+            ></Col>
             <Col className="col-md-6 bg-light">
                 <div className="login d-flex align-items-center py-5">
                     <Container>
@@ -87,10 +112,25 @@ const Login = () => {
                                                 {loading ? 'Logging in...' : 'Login'}
                                             </Button>
                                             <div className="text-center d-flex justify-content-between mt-4">
-                                                <p>Bạn chưa có tài khoản? Đăng ký <Link to={'/register'} className="font-italic text-muted">
+                                                <p>Bạn chưa có tài khoản? Đăng ký <Link
+                                                    to={'/register'} className="font-italic text-muted"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        startTransition(() => {
+                                                            navigate("/register");
+                                                        });
+                                                    }}
+                                                >
                                                     <u>tại đây</u></Link>
                                                 </p>
-                                                <Link to={'/'} className="font-italic text-danger">Trang chủ</Link>
+                                                <Link to={'/'} className="font-italic text-danger"
+                                                      onClick={(e) => {
+                                                          e.preventDefault();
+                                                          startTransition(() => {
+                                                              navigate("/");
+                                                          });
+                                                      }}
+                                                >Trang chủ</Link>
                                             </div>
                                             <div className="text-center d-flex justify-content-between mt-4">
                                                 <p>Code by <Link to={'/'} className="font-italic text-muted"><u>Phuphan</u></Link></p>

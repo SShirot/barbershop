@@ -9,13 +9,14 @@ import PostManager from "../pages/user/PostManager";
 import BoardingManager from "../pages/user/BoardingManager";
 import OrderManager from "../pages/user/OrderManager";
 import ProductManager from "../pages/user/ProductManager";
+import AdminLayout from "../components/AdminLayout";
 
 const UserRoutes = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-    if (user?.role !== 'customer') {
-        return null; // Trả về null nếu không phải là customer
-    }
+    // if (user?.role !== 'customer') {
+    //     return null; // Trả về null nếu không phải là customer
+    // }
 
     return (
         <Routes>

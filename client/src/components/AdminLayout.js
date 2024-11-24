@@ -71,11 +71,11 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                         <Dropdown align="end">
                             <Dropdown.Toggle as={Nav.Link} id="dropdown-user">
                                 <img
-                                    src={user.avatar || 'https://via.placeholder.com/150'}
+                                    src={user?.avatar || 'https://via.placeholder.com/150'}
                                     alt="Avatar"
                                     style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }}
                                 />
-                                {user.name}
+                                {user?.name}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>

@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import { Container, Navbar, Nav, Dropdown, Badge, Alert } from 'react-bootstrap';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import {Outlet, Link, useLocation, useNavigate} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import HomeCarousel from "../pages/components/slide/HomeCarousel";
 import Footer from "../pages/components/footer/Footer";
 import { FaShoppingCart } from 'react-icons/fa';
 import { loadUserFromLocalStorage, logout } from '../redux/slices/authSlice';
 import BookingModal from './guest/BookingModal';
-import BoardingModal from './guest/BoardingModal';
-import ConsultationModal from './guest/ConsultationModal';
 import categoryService from "../api/categoryService";
 import {createSlug} from "../helpers/formatters"; // Import ConsultationModal
 
@@ -29,27 +27,19 @@ const GuestLayout = () => {
     }, [dispatch]);
 
     const [showBooking, setShowBooking] = useState(false);
-    const [showBoarding, setShowBoarding] = useState(false);
-    const [showConsultation, setShowConsultation] = useState(false); // State để quản lý modal tư vấn
     const [successMessage, setSuccessMessage] = useState('');
 
     const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
 
     const handleBookingClose = () => setShowBooking(false);
     const handleBookingShow = () => setShowBooking(true);
-
-    const handleBoardingClose = () => setShowBoarding(false);
-    const handleBoardingShow = () => setShowBoarding(true);
-
-    const handleConsultationClose = () => setShowConsultation(false);
-    const handleConsultationShow = () => setShowConsultation(true);
 
     // Gọi API để lấy danh sách category khi component được mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await categoryService.getListsGuest({}); // Gọi API lấy category
-                console.info("===========[] ===========[] : ",response);
                 setCategories(response.data.data); // Lưu danh sách category vào state
             } catch (error) {
                 console.error('Failed to fetch categories', error);
@@ -84,13 +74,11 @@ const GuestLayout = () => {
                                 )}
                             </Dropdown.Menu>
                         </Dropdown>
-                        <Nav.Link as={Link} to="/">Dịch vụ</Nav.Link>
                         {isAuthenticated && (
                             <>
                                 <Nav.Link onClick={handleBookingShow}>Đặt lịch</Nav.Link>
                             </>
                         )}
-                        <Nav.Link as={Link} to="/">Chia sẻ</Nav.Link>
                     </Nav>
                     <Nav>
                         <Nav.Link as={Link} to="/cart" className="position-relative">
@@ -113,17 +101,34 @@ const GuestLayout = () => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to="/user/profile">Profile</Dropdown.Item>
-                                    <Dropdown.Item as={Link} to="/user/pets">My Pets</Dropdown.Item>
-                                    <Dropdown.Item as={Link} to="/user/orders">My Orders</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to="/user/profile">Cập nhật thông tin</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to="/user/orders">Đơn hàng</Dropdown.Item>
                                     <Dropdown.Divider />
-                                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         ) : (
                             <>
-                                <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                                <Nav.Link as={Link} to="/register">Register</Nav.Link>
+                                <Nav.Link as={Link}
+                                          to="/login"
+                                          onClick={(e) => {
+                                              e.preventDefault();
+                                              startTransition(() => {
+                                                  navigate("/login");
+                                              });
+                                          }}
+                                >Đăng nhập</Nav.Link>
+                                <Nav.Link as={Link}
+                                          to="/register"
+                                          onClick={(e) => {
+                                              e.preventDefault();
+                                              startTransition(() => {
+                                                  navigate("/register");
+                                              });
+                                          }}
+                                >
+                                    Đăng ký
+                                </Nav.Link>
                             </>
                         )}
                     </Nav>

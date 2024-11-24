@@ -63,6 +63,11 @@ const Category = {
         const [rows] = await db.query(query, [id]);
         return rows?.length > 0 ? rows[0] : null;
     },
+    findBySlug: async function (slug) {
+        const query = `SELECT * FROM ${this.tableName} WHERE slug = ? LIMIT 1`;
+        const [rows] = await db.query(query, [slug]);
+        return rows?.length > 0 ? rows[0] : null;
+    },
     // Phương thức tạo mới category
     create: async function (categoryData) {
         const query = `
