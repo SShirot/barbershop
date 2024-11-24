@@ -121,14 +121,14 @@ const OrderManager = () => {
                                     <span className={`text-${getVariant(order.status)}`}>{order.status}</span>
                                 </td>
                                 <td>
-                                    {/*<Button*/}
-                                    {/*    size="sm"*/}
-                                    {/*    variant="primary"*/}
-                                    {/*    onClick={() => handleUpdateOrderClick(order)}*/}
-                                    {/*    title="Cập nhật"*/}
-                                    {/*>*/}
-                                    {/*    <FaEdit />*/}
-                                    {/*</Button>*/}
+                                    <Button
+                                        size="sm"
+                                        variant="primary"
+                                        onClick={() => handleUpdateOrderClick(order)}
+                                        title="Cập nhật"
+                                    >
+                                        <FaEdit />
+                                    </Button>
                                     <Button
                                         size="sm"
                                         className="ms-2"

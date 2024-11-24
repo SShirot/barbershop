@@ -72,7 +72,7 @@ const Order = {
         // Lấy danh sách sản phẩm cho từng đơn hàng
         for (let order of orders) {
             const productsQuery = `
-            SELECT p.id, p.name, p.price, op.qty 
+            SELECT p.id, p.name, p.price, op.qty, p.avatar
             FROM ec_transactions op
             JOIN ec_products p ON op.product_id = p.id
             WHERE op.order_id = ?
@@ -144,7 +144,8 @@ const Order = {
             const subTotal = orderData.total_amount + (orderData.shipping_fee || 0);
 
             // Tạo đơn hàng trong bảng `ec_orders`
-            const orderQuery = `INSERT INTO ${Order.tableName} (user_id, payment_method_id, code, total_shipping_fee, payment_status, status, coupon_code, amount, shipping_amount, tax_amount, discount_amount, sub_total, completed_at, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            const orderQuery = `INSERT INTO ${Order.tableName} (user_id, payment_method_id, code, total_shipping_fee, payment_status, status, coupon_code, amount, shipping_amount, tax_amount, discount_amount, sub_total, completed_at, notes, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`;
             const orderValues = [
                 orderData.user_id,
                 orderData.payment_method_id || 0,

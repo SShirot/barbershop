@@ -23,6 +23,12 @@ const userService = {
     updateProfile: (data) => {
         return apiHelper.put(`me`,data);
     },
+    forgotPassword: (data) => {
+        return apiHelper.post(`auth/forgot-password`,data);
+    },
+    resetPassword: (data) => {
+        return apiHelper.post(`auth/reset-password`,data);
+    },
 };
 
 export default userService;

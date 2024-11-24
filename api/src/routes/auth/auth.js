@@ -221,4 +221,16 @@ router.post(
     authController.login
 );
 
+router.post(
+    '/forgot-password',
+    [
+        check('email', 'Vui lòng nhập email hợp lệ').isEmail(),
+    ],
+    authController.forgotPassword
+);
+router.post(
+    '/reset-password',
+    authController.resetPassword
+);
+
 module.exports = router;

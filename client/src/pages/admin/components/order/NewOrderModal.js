@@ -73,7 +73,8 @@ const NewOrderModal = ({ show, onHide, orderToUpdate, refreshOrders }) => {
                 value: product.id,
                 label: product.name,
                 price: product.price,
-                quantity: product.quantity
+                quantity: product.quantity,
+                avatar: product.avatar,
             })));
         } else {
             setUser(null);

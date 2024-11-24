@@ -7,8 +7,8 @@ import './App.css';
 // import LoginLayout from './components/LoginLayout';
 // import RegisterLayout from './components/RegisterLayout';
 
-import Login from './pages/guest/Login';
-import Register from './pages/guest/Register';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
 import { useDispatch } from "react-redux";
 import { loadUserFromLocalStorage } from "./redux/slices/authSlice";
@@ -16,10 +16,11 @@ import { loadUserFromLocalStorage } from "./redux/slices/authSlice";
 // Import các route đã tách
 import AdminRoutes from './routes/AdminRoutes';
 import UserRoutes from './routes/UserRoutes';
+import ResetPassword from "./pages/auth/ResetPassword";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 
-const LoginLayout = React.lazy(() => import('./components/LoginLayout'));
-const RegisterLayout = React.lazy(() => import('./components/RegisterLayout'));
+const AuthLayout = React.lazy(() => import('./components/AuthLayout'));
 const GuestLayout = React.lazy(() => import('./components/GuestLayout'));
 
 // Import các component sử dụng lazy loading
@@ -75,11 +76,17 @@ const App = () => {
                 <Route path="/user/*" element={<UserRoutes />} />
 
                 {/* Routes dành cho login và register */}
-                <Route path="login" element={<LoginLayout />}>
+                <Route path="login" element={<AuthLayout />}>
                     <Route index element={<Login />} />
                 </Route>
-                <Route path="register" element={<RegisterLayout />}>
+                <Route path="register" element={<AuthLayout />}>
                     <Route index element={<Register />} />
+                </Route>
+                <Route path="forgot-password" element={<AuthLayout />}>
+                    <Route index element={<ForgotPassword />} />
+                </Route>
+                <Route path="/reset-password/:token" element={<AuthLayout />}>
+                    <Route index element={<ResetPassword />} />
                 </Route>
 
                 {/* Điều hướng đến trang chủ nếu không tìm thấy route */}
