@@ -15,6 +15,7 @@ const Product = {
         price: 'int(11) DEFAULT 0',
         sale: 'int(11) DEFAULT 0',
         contents: 'text',
+        images: 'json',
         length: 'double(8,2)',
         width: 'double(8,2)',
         height: 'double(8,2)',
@@ -32,7 +33,8 @@ const Product = {
         const queryParams = [];
 
         // Điều kiện để join bảng nhãn khi lọc theo label_id
-        if (label_id) {
+        if (label_id && label_id !== 'null' && label_id !== null) {
+            console.info("===========[1] ===========[label_id] : ",label_id);
             query += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
             countQuery += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
         }
@@ -63,7 +65,8 @@ const Product = {
         // }
 
         // Điều kiện lọc theo label_id
-        if (label_id) {
+        if (label_id && label_id !== 'null' && label_id !== null) {
+            console.info("===========[2] ===========[label_id] : ",label_id);
             query += (name || category_id || rating) ? ' AND' : ' WHERE';
             query += ` pl.product_label_id = ?`;
             countQuery += (name || category_id || rating) ? ' AND' : ' WHERE';
@@ -93,7 +96,7 @@ const Product = {
         // Giới hạn và offset cho phân trang
         query += ' LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
-
+        console.info("===========[] ===========[query] : ",query);
         const [products] = await db.query(query, queryParams);
         const [countResult] = await db.query(countQuery, queryParams.slice(0, -2));
         const total = countResult[0].total;
@@ -151,12 +154,13 @@ const Product = {
 
     // Phương thức tạo mới sản phẩm cùng với tags
     create: async (productData, LabelsIds = []) => {
-        const query = `INSERT INTO ${Product.tableName} (name, slug, description, avatar, status, number, price, sale, contents, length, width, height, category_id, brand_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO ${Product.tableName} (name, slug, description, avatar, images, status, number, price, sale, contents, length, width, height, category_id, brand_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             productData.name,
             productData.slug,
             productData.description || null,
             productData.avatar || null,
+            JSON.stringify(productData.images || []),
             productData.status || 'pending',
             productData.number || 0,
             productData.price || 0,
@@ -180,13 +184,14 @@ const Product = {
     updateById: async (id, updateData, LabelsIds = []) => {
         const query = `
             UPDATE ${Product.tableName} 
-            SET name = ?, slug = ?, description = ?, avatar = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
+            SET name = ?, slug = ?, description = ?, avatar = ?,images = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
             WHERE id = ?`;
         const values = [
             updateData.name,
             updateData.slug,
             updateData.description || null,
             updateData.avatar || null,
+            JSON.stringify(updateData.images || []),
             updateData.status || 'pending',
             updateData.number || 0,
             updateData.price || 0,

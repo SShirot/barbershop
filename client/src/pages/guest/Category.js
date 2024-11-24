@@ -7,7 +7,7 @@ import categoryService from '../../api/categoryService';
 import CategorySkeleton from './../components/loading/CategorySkeleton';
 import ProductSkeleton from './../components/loading/ProductSkeleton';
 import apiProductService from "../../api/apiProductService";
-import { formatPrice } from "../../helpers/formatters";
+import {createSlug, formatPrice} from "../../helpers/formatters";
 
 const Category = () => {
     const { slug } = useParams();
@@ -201,10 +201,13 @@ const Category = () => {
                             products.map((product, idx) => (
                                 <Col md={3} key={idx} className={'item-prod'}>
                                     <Card className="mb-4 card-prod">
-                                        <Card.Img variant="top" src={product.avatar} />
+                                        {/*<Card.Img variant="top" src={product.avatar} />*/}
+                                        <Nav.Link as={Link} to={`/p/${createSlug(product.name)}-${product.id}`}>
+                                            <Card.Img variant="top" src={product.avatar} alt={product.name} style={{ height: '200px'}} />
+                                        </Nav.Link>
                                         <Card.Body>
                                             <Card.Title>
-                                                <Nav.Link as={Link} to={`/product/${product.slug}`}>{product.name}</Nav.Link>
+                                                <Nav.Link as={Link} to={`p/${createSlug(product.name)}-${product.id}`}>{product.name}</Nav.Link>
                                             </Card.Title>
                                             <Card.Text>{formatPrice(product.price)}</Card.Text>
                                         </Card.Body>
