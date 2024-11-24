@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {startTransition} from 'react';
 import {Container, Navbar, Nav, NavDropdown, Dropdown} from 'react-bootstrap';
 import {Outlet, Link, useNavigate} from 'react-router-dom';
 import './UserLayout.css';
@@ -81,7 +81,14 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/profile">Cập nhật thông tin</Dropdown.Item>
                                 <Dropdown.Divider />
-                                <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                                <Dropdown.Item
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        startTransition(() => {
+                                            navigate("/login");
+                                        });
+                                    }}
+                                >Đăng xuất</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav>

@@ -15,7 +15,7 @@ const UserTable = ({ users, openUserModal, setUserToDelete, setShowDeleteModal }
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Ngày tạo</th>
-                {/*<th>Role</th>*/}
+                <th>Role</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
@@ -37,32 +37,30 @@ const UserTable = ({ users, openUserModal, setUserToDelete, setShowDeleteModal }
                     <td>{user.email}</td>
                     <td>{user.phone}</td>
                     <td>{moment(user.dateOfBirth).format('DD-MM-YYYY')}</td>
-                    {/*<td>*/}
-                    {/*    <Badge*/}
-                    {/*        pill*/}
-                    {/*        bg={*/}
-                    {/*            user.role === 'admin' ? 'danger' :*/}
-                    {/*            user.role === 'staff' ? 'success' :*/}
-                    {/*                user.role === 'doctor' ? 'dark' :*/}
-                    {/*                    'primary' // default color for 'customer'*/}
-                    {/*        }*/}
-                    {/*    >*/}
-                    {/*        {user.role.charAt(0).toUpperCase() + user.role.slice(1)}*/}
-                    {/*    </Badge>*/}
-                    {/*</td>*/}
                     <td>
-                        <Dropdown as={ButtonGroup}>
-                            <Dropdown.Toggle variant="link" id="dropdown-basic">
-                                <FaListUl/>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => openUserModal(user)}>  <FaEdit /> Cập nhật</Dropdown.Item>
-                                <Dropdown.Item onClick={() => {
-                                    setUserToDelete(user);
-                                    setShowDeleteModal(true);
-                                }}> <FaTrash /> Xoá</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        {user.user_type}
+                    </td>
+                    <td>
+                        <Button
+                            size="sm"
+                            variant="primary"
+                            onClick={() => openUserModal(user)}
+                            title="Cập nhật"
+                        >
+                            <FaEdit />
+                        </Button>
+                        <Button
+                            size="sm"
+                            className="ms-2"
+                            variant="danger"
+                            onClick={() => {
+                                setUserToDelete(user);
+                                setShowDeleteModal(true);
+                            }}
+                            title="Xoá"
+                        >
+                            <FaTrash />
+                        </Button>
                     </td>
                 </tr>
             ))}

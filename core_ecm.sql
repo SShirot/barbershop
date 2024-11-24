@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 04, 2024 at 11:28 PM
+-- Generation Time: Nov 14, 2024 at 08:27 AM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -156,7 +156,7 @@ CREATE TABLE `bl_articles` (
 
 INSERT INTO `bl_articles` (`id`, `name`, `slug`, `description`, `content`, `status`, `author_id`, `menu_id`, `is_featured`, `avatar`, `views`, `created_at`, `updated_at`) VALUES
 (4, 'ĐỘC QUYỀN WEBSITE - VOUCHER 100K CHO KHÁCH HÀNG ĐĂNG KÍ EMAIL', NULL, 'adadadadada', '<p>Nội dung1212</p>', 'pending', NULL, 4, 0, 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/4.%20%C4%90%C4%82NG%20K%C3%8D%20TH%C3%94NG%20TIN.jpg', 0, '2024-10-20 03:47:11', NULL),
-(7, 'Tặng ngay Voucher 25K cho khách hàng Follow Zalo YODY trong tháng 10', NULL, 'Ưu đãi cực Hot trong tháng 10, chỉ cần quý khách thao tác theo dõi kênh Zalo OA của YODY sẽ được nhận ngay Voucher giảm giá', '<p>Nội dung</p>', 'pending', NULL, 3, 0, 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/2.%20ZALO%20YODY%2050K.jpg', 0, '2024-10-27 05:42:41', NULL),
+(7, 'Tặng ngay Voucher 25K cho khách hàng Follow Zalo YODY trong tháng 10', NULL, 'Ưu đãi cực Hot trong tháng 10, chỉ cần quý khách thao tác theo dõi kênh Zalo OA của YODY sẽ được nhận ngay Voucher giảm giá', '<p>Nội dung</p>', 'published', NULL, 3, 0, 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/2.%20ZALO%20YODY%2050K.jpg', 0, '2024-10-27 05:42:41', NULL),
 (8, 'Ưu đãi lớn nhất năm 2024 - SALE CUỐI MÙA LÊN ĐẾN 50%', NULL, 'Quý khách có thể thực hiện mua sắm trực tiếp tại hệ thống Online Yody bao gồm Website, Fanpge, Zalo OA hoặc trực tiếp tại hơn 270 cửa hàng YODY trên toàn quốc.', '<p>Nội dung</p>', 'pending', NULL, 4, 0, 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/yody-sale-cuoi-mua.png', 0, '2024-10-27 05:42:41', NULL),
 (11, 'ĐỘC QUYỀN WEBSITE - VOUCHER 100K CHO KHÁCH HÀNG ĐĂNG KÍ EMAIL', NULL, 'Thời gian nhận và sử dụng mã khuyến mãi kéo dài từ ngày 01/10/2024 đến ngày 31/10/2024. Sau khi nhận mã, khách hàng sẽ sử dụng trực tiếp để mua hàng trên Website (không áp dụng tại cửa hàng).', '<p>Nội dung</p>', 'pending', NULL, 3, 0, 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/4.%20%C4%90%C4%82NG%20K%C3%8D%20TH%C3%94NG%20TIN.jpg', 0, NULL, NULL),
 (13, '1212121', NULL, '21', '<p>12212121</p>', 'pending', NULL, 3, 0, 'http://localhost:3014/uploads/images/264f3cbf-b3e6-49c0-9e4b-3bfe4b18a32f.png', 0, NULL, NULL);
@@ -178,8 +178,8 @@ CREATE TABLE `bl_articles_tags` (
 --
 
 INSERT INTO `bl_articles_tags` (`id`, `article_id`, `tag_id`) VALUES
-(15, 7, 11),
-(16, 7, 4);
+(18, 7, 11),
+(19, 7, 4);
 
 -- --------------------------------------------------------
 
@@ -203,7 +203,6 @@ CREATE TABLE `bl_menus` (
 --
 
 INSERT INTO `bl_menus` (`id`, `name`, `slug`, `description`, `status`, `is_featured`, `created_at`, `updated_at`) VALUES
-(1, 'Check 2', NULL, 'Check 2', 'pending', 0, '2024-10-20 03:47:11', NULL),
 (2, 'Thời trang thế giới', 'thoi-trang-the-gioi', 'Thời trang thế giới', 'published', 1, '2024-10-20 03:47:11', NULL),
 (3, 'Đồng phục', 'dong-phuc', 'Đồng phục', 'published', 1, '2024-10-20 03:47:11', NULL),
 (4, 'Tin tức thời trang', NULL, 'Tin tức thời trang', 'published', 1, '2024-10-25 02:53:11', NULL);
@@ -231,7 +230,6 @@ CREATE TABLE `bl_tags` (
 
 INSERT INTO `bl_tags` (`id`, `name`, `slug`, `description`, `status`, `is_featured`, `created_at`, `updated_at`) VALUES
 (1, 'thời trang nổi bật', NULL, 'thời trang nổi bật', 'published', 1, '2024-10-20 03:47:11', NULL),
-(2, 'xu thế mới', NULL, 'xu thế mới', 'published', 1, '2024-10-20 03:47:11', NULL),
 (3, 'Đồng phục', NULL, 'Đồng phục', 'published', 1, '2024-10-20 03:47:11', NULL),
 (4, 'thời trang nổi bật', NULL, 'thời trang nổi bật', 'published', 1, '2024-10-25 02:58:38', NULL),
 (5, 'xu hướng', NULL, 'xu hướng', 'published', 1, '2024-10-25 02:58:38', NULL),
@@ -239,9 +237,10 @@ INSERT INTO `bl_tags` (`id`, `name`, `slug`, `description`, `status`, `is_featur
 (7, 'thời trang nổi bật', NULL, 'thời trang nổi bật', 'published', 1, '2024-10-25 03:12:45', NULL),
 (8, 'xu hướng', NULL, 'xu hướng', 'published', 1, '2024-10-25 03:12:45', NULL),
 (9, 'thoáng mát', NULL, 'thoáng mát', 'published', 1, '2024-10-25 03:12:45', NULL),
-(11, 'xu hướng', 'xu-huong', 'xu hướng', 'published', 1, '2024-10-25 20:51:50', NULL),
+(11, 'xu hướng 1221', NULL, 'xu hướng', 'pending', 0, '2024-10-25 20:51:50', NULL),
 (12, 'thoáng mát', 'thoang-mat', 'thoáng mát', 'published', 1, '2024-10-25 20:51:50', NULL),
-(14, '2212', NULL, '2121211', 'pending', 0, NULL, NULL);
+(14, '2212', NULL, '2121211', 'pending', 0, NULL, NULL),
+(16, 'từ khoá mới nhập', NULL, 'từ khoá mới nhập', 'pending', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -271,15 +270,12 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `slug`, `avatar`, `icon`, `status`, `description`, `parent_id`, `title_seo`, `description_seo`, `keywords_seo`, `index_seo`, `created_at`, `updated_at`) VALUES
-(5, 'Phụ kiện', NULL, NULL, NULL, 'pending', 'Mô tả cập nhật', 0, NULL, NULL, NULL, 1, '2024-10-20 03:47:11', NULL),
-(7, 'Áo nam', NULL, NULL, NULL, 'pending', 'Áo nam mới', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(8, 'Áo nữ', NULL, NULL, NULL, 'pending', 'Áo nữ mới', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(10, 'Quần nữ', NULL, NULL, NULL, 'pending', 'Quần nữ', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(11, 'Đầm', NULL, NULL, NULL, 'pending', 'Đầm mô tả', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(12, 'Áo sơ mi', 'ao-so-mi', NULL, NULL, 'pending', NULL, 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(13, 'Áo phông', 'ao-phong', NULL, NULL, 'pending', NULL, 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(14, 'Áo khoác', 'ao-khoac', NULL, NULL, 'pending', NULL, 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
-(15, 'Đồ thể thao', 'do-the-thao', NULL, NULL, 'pending', NULL, 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL);
+(5, 'Dầu dưỡng xả', 'dau-duong-xa', NULL, NULL, 'pending', 'Dầu dưỡng xả', 0, NULL, NULL, NULL, 1, '2024-10-20 03:47:11', NULL),
+(7, 'Tạo kiểu tóc', 'tao-kieu-toc', NULL, NULL, 'pending', 'Tạo kiểu tóc', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
+(8, 'Chăm sóc da mặt', 'cham-soc-da-mat', NULL, NULL, 'pending', 'Chăm sóc da mặt', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
+(10, 'Chăm sóc tóc', 'cham-soc-toc', NULL, NULL, 'pending', 'Chăm sóc tóc', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
+(11, 'Chăm sóc cơ thể', 'cham-soc-co-the', NULL, NULL, 'pending', 'Chăm sóc cơ thể', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL),
+(12, 'Thực phẩm chức năng', 'thuc-pham-chuc-nang', NULL, NULL, 'pending', 'Thực phẩm chức năng', 0, NULL, NULL, NULL, 1, '2024-10-25 01:47:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -377,8 +373,19 @@ CREATE TABLE `ec_orders` (
   `completed_at` datetime DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ec_orders`
+--
+
+INSERT INTO `ec_orders` (`id`, `user_id`, `payment_method_id`, `code`, `total_shipping_fee`, `payment_status`, `status`, `coupon_code`, `amount`, `shipping_amount`, `tax_amount`, `discount_amount`, `sub_total`, `completed_at`, `notes`, `created_at`, `updated_at`, `supplier_id`) VALUES
+(6, 6, 1, 'OD6BQzSyDk', 0, 'pending', 'pending', NULL, '200000.00', '0.00', '0.00', '0.00', '200000.00', NULL, NULL, NULL, NULL, 0),
+(7, 4, 1, 'ODlilEo2YY', 0, 'pending', 'pending', NULL, '340000.00', '0.00', '0.00', '0.00', '340000.00', NULL, NULL, NULL, NULL, 0),
+(8, 9, 1, 'ODevL1SVMI', 0, 'pending', 'pending', NULL, '4050000.00', '0.00', '0.00', '0.00', '4050000.00', NULL, NULL, NULL, NULL, 0),
+(11, 10, 1, 'ODlV5sCoQK', 0, 'pending', 'pending', NULL, '1350000.00', '0.00', '0.00', '0.00', '1350000.00', NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -403,16 +410,28 @@ CREATE TABLE `ec_products` (
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `brand_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `images` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `ec_products`
 --
 
-INSERT INTO `ec_products` (`id`, `name`, `slug`, `description`, `avatar`, `status`, `number`, `price`, `sale`, `contents`, `length`, `width`, `height`, `category_id`, `brand_id`, `created_at`, `updated_at`) VALUES
-(1, 'Đồ Bộ Nam Phối Dây Dệt', 'do-bo-nam-phoi-day-det', 'Mô tả sản phẩm', 'https://m.yodycdn.com/fit-in/filters:format(webp)/products/bo-do-nam-phoi-day-det-yody-bdm7011-nau-2.jpg', 'pending', 0, 200000, 0, 'Nội dung', NULL, NULL, NULL, 5, NULL, '2024-10-20 03:47:11', NULL),
-(5, 'Đầm dã hội mới', NULL, NULL, 'http://localhost:3014/uploads/images/ee3dd336-ef5f-4cf8-9caa-54b2a3162cef.jpg', 'pending', 0, 900000, 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL);
+INSERT INTO `ec_products` (`id`, `name`, `slug`, `description`, `avatar`, `status`, `number`, `price`, `sale`, `contents`, `length`, `width`, `height`, `category_id`, `brand_id`, `created_at`, `updated_at`, `images`) VALUES
+(1, 'Đồ Bộ Nam Phối Dây Dệt', 'do-bo-nam-phoi-day-det', NULL, 'http://localhost:3014/uploads/images/2c4fbd57-8299-43ff-a333-506d3a1b462d.webp', 'pending', 20, 200000, 0, NULL, NULL, NULL, NULL, 5, NULL, '2024-10-20 03:47:11', NULL, '[\"http://localhost:3014/uploads/images/2dd017bd-727c-41f9-b650-59cab5767931.jpg\", \"http://localhost:3014/uploads/images/c10857d5-db8c-4669-8666-c1a65c74f023.jpg\"]'),
+(5, 'Đầm dã hội mới', 'dam-da-hoi-moi', NULL, 'http://localhost:3014/uploads/images/2193b280-4e7d-4f2c-ab53-1ccea7bee986.webp', 'pending', 0, 900000, 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL),
+(6, 'Áo Polo Nam Thêu Ngực', 'ao-polo-nam-theu-nguc', NULL, 'http://localhost:3014/uploads/images/9e9027eb-c80d-496a-933f-edacf70e8e89.jpg', 'pending', 0, 560000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
+(7, 'Áo thể thao nam nỉ in Limitless', 'ao-the-thao-nam-ni-in-limitless', NULL, 'http://localhost:3014/uploads/images/fb08918d-875c-486c-a516-6538d3fc5e06.jpg', 'pending', 0, 340000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
+(8, 'Mặt Khóa Kim Thắt Lưng Nam Xoay 2 Chiều Bản 3.5cm', NULL, NULL, 'http://localhost:3014/uploads/images/1d135f8c-cf06-41f1-8988-084d684c9dc1.webp', 'pending', 0, 450000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
+(9, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/7264572e-13e2-4156-a1ff-9a618ac9c286.jpg', 'pending', 200, 650000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL),
+(10, 'Tinh chất nuôi dưỡng chăm sóc tóc khô và hư tổn UNOVE SILK OIL ESSENCE 70ml', 'tinh-chat-nuoi-duong-cham-soc-toc-kho-va-hu-ton-unove-silk-oil-essence-70ml', NULL, 'http://localhost:3014/uploads/images/537c1978-7e92-42af-ba3d-f99bd8037138.jpg', 'pending', 10, 250000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
+(11, 'Mặt nạ phục hồi tóc Laborie Derma Molecular Repair Hair Mask', 'mat-na-phuc-hoi-toc-laborie-derma-molecular-repair-hair-mask', NULL, 'http://localhost:3014/uploads/images/535b24fd-6e20-4373-b8a2-440e3473bb91.jpg', 'pending', 100, 450000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL),
+(12, 'Tinh dầu dưỡng tóc Arren Men\'s Grooming 100ml', 'tinh-dau-duong-toc-arren-mens-grooming-100ml', NULL, 'http://localhost:3014/uploads/images/389ddfa8-5c8f-448c-9e80-76fe6b8269f3.jpg', 'pending', 10, 450000, 0, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, NULL),
+(13, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/a26592e2-ff7c-411f-a77b-709ca706cad8.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
+(14, 'Dầu gội cho da đầu nhạy cảm và rụng tóc Laborie Derma Scalp Shampoo 250ml', 'dau-goi-cho-da-dau-nhay-cam-va-rung-toc-laborie-derma-scalp-shampoo-250ml', NULL, 'http://localhost:3014/uploads/images/34a74fd6-743f-429b-b374-a17fd2411f36.jpg', 'pending', 100, 900000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
+(15, 'TrungPhuNA', 'trungphuna', '<p>Mô tả</p>', 'https://via.placeholder.com/150', 'pending', 100, 100000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
+(16, 'Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml', 'dau-xa-blairsom-thao-moc-phuc-hoi-500ml', '<p>Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml</p>', 'http://localhost:3014/uploads/images/fd92cbd0-6832-47ea-bb1a-95a92d79f2e7.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -433,9 +452,22 @@ CREATE TABLE `ec_products_labels` (
 --
 
 INSERT INTO `ec_products_labels` (`id`, `product_id`, `product_label_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2024-10-20 03:47:11', NULL),
-(10, 5, 1, NULL, NULL),
-(11, 5, 2, NULL, NULL);
+(14, 8, 1, NULL, NULL),
+(15, 8, 3, NULL, NULL),
+(16, 8, 2, NULL, NULL),
+(31, 5, 1, NULL, NULL),
+(32, 5, 2, NULL, NULL),
+(33, 9, 1, NULL, NULL),
+(34, 10, 1, NULL, NULL),
+(35, 10, 2, NULL, NULL),
+(36, 11, 1, NULL, NULL),
+(37, 11, 3, NULL, NULL),
+(38, 12, 1, NULL, NULL),
+(39, 15, 1, NULL, NULL),
+(40, 6, 1, NULL, NULL),
+(41, 7, 1, NULL, NULL),
+(42, 16, 1, NULL, NULL),
+(45, 1, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -460,8 +492,8 @@ CREATE TABLE `ec_product_labels` (
 
 INSERT INTO `ec_product_labels` (`id`, `name`, `description`, `slug`, `order`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'New', 'Sản phẩm mới', 'new', 0, 'published', '2024-10-20 03:47:11', NULL),
-(2, 'Hot', 'Sản phẩm nổi bật', 'hot', 0, 'published', '2024-10-20 03:47:11', NULL),
-(3, 'Sale 1', 'Sản phẩm khuyến mãi 2', 'sale 2', 0, 'published', NULL, NULL);
+(2, 'Hot', 'Sản phẩm nổi bật', 'hot', 0, 'pending', '2024-10-20 03:47:11', NULL),
+(3, 'Sale', 'Sản phẩm khuyến mãi 2', 'sale', 0, 'published', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -507,16 +539,17 @@ CREATE TABLE `ec_stock_ins` (
   `price` int(11) DEFAULT '0',
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'final: Kho thành phẩm      ingredient: kho nguyên liệu   '
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `ec_stock_ins`
 --
 
-INSERT INTO `ec_stock_ins` (`id`, `product_id`, `quantity`, `price`, `date`, `created_at`, `updated_at`) VALUES
-(1, 1, 10, 10000, '2024-10-28', '2024-10-28 09:18:40', '2024-10-28 09:18:40'),
-(2, 1, 30, 30000, '2024-10-28', '2024-10-28 09:32:56', '2024-10-28 09:32:56');
+INSERT INTO `ec_stock_ins` (`id`, `product_id`, `quantity`, `price`, `date`, `created_at`, `updated_at`, `type`) VALUES
+(1, 1, 10, 10000, '2024-10-28', '2024-10-28 09:18:40', '2024-10-28 09:18:40', NULL),
+(2, 1, 30, 30000, '2024-10-28', '2024-10-28 09:32:56', '2024-10-28 09:32:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -532,16 +565,18 @@ CREATE TABLE `ec_stock_outs` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'final: Kho thành phẩm      ingredient: kho nguyên liệu   ',
+  `order_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `ec_stock_outs`
 --
 
-INSERT INTO `ec_stock_outs` (`id`, `product_id`, `quantity`, `price`, `user_id`, `date`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 20000, 1, '2024-10-28', '2024-10-28 09:18:57', '2024-10-28 09:18:57'),
-(2, 1, 3, 20000, 1, '2024-10-28', '2024-10-28 09:32:08', '2024-10-28 09:32:08');
+INSERT INTO `ec_stock_outs` (`id`, `product_id`, `quantity`, `price`, `user_id`, `date`, `created_at`, `updated_at`, `type`, `order_id`) VALUES
+(1, 1, 2, 20000, 1, '2024-10-28', '2024-10-28 09:18:57', '2024-10-28 09:18:57', NULL, 0),
+(2, 1, 3, 20000, 1, '2024-10-28', '2024-10-28 09:32:08', '2024-10-28 09:32:08', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -560,6 +595,15 @@ CREATE TABLE `ec_transactions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ec_transactions`
+--
+
+INSERT INTO `ec_transactions` (`id`, `order_id`, `product_id`, `qty`, `price`, `total_price`, `status`, `created_at`, `updated_at`) VALUES
+(8, 6, 1, 1, 200000, 200000, 'pending', NULL, NULL),
+(9, 7, 7, 1, 340000, 340000, 'pending', NULL, NULL),
+(14, 11, 11, 3, 450000, 1350000, 'pending', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -601,7 +645,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (37, '2024_08_24_073329_create_products_table', 1),
 (38, '2024_09_29_001703_create_permission_tables', 1),
 (39, '2024_10_13_163624_create_csdl_base_module_admin', 1),
-(40, '2024_10_15_155633_create_csdl_blogs_module_admin', 1);
+(40, '2024_10_15_155633_create_csdl_blogs_module_admin', 1),
+(41, '2024_11_01_045329_create_supplier', 2),
+(42, '2024_11_02_082440_alter_add_column_order_id', 2),
+(43, '2024_11_07_164654_create_services_table', 2),
+(46, '2024_11_13_041229_create_services_user_table', 3);
 
 -- --------------------------------------------------------
 
@@ -687,6 +735,59 @@ CREATE TABLE `product_variants` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `services`
+--
+
+CREATE TABLE `services` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_home_service` tinyint(1) NOT NULL DEFAULT '0',
+  `price` int(11) NOT NULL DEFAULT '0',
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `name`, `slug`, `is_home_service`, `price`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'Dịch vụ bảo hành', NULL, 1, 10000, '<p>Dịch vụ bảo hành</p>', NULL, NULL),
+(2, 'Dịch vụ 10 bước gội đầu', NULL, 0, 100000, '<p>Dịch vụ 10 bước gội đầu</p>', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services_user`
+--
+
+CREATE TABLE `services_user` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `price` int(11) NOT NULL DEFAULT '0',
+  `status` enum('pending','processing','completed','canceled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `is_home_service` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `services_user`
+--
+
+INSERT INTO `services_user` (`id`, `user_id`, `service_id`, `price`, `status`, `name`, `address`, `date`, `is_home_service`, `created_at`, `updated_at`) VALUES
+(1, 9, 1, 10000, 'pending', 'Dịch vụ bảo hành', NULL, NULL, 0, NULL, NULL),
+(2, 10, 2, 100000, 'pending', 'Dịch vụ 10 bước gội đầu', NULL, NULL, 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `slides`
 --
 
@@ -708,8 +809,22 @@ CREATE TABLE `slides` (
 --
 
 INSERT INTO `slides` (`id`, `name`, `description`, `position`, `page`, `link`, `avatar`, `status`, `created_at`, `updated_at`) VALUES
-(9, 'Sản phẩm thông minh', 'Bộ sưu tập ưu đãi mùa đông 2024', 1, 'home', 'https://123code.net', 'https://flone.jamstacktemplates.dev/assets/img/slider/single-slide-hm1-2.png', 'published', '2024-10-25 02:41:41', NULL),
-(10, 'MCN', 'Bộ sưu tập ưu đãi mùa đông 2024', 1, 'home', 'https://123code.net', 'http://localhost:3014/uploads/images/d2c96f28-ab40-4b6f-8896-e17487441b93.png', 'pending', '2024-10-25 02:41:41', NULL);
+(9, 'Sản phẩm thông minh', 'Bộ sưu tập ưu đãi mùa đông 2024', 1, 'auth', 'https://123code.net', 'http://localhost:3014/uploads/images/7d9fb5eb-44fb-41e6-b6ae-9508232e0b89.jpeg', 'pending', '2024-10-25 02:41:41', NULL),
+(10, 'MCN', 'Bộ sưu tập ưu đãi mùa đông 2024', 1, 'home', 'https://123code.net', 'http://localhost:3014/uploads/images/e5898531-6533-49b4-b262-bd1a8d803c27.jpeg', 'pending', '2024-10-25 02:41:41', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier`
+--
+
+CREATE TABLE `supplier` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -730,20 +845,22 @@ CREATE TABLE `users` (
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_type` enum('USER','ADMIN') COLLATE utf8mb4_unicode_ci DEFAULT 'USER'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `provider`, `provider_id`, `status`, `avatar`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'ADMIN', 'admin@gmail.com', NULL, '$2y$12$w5.p9RDFwrnZJ0LMJEgdJuzSM8R3LajfSxiVGUWkbjyHFkqcW7p8W', '0986420994', NULL, NULL, 1, NULL, NULL, '2024-10-20 03:47:10', '2024-10-20 03:47:10'),
-(2, 'John Doe', 'johndoe@example.com', NULL, '$2a$10$byza/A/vX7SCxPZOmLfvGOf05YPOhnPjDUO5iboWGWf.HUx9QSiPS', NULL, NULL, NULL, 1, 'https://via.placeholder.com/150', NULL, NULL, NULL),
-(3, 'Phu DZ', 'adada@gmail.com', NULL, '$2a$10$xFPuodkPC0/7u2pAsC1tNe7aNGWPQGbwNlViMIPer78j2Y3EOIC06', NULL, NULL, NULL, 1, 'https://via.placeholder.com/150', NULL, NULL, NULL),
-(4, 'Phú Phan', 'codethue9402@gmail.com', NULL, '$2a$10$tai56eo5T0CB1DY9uywD1OQjN7H2/k26Ba0sJuPbamNpUA.B8MSY.', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(5, 'Phú Phan', 'admin1@gmail.com', NULL, '$2a$10$gYJXilaWEcbO8B0YkUPAG.ksc/LLLuutg5MH2Ch77ujZ1wyBPQGQa', NULL, NULL, NULL, 1, 'https://scontent.fhan14-2.fna.fbcdn.net/v/t39.30808-1/464175296_2853626261443243_7907192900884540576_n.jpg', NULL, NULL, NULL),
-(6, 'Phú Phan', 'admin2@gmail.com', NULL, '$2a$10$XdpPkBpM6tZTMWghviq7vOzzrNSkNc8pHa19xZt38eWxmzQ.E13I6', NULL, NULL, NULL, 1, 'http://localhost:3014/uploads/images/c2e72f2a-a018-4199-97bb-dabf9187393a.jpg', NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `provider`, `provider_id`, `status`, `avatar`, `remember_token`, `created_at`, `updated_at`, `user_type`) VALUES
+(1, 'ADMIN', 'admin@gmail.com', NULL, '$2y$12$w5.p9RDFwrnZJ0LMJEgdJuzSM8R3LajfSxiVGUWkbjyHFkqcW7p8W', '0986420994', NULL, NULL, 1, 'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg', NULL, '2024-10-20 03:47:10', '2024-10-20 03:47:10', 'ADMIN'),
+(4, 'Hạ Linh', 'codethue9402@gmail.com', NULL, '$2a$10$tai56eo5T0CB1DY9uywD1OQjN7H2/k26Ba0sJuPbamNpUA.B8MSY.', '0986787625', NULL, NULL, 1, 'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg', NULL, NULL, NULL, 'USER'),
+(6, 'Bích ngọc', 'admin2@gmail.com', NULL, '$2a$10$XdpPkBpM6tZTMWghviq7vOzzrNSkNc8pHa19xZt38eWxmzQ.E13I6', '0986420994', NULL, NULL, 1, NULL, NULL, NULL, NULL, 'USER'),
+(7, 'Nhã An', 'phuphandata@gmail.com', NULL, '$2a$10$urkwF3Ax7M6NzPqyjBV47enG0WHwuvCIywv.qp5R1Zz2rtHXCVXf6', '0978656212', NULL, NULL, 1, 'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg', NULL, NULL, NULL, 'USER'),
+(9, 'Phú PT', 'phupt.humg.94@gmail.com', NULL, '$2a$10$N9dTqUb0jYYxhmICY1f/FODdIKYUvkT71cpt/8CE1AoLsQywflsCa', '0987676222', NULL, NULL, 1, 'http://localhost:3014/uploads/images/46973176-09b2-4642-bf00-de0d995408cd.jpg', NULL, NULL, NULL, 'USER'),
+(10, 'ngoc na', 'ngoc@gmail.com', NULL, '$2a$10$KLfvLksRuqlrLkuAh/EjeO6uqFtFtzWntsyc.PZJSqlG22fxGCZVq', NULL, NULL, NULL, 1, 'http://localhost:3014/uploads/images/c20534bf-8090-40ac-841e-e85c3ca3aa16.jpg', NULL, NULL, NULL, 'USER'),
+(11, 'letrinhxuan', 'letrinhxuan@gmail.com', NULL, '$2a$10$bLPUPfgErXseoS3iAvmZkueOWgD0IP2ozk9tBtUiFTcL7i7gb/A4q', NULL, NULL, NULL, 1, 'https://via.placeholder.com/150', NULL, NULL, NULL, 'USER');
 
 -- --------------------------------------------------------
 
@@ -1060,9 +1177,29 @@ ALTER TABLE `product_variants`
   ADD KEY `product_variants_product_id_foreign` (`product_id`);
 
 --
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `services_user`
+--
+ALTER TABLE `services_user`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `services_user_user_id_index` (`user_id`),
+  ADD KEY `services_user_service_id_index` (`service_id`);
+
+--
 -- Indexes for table `slides`
 --
 ALTER TABLE `slides`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `supplier`
+--
+ALTER TABLE `supplier`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1150,7 +1287,7 @@ ALTER TABLE `bl_articles`
 -- AUTO_INCREMENT for table `bl_articles_tags`
 --
 ALTER TABLE `bl_articles_tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `bl_menus`
@@ -1162,13 +1299,13 @@ ALTER TABLE `bl_menus`
 -- AUTO_INCREMENT for table `bl_tags`
 --
 ALTER TABLE `bl_tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `ec_attributes`
@@ -1192,19 +1329,19 @@ ALTER TABLE `ec_brands`
 -- AUTO_INCREMENT for table `ec_orders`
 --
 ALTER TABLE `ec_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `ec_products`
 --
 ALTER TABLE `ec_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `ec_products_labels`
 --
 ALTER TABLE `ec_products_labels`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `ec_product_labels`
@@ -1240,7 +1377,7 @@ ALTER TABLE `ec_stock_outs`
 -- AUTO_INCREMENT for table `ec_transactions`
 --
 ALTER TABLE `ec_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1252,7 +1389,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -1273,16 +1410,34 @@ ALTER TABLE `product_variants`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `services`
+--
+ALTER TABLE `services`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `services_user`
+--
+ALTER TABLE `services_user`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `slides`
 --
 ALTER TABLE `slides`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users_bank_accounts`

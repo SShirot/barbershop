@@ -113,14 +113,22 @@ const ProductDetail = () => {
                             <div className="sold-count">| Đã bán 47</div>
                         </div>
                         <div className="product-price mb-3">
-                            <span className="current-price">{formatPrice(product.price)}</span>
-                            <span className="original-price ms-2">{formatPrice(399000)}</span>
-                            <span className="discount-percent ms-2">-35%</span>
+                            {product.sale ? (
+                                <>
+                                    <span className="current-price">{formatPrice(product.price)}</span>
+                                    <span className="original-price ms-2">{formatPrice(product.price)}</span>
+                                    <span className="discount-percent ms-2">-{product.sale}%</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="current-price">{formatPrice(product.price)}</span>
+                                </>
+                            )}
                         </div>
                         <div className="delivery-info mb-3">
                             <h6>Thông tin vận chuyển</h6>
                             <div className="d-flex align-items-center">
-                                <FaTruck className="me-2 text-primary" />
+                            <FaTruck className="me-2 text-primary" />
                                 <div>
                                     <div><Badge bg="danger">Giao siêu tốc 2h</Badge></div>
                                     <div>Trước 10h ngày mai: <span className="text-success">Miễn phí</span> 25.000đ</div>
@@ -207,7 +215,7 @@ const ProductDetail = () => {
             <Row className="mt-5">
                 <Col>
                     <div className="related-products bg-white p-4 rounded">
-                        <h2 className="mb-4">Sản phẩm liên quan</h2>
+                        <h6 className="mb-4 text-start my-4 text-uppercase">Sản phẩm liên quan</h6>
                         <Row>
                             {relatedProducts.map((relatedProduct, idx) => (
                                 <Col key={idx} xs={12} sm={6} md={4} lg={2} className="mb-3">

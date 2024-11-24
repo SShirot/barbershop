@@ -73,7 +73,8 @@ exports.login = async (req, res) => {
         // Tạo token
         const payload = {
             user: {
-                id: user.id
+                id: user.id,
+                user_type: user.user_type
             }
         };
 
@@ -113,6 +114,7 @@ exports.me = async (req, res) => {
             name: user.name,
             avatar: user.avatar,
             phone: user.phone,
+            user_type: user.user_type,
         }, 'User details fetched successfully');
     } catch (err) {
         console.error(err.message);

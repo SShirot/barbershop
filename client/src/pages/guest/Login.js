@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import './style/Login.css';
-import { loginUser } from "../../redux/slices/authSlice";
+import {loginUser, logout} from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {unwrapResult} from "@reduxjs/toolkit";
 import bgImage from '../../assets/images/bg-login.jpg';
@@ -26,10 +26,7 @@ const Login = () => {
     const backgroundImageUrl = slides.length > 0 ? slides[0].avatar : '';
 
     useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/'); // Điều hướng chỉ khi isAuthenticated là true
-        }
-        console.info("===========[] ===========[error] : ",error);
+        dispatch(logout()); // Dispatch action logout để đăng xuất người dùng
     }, [isAuthenticated, navigate]);
 
     useEffect(() => {
@@ -61,12 +58,11 @@ const Login = () => {
             if (loginUser?.fulfilled.match(result)) {
                 let response = await unwrapResult(result);
                 console.info("===========[userLogin] ===========[response math] : ",response);
-                navigate('/admin');
-                // if(response.user.role === 'admin' || response.user.role === 'staff') {
-                //     navigate('/admin');
-                // }else {
-                //     navigate('/');
-                // }
+                if(response.user.user_type === 'ADMIN') {
+                    navigate('/admin');
+                }else {
+                    navigate('/');
+                }
                 return true;
             }else {
                 console.info("===========[] ===========[FAIL ROI] : ");

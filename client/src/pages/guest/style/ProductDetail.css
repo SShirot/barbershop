@@ -151,12 +151,15 @@
 
 .product-title-small {
     font-size: 13px;
-    margin-bottom: 8px;
-    color: #242424;
-    display: -webkit-box;
+    color: #272727;
+    line-height: 20px;
+    overflow: hidden;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: -webkit-box;
+    font-weight: normal;
+    margin-top: 10px;
+    height: 40px;
 }
 
 .rating-small {
@@ -164,7 +167,7 @@
 }
 
 .price-small {
-    font-size: 16px;
-    font-weight: 500;
-    color: #ff424e;
+    font-size: 14px;
+    font-weight: 700;
+    color: #888;
 }
