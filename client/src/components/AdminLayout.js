@@ -43,6 +43,7 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/categories">Danh mục</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/admin/ecommerce/brands">Thương hiệu</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product-labels">Nhãn sản phẩm</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product">Sản phẩm</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/order">Đơn hàng</Dropdown.Item>

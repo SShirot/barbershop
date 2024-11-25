@@ -17,6 +17,7 @@ import ProfileManager from "../pages/admin/account/ProfileManager";
 import ServiceManager from "../pages/admin/service/ServiceManager";
 import ServiceUserManager from "../pages/admin/service/ServiceUserManager";
 import VoteManager from "../pages/admin/ecm/VoteManager";
+import BrandManager from "../pages/admin/ecm/BrandManager";
 
 const AdminRoutes = () => {
 
@@ -67,6 +68,7 @@ const AdminRoutes = () => {
                         <Route path="ecommerce/product-labels" element={<ProductLabelManager />} />
                         <Route path="ecommerce/product" element={<ProductManager />} />
                         <Route path="ecommerce/order" element={<OrderManager />} />
+                        <Route path="ecommerce/brands" element={<BrandManager />} />
                         <Route path="ecommerce/vote" element={<VoteManager />} />
                         <Route path="services/manage" element={<ServiceManager />} />
                         <Route path="services/order" element={<ServiceUserManager />} />
