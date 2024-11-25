@@ -5,10 +5,11 @@ import {FaStar, FaRegStar, FaTruck, FaShieldAlt, FaExchangeAlt, FaStarHalfAlt} f
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice';
 import apiProductService from '../../api/apiProductService';
-import {createSlug, formatPrice, renderStarsItem} from '../../helpers/formatters';
+import {formatPrice, renderStarsItem} from '../../helpers/formatters';
 import './style/ProductDetail.css';
 
 const DashboardVoteProduct = React.lazy(() => import('./../components/vote/DashboardVoteProduct'));
+const RelatedProducts = React.lazy(() => import('./../components/product/RelatedProducts'));
 
 const ProductDetail = () => {
     const { slug } = useParams();
@@ -168,44 +169,7 @@ const ProductDetail = () => {
             <DashboardVoteProduct product={product} />
 
             {/* Related Products Section */}
-            <Row className="mt-5">
-                <Col>
-                    <div className="related-products bg-white p-4 rounded">
-                        <h6 className="mb-4 text-start my-4 text-uppercase">Sản phẩm liên quan</h6>
-                        <Row>
-                            {relatedProducts.map((relatedProduct, idx) => (
-                                <Col key={idx} xs={12} sm={6} md={4} lg={2} className="mb-3">
-                                    <div className="product-card h-100">
-                                        <Nav.Link as={Link} to={`/p/${createSlug(relatedProduct.name)}-${relatedProduct.id}`}>
-                                        <img
-                                            src={relatedProduct.avatar}
-                                            alt={relatedProduct.name}
-                                            className="img-fluid mb-2"
-                                        />
-                                        </Nav.Link>
-                                        <h3 className="product-title-small">
-                                            <Nav.Link as={Link} to={`/p/${createSlug(relatedProduct.name)}-${relatedProduct.id}`}>
-                                                {relatedProduct.name}
-                                            </Nav.Link>
-                                        </h3>
-                                        <div className="rating-small mb-2">
-                                            { relatedProduct.total_rating_score > 0 ? (
-                                                renderStarsItem(relatedProduct.total_rating_score / relatedProduct.total_vote_count )
-                                            ) : (
-                                                renderStarsItem(0)
-                                            )}
-
-                                        </div>
-                                        <div className="price-small">
-                                            {formatPrice(relatedProduct.price)}
-                                        </div>
-                                    </div>
-                                </Col>
-                            ))}
-                        </Row>
-                    </div>
-                </Col>
-            </Row>
+            <RelatedProducts relatedProducts={relatedProducts} />
         </Container>
     );
 };

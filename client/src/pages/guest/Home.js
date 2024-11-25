@@ -1,74 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import ProductCarousel from "../components/product/ProductCarousel";
-import ServiceCards from "../components/service/ServiceCards";
 import apiProductService from "./../../api/apiProductService";
 import categoryService from "./../../api/categoryService";
-import LoadingProductSkeleton from "../components/loading/LoadingProductSkeleton";
-import { useNavigate } from "react-router-dom";
+
+const ProductCarousel = React.lazy(() => import('./../components/product/ProductCarousel'));
+const LoadingProductSkeleton = React.lazy(() => import('./../components/loading/LoadingProductSkeleton'));
 
 const Home = () => {
     const [categoryProducts, setCategoryProducts] = useState({});
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
+        let isMounted = true;
+
         const loadCategoriesAndProducts = async () => {
+            setLoading(true);
             try {
-                // Gọi API lấy danh sách các category cần hiển thị
                 const categoriesResponse = await categoryService.getListsGuest({
                     page: 1,
-                    page_size: 3 // Giả sử bạn muốn lấy 3 category đầu tiên
+                    page_size: 3,
                 });
-                const categories = categoriesResponse.data.data;
+                if (!isMounted) return;
 
-                // Tạo object chứa sản phẩm cho từng category
+                const categories = categoriesResponse.data.data;
                 const productsByCategory = {};
 
-                // Dùng Promise.all để thực hiện đồng thời các API call cho mỗi category
                 await Promise.all(
                     categories.map(async (category) => {
                         const productsResponse = await apiProductService.getLists({
                             page: 1,
                             page_size: 10,
-                            category_id: category.id
+                            category_id: category.id,
                         });
+                        if (!isMounted) return;
                         productsByCategory[category.name] = productsResponse.data.data;
                     })
                 );
 
-                setCategoryProducts(productsByCategory);
+                if (isMounted) setCategoryProducts(productsByCategory);
             } catch (error) {
                 console.error("Error fetching categories or products:", error);
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
 
-        loadCategoriesAndProducts().then(r => {});
+        loadCategoriesAndProducts();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return (
         <>
             {loading ? (
-                <>
-                    <LoadingProductSkeleton />
-                    <LoadingProductSkeleton />
-                    <LoadingProductSkeleton />
-                    <LoadingProductSkeleton />
-                    <LoadingProductSkeleton />
-                    <LoadingProductSkeleton />
-                </>
+                Array.from({ length: 6 }).map((_, idx) => (
+                    <LoadingProductSkeleton key={idx} />
+                ))
             ) : (
-                <>
-                    {Object.keys(categoryProducts).map((categoryName, idx) => (
-                        <ProductCarousel
-                            key={idx}
-                            title={categoryName}
-                            showTitle={true}
-                            products={categoryProducts[categoryName]}
-                        />
-                    ))}
-                </>
+                Object.keys(categoryProducts).map((categoryName, idx) => (
+                    <ProductCarousel
+                        key={idx}
+                        title={categoryName}
+                        showTitle={true}
+                        products={categoryProducts[categoryName]}
+                    />
+                ))
             )}
         </>
     );

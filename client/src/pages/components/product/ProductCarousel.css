@@ -55,3 +55,28 @@
 .card-prod .card-body {
     padding: 0;
 }
+
+@media (max-width: 768px) {
+    .item-prod {
+        margin-bottom: 20px;
+    }
+
+    .item-prod img {
+        height: auto;
+        max-width: 100%;
+    }
+
+    .carousel-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .card-title a {
+        font-size: 12px;
+    }
+
+    .card-text {
+        font-size: 12px;
+    }
+}
+

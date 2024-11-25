@@ -33,17 +33,24 @@ const HomeCarousel = () => {
                 <SlideSkeleton />
             ) : (
                 // Hiển thị Carousel khi dữ liệu đã sẵn sàng
-                <Carousel>
+                <Carousel interval={5000} pause="hover">
                     {slides.map((slide, idx) => (
                         <Carousel.Item key={idx}>
-                            <img
-                                className="d-block w-100"
-                                src={slide.avatar}
-                                alt={slide.name}
-                            />
+                            <picture>
+                                {/* Ảnh responsive */}
+                                <source
+                                    media="(max-width: 768px)"
+                                    srcSet={slide.mobile_image || slide.avatar}
+                                />
+                                <img
+                                    className="d-block w-100"
+                                    src={slide.avatar}
+                                    alt={slide.name}
+                                />
+                            </picture>
                             <Carousel.Caption>
-                                <h3>{slide.name}</h3>
-                                <p>{slide.description}</p>
+                                <h3 className="slide-title">{slide.name}</h3>
+                                <p className="slide-description">{slide.description}</p>
                             </Carousel.Caption>
                         </Carousel.Item>
                     ))}

@@ -4,10 +4,11 @@ import { Container, Row, Col, Card, Dropdown, Pagination, Nav, Button, Form } fr
 import './style/Category.css';
 import './../components/product/ProductCarousel.css';
 import categoryService from '../../api/categoryService';
-import CategorySkeleton from './../components/loading/CategorySkeleton';
-import ProductSkeleton from './../components/loading/ProductSkeleton';
 import apiProductService from "../../api/apiProductService";
-import {createSlug, formatPrice} from "../../helpers/formatters";
+import {createSlug, formatPrice, renderStarsItem} from "../../helpers/formatters";
+
+const CategorySkeleton = React.lazy(() => import('./../components/loading/CategorySkeleton'));
+const ProductSkeleton = React.lazy(() => import('./../components/loading/ProductSkeleton'));
 
 const Category = () => {
     const { slug } = useParams();
@@ -207,8 +208,16 @@ const Category = () => {
                                         </Nav.Link>
                                         <Card.Body>
                                             <Card.Title>
-                                                <Nav.Link as={Link} to={`p/${createSlug(product.name)}-${product.id}`}>{product.name}</Nav.Link>
+                                                <Nav.Link as={Link}
+                                                          to={`p/${createSlug(product.name)}-${product.id}`}>{product.name}</Nav.Link>
                                             </Card.Title>
+                                            <div className="rating-small mb-2">
+                                                {product.total_rating_score > 0 ? (
+                                                    renderStarsItem(product.total_rating_score / product.total_vote_count)
+                                                ) : (
+                                                    renderStarsItem(0)
+                                                )}
+                                            </div>
                                             <Card.Text>{formatPrice(product.price)}</Card.Text>
                                         </Card.Body>
                                         <Button variant={product.status === 1 ? 'success' : 'danger'}>
