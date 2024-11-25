@@ -1,5 +1,8 @@
 // src/helpers/formatters.js
 
+import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import React from "react";
+
 export const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
 };
@@ -28,4 +31,36 @@ export const formatCurrencyInput = (value) => {
 
 export const stripHtmlTags = (str) => {
     return str.replace(/<\/?[^>]+(>|$)/g, "");
+};
+
+export const renderStars = (rating) => {
+    return [...Array(5)].map((_, index) => (
+        <span key={index}>
+        {index < rating ? (
+            <FaStar className="text-warning" />
+        ) : (
+            <FaRegStar className="text-warning" />
+        )}
+      </span>
+    ));
+};
+
+export const renderStarsItem = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        if (rating === null || rating === undefined || rating === 0) {
+            // Hiển thị sao mờ nếu không có đánh giá
+            stars.push(<FaRegStar className={'me-1'} key={`empty-star-${i}`} style={{ color: 'gray' }} />);
+        } else if (i <= Math.floor(rating)) {
+            // Hiển thị sao đầy
+            stars.push(<FaStar className={'me-1'} key={`star-${i}`} style={{ color: 'orange' }} />);
+        } else if (i - rating < 1) {
+            // Hiển thị nửa sao
+            stars.push(<FaStarHalfAlt className={'me-1'} key={`half-star-${i}`} style={{ color: 'orange' }} />);
+        } else {
+            // Hiển thị sao mờ
+            stars.push(<FaRegStar className={'me-1'} key={`empty-star-${i}`} style={{ color: 'gray' }} />);
+        }
+    }
+    return stars;
 };

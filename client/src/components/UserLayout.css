@@ -23,6 +23,16 @@ body {
     position: absolute;
     left: -20px;
 }
+.breadcrumb .breadcrumb-item.active {
+    position: relative;
+}
+.breadcrumb .breadcrumb-item.active::before {
+    content: "/";
+    color: #6c757d;
+    margin: 0 8px;
+    position: absolute;
+    left: -20px;
+}
 
 .nav-item a {
     color: #007bff;

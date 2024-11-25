@@ -33,10 +33,24 @@ exports.showProductDetail = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) {
-            return errorResponse(res, 'Tag not found', 404, 404);
+            return errorResponse(res, 'Product not found', 404, 404);
         }
 
         return successResponse(res, { data: product }, 'data found successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+};
+
+exports.showDashboardVoteDetail = async (req, res) => {
+    try {
+        const vote = await Product.showDashboardVoteDetail(req.params.id);
+        if (!vote) {
+            return errorResponse(res, 'Vote not found', 404, 404);
+        }
+
+        return successResponse(res, { data: vote }, 'data found successfully');
     } catch (err) {
         console.error(err);
         return errorResponse(res);

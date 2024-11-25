@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 14, 2024 at 08:27 AM
+-- Generation Time: Nov 17, 2024 at 08:47 PM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -384,8 +384,12 @@ CREATE TABLE `ec_orders` (
 INSERT INTO `ec_orders` (`id`, `user_id`, `payment_method_id`, `code`, `total_shipping_fee`, `payment_status`, `status`, `coupon_code`, `amount`, `shipping_amount`, `tax_amount`, `discount_amount`, `sub_total`, `completed_at`, `notes`, `created_at`, `updated_at`, `supplier_id`) VALUES
 (6, 6, 1, 'OD6BQzSyDk', 0, 'pending', 'pending', NULL, '200000.00', '0.00', '0.00', '0.00', '200000.00', NULL, NULL, NULL, NULL, 0),
 (7, 4, 1, 'ODlilEo2YY', 0, 'pending', 'pending', NULL, '340000.00', '0.00', '0.00', '0.00', '340000.00', NULL, NULL, NULL, NULL, 0),
-(8, 9, 1, 'ODevL1SVMI', 0, 'pending', 'pending', NULL, '4050000.00', '0.00', '0.00', '0.00', '4050000.00', NULL, NULL, NULL, NULL, 0),
-(11, 10, 1, 'ODlV5sCoQK', 0, 'pending', 'pending', NULL, '1350000.00', '0.00', '0.00', '0.00', '1350000.00', NULL, NULL, NULL, NULL, 0);
+(11, 10, 1, 'ODlV5sCoQK', 0, 'pending', 'pending', NULL, '1350000.00', '0.00', '0.00', '0.00', '1350000.00', NULL, NULL, NULL, NULL, 0),
+(12, 10, 1, 'ODXQ4FOYXy', 0, 'pending', 'pending', NULL, '1350000.00', '0.00', '0.00', '0.00', '1350000.00', NULL, NULL, NULL, NULL, 0),
+(13, 10, 1, 'ODobpUVSkG', 0, 'pending', 'pending', NULL, '450000.00', '0.00', '0.00', '0.00', '450000.00', NULL, NULL, '2024-11-14 14:48:01', NULL, 0),
+(14, 9, 1, 'ODMKvJL6Zn', 0, 'pending', 'pending', NULL, '450000.00', '0.00', '0.00', '0.00', '450000.00', NULL, NULL, '2024-11-15 06:51:34', NULL, 0),
+(15, 9, 1, 'ODs49eLm99', 0, 'pending', 'pending', NULL, '340000.00', '0.00', '0.00', '0.00', '340000.00', NULL, NULL, '2024-11-15 16:12:05', NULL, 0),
+(16, 9, 1, 'ODcOgHeMSP', 0, 'pending', 'pending', NULL, '560000.00', '0.00', '0.00', '0.00', '560000.00', NULL, NULL, '2024-11-15 16:14:14', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -411,27 +415,29 @@ CREATE TABLE `ec_products` (
   `brand_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `images` json DEFAULT NULL
+  `images` json DEFAULT NULL,
+  `total_vote_count` int(11) NOT NULL DEFAULT '0',
+  `total_rating_score` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `ec_products`
 --
 
-INSERT INTO `ec_products` (`id`, `name`, `slug`, `description`, `avatar`, `status`, `number`, `price`, `sale`, `contents`, `length`, `width`, `height`, `category_id`, `brand_id`, `created_at`, `updated_at`, `images`) VALUES
-(1, 'Đồ Bộ Nam Phối Dây Dệt', 'do-bo-nam-phoi-day-det', NULL, 'http://localhost:3014/uploads/images/2c4fbd57-8299-43ff-a333-506d3a1b462d.webp', 'pending', 20, 200000, 0, NULL, NULL, NULL, NULL, 5, NULL, '2024-10-20 03:47:11', NULL, '[\"http://localhost:3014/uploads/images/2dd017bd-727c-41f9-b650-59cab5767931.jpg\", \"http://localhost:3014/uploads/images/c10857d5-db8c-4669-8666-c1a65c74f023.jpg\"]'),
-(5, 'Đầm dã hội mới', 'dam-da-hoi-moi', NULL, 'http://localhost:3014/uploads/images/2193b280-4e7d-4f2c-ab53-1ccea7bee986.webp', 'pending', 0, 900000, 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL),
-(6, 'Áo Polo Nam Thêu Ngực', 'ao-polo-nam-theu-nguc', NULL, 'http://localhost:3014/uploads/images/9e9027eb-c80d-496a-933f-edacf70e8e89.jpg', 'pending', 0, 560000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
-(7, 'Áo thể thao nam nỉ in Limitless', 'ao-the-thao-nam-ni-in-limitless', NULL, 'http://localhost:3014/uploads/images/fb08918d-875c-486c-a516-6538d3fc5e06.jpg', 'pending', 0, 340000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
-(8, 'Mặt Khóa Kim Thắt Lưng Nam Xoay 2 Chiều Bản 3.5cm', NULL, NULL, 'http://localhost:3014/uploads/images/1d135f8c-cf06-41f1-8988-084d684c9dc1.webp', 'pending', 0, 450000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
-(9, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/7264572e-13e2-4156-a1ff-9a618ac9c286.jpg', 'pending', 200, 650000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL),
-(10, 'Tinh chất nuôi dưỡng chăm sóc tóc khô và hư tổn UNOVE SILK OIL ESSENCE 70ml', 'tinh-chat-nuoi-duong-cham-soc-toc-kho-va-hu-ton-unove-silk-oil-essence-70ml', NULL, 'http://localhost:3014/uploads/images/537c1978-7e92-42af-ba3d-f99bd8037138.jpg', 'pending', 10, 250000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL),
-(11, 'Mặt nạ phục hồi tóc Laborie Derma Molecular Repair Hair Mask', 'mat-na-phuc-hoi-toc-laborie-derma-molecular-repair-hair-mask', NULL, 'http://localhost:3014/uploads/images/535b24fd-6e20-4373-b8a2-440e3473bb91.jpg', 'pending', 100, 450000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL),
-(12, 'Tinh dầu dưỡng tóc Arren Men\'s Grooming 100ml', 'tinh-dau-duong-toc-arren-mens-grooming-100ml', NULL, 'http://localhost:3014/uploads/images/389ddfa8-5c8f-448c-9e80-76fe6b8269f3.jpg', 'pending', 10, 450000, 0, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, NULL),
-(13, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/a26592e2-ff7c-411f-a77b-709ca706cad8.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
-(14, 'Dầu gội cho da đầu nhạy cảm và rụng tóc Laborie Derma Scalp Shampoo 250ml', 'dau-goi-cho-da-dau-nhay-cam-va-rung-toc-laborie-derma-scalp-shampoo-250ml', NULL, 'http://localhost:3014/uploads/images/34a74fd6-743f-429b-b374-a17fd2411f36.jpg', 'pending', 100, 900000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
-(15, 'TrungPhuNA', 'trungphuna', '<p>Mô tả</p>', 'https://via.placeholder.com/150', 'pending', 100, 100000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL),
-(16, 'Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml', 'dau-xa-blairsom-thao-moc-phuc-hoi-500ml', '<p>Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml</p>', 'http://localhost:3014/uploads/images/fd92cbd0-6832-47ea-bb1a-95a92d79f2e7.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL);
+INSERT INTO `ec_products` (`id`, `name`, `slug`, `description`, `avatar`, `status`, `number`, `price`, `sale`, `contents`, `length`, `width`, `height`, `category_id`, `brand_id`, `created_at`, `updated_at`, `images`, `total_vote_count`, `total_rating_score`) VALUES
+(1, 'Đồ Bộ Nam Phối Dây Dệt', 'do-bo-nam-phoi-day-det', NULL, 'http://localhost:3014/uploads/images/2c4fbd57-8299-43ff-a333-506d3a1b462d.webp', 'pending', 20, 200000, 0, NULL, NULL, NULL, NULL, 5, NULL, '2024-10-20 03:47:11', NULL, '[\"http://localhost:3014/uploads/images/2dd017bd-727c-41f9-b650-59cab5767931.jpg\", \"http://localhost:3014/uploads/images/c10857d5-db8c-4669-8666-c1a65c74f023.jpg\"]', 0, 0),
+(5, 'Đầm dã hội mới', 'dam-da-hoi-moi', NULL, 'http://localhost:3014/uploads/images/2193b280-4e7d-4f2c-ab53-1ccea7bee986.webp', 'pending', 0, 900000, 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, 0, 0),
+(6, 'Áo Polo Nam Thêu Ngực', 'ao-polo-nam-theu-nguc', NULL, 'http://localhost:3014/uploads/images/9e9027eb-c80d-496a-933f-edacf70e8e89.jpg', 'pending', 0, 560000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, 0, 0),
+(7, 'Áo thể thao nam nỉ in Limitless', 'ao-the-thao-nam-ni-in-limitless', NULL, 'http://localhost:3014/uploads/images/fb08918d-875c-486c-a516-6538d3fc5e06.jpg', 'pending', 0, 340000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, 1, 4),
+(8, 'Mặt Khóa Kim Thắt Lưng Nam Xoay 2 Chiều Bản 3.5cm', NULL, NULL, 'http://localhost:3014/uploads/images/1d135f8c-cf06-41f1-8988-084d684c9dc1.webp', 'pending', 0, 450000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, 0, 0),
+(9, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/7264572e-13e2-4156-a1ff-9a618ac9c286.jpg', 'pending', 200, 650000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL, 0, 0),
+(10, 'Tinh chất nuôi dưỡng chăm sóc tóc khô và hư tổn UNOVE SILK OIL ESSENCE 70ml', 'tinh-chat-nuoi-duong-cham-soc-toc-kho-va-hu-ton-unove-silk-oil-essence-70ml', NULL, 'http://localhost:3014/uploads/images/537c1978-7e92-42af-ba3d-f99bd8037138.jpg', 'pending', 10, 250000, 0, NULL, NULL, NULL, NULL, 7, NULL, NULL, NULL, NULL, 0, 0),
+(11, 'Mặt nạ phục hồi tóc Laborie Derma Molecular Repair Hair Mask', 'mat-na-phuc-hoi-toc-laborie-derma-molecular-repair-hair-mask', NULL, 'http://localhost:3014/uploads/images/535b24fd-6e20-4373-b8a2-440e3473bb91.jpg', 'pending', 100, 450000, 0, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL, 0, 0),
+(12, 'Tinh dầu dưỡng tóc Arren Men\'s Grooming 100ml', 'tinh-dau-duong-toc-arren-mens-grooming-100ml', NULL, 'http://localhost:3014/uploads/images/389ddfa8-5c8f-448c-9e80-76fe6b8269f3.jpg', 'pending', 10, 450000, 0, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, NULL, 0, 0),
+(13, 'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml', 'tinh-dau-duong-toc-ats-for-man-styling-oil-80ml', NULL, 'http://localhost:3014/uploads/images/a26592e2-ff7c-411f-a77b-709ca706cad8.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, 0, 0),
+(14, 'Dầu gội cho da đầu nhạy cảm và rụng tóc Laborie Derma Scalp Shampoo 250ml', 'dau-goi-cho-da-dau-nhay-cam-va-rung-toc-laborie-derma-scalp-shampoo-250ml', NULL, 'http://localhost:3014/uploads/images/34a74fd6-743f-429b-b374-a17fd2411f36.jpg', 'pending', 100, 900000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, 0, 0),
+(15, 'TrungPhuNA', 'trungphuna', '<p>Mô tả</p>', 'https://via.placeholder.com/150', 'pending', 100, 100000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, 0, 0),
+(16, 'Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml', 'dau-xa-blairsom-thao-moc-phuc-hoi-500ml', '<p>Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml</p>', 'http://localhost:3014/uploads/images/fd92cbd0-6832-47ea-bb1a-95a92d79f2e7.jpg', 'pending', 100, 560000, 0, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -603,7 +609,12 @@ CREATE TABLE `ec_transactions` (
 INSERT INTO `ec_transactions` (`id`, `order_id`, `product_id`, `qty`, `price`, `total_price`, `status`, `created_at`, `updated_at`) VALUES
 (8, 6, 1, 1, 200000, 200000, 'pending', NULL, NULL),
 (9, 7, 7, 1, 340000, 340000, 'pending', NULL, NULL),
-(14, 11, 11, 3, 450000, 1350000, 'pending', NULL, NULL);
+(14, 11, 11, 3, 450000, 1350000, 'pending', NULL, NULL),
+(15, 12, 11, 3, 450000, 1350000, 'pending', NULL, NULL),
+(16, 13, 11, 1, 450000, 450000, 'pending', NULL, NULL),
+(17, 14, 11, 1, 450000, 450000, 'pending', NULL, NULL),
+(18, 15, 7, 1, 340000, 340000, 'pending', NULL, NULL),
+(19, 16, 16, 1, 560000, 560000, 'pending', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -649,7 +660,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (41, '2024_11_01_045329_create_supplier', 2),
 (42, '2024_11_02_082440_alter_add_column_order_id', 2),
 (43, '2024_11_07_164654_create_services_table', 2),
-(46, '2024_11_13_041229_create_services_user_table', 3);
+(46, '2024_11_13_041229_create_services_user_table', 3),
+(48, '2024_11_15_102428_create_votes_table', 4);
 
 -- --------------------------------------------------------
 
@@ -858,7 +870,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `ph
 (4, 'Hạ Linh', 'codethue9402@gmail.com', NULL, '$2a$10$tai56eo5T0CB1DY9uywD1OQjN7H2/k26Ba0sJuPbamNpUA.B8MSY.', '0986787625', NULL, NULL, 1, 'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg', NULL, NULL, NULL, 'USER'),
 (6, 'Bích ngọc', 'admin2@gmail.com', NULL, '$2a$10$XdpPkBpM6tZTMWghviq7vOzzrNSkNc8pHa19xZt38eWxmzQ.E13I6', '0986420994', NULL, NULL, 1, NULL, NULL, NULL, NULL, 'USER'),
 (7, 'Nhã An', 'phuphandata@gmail.com', NULL, '$2a$10$urkwF3Ax7M6NzPqyjBV47enG0WHwuvCIywv.qp5R1Zz2rtHXCVXf6', '0978656212', NULL, NULL, 1, 'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg', NULL, NULL, NULL, 'USER'),
-(9, 'Phú PT', 'phupt.humg.94@gmail.com', NULL, '$2a$10$N9dTqUb0jYYxhmICY1f/FODdIKYUvkT71cpt/8CE1AoLsQywflsCa', '0987676222', NULL, NULL, 1, 'http://localhost:3014/uploads/images/46973176-09b2-4642-bf00-de0d995408cd.jpg', NULL, NULL, NULL, 'USER'),
+(9, 'Phú PT', 'phupt.humg.94@gmail.com', NULL, '$2a$10$c65qUmLXehEbRhckL/KNPOTbJhTwEvoD5FIJ34ul8SfkQqGhhglLa', '0987676222', NULL, NULL, 1, 'http://localhost:3014/uploads/images/46973176-09b2-4642-bf00-de0d995408cd.jpg', NULL, NULL, NULL, 'USER'),
 (10, 'ngoc na', 'ngoc@gmail.com', NULL, '$2a$10$KLfvLksRuqlrLkuAh/EjeO6uqFtFtzWntsyc.PZJSqlG22fxGCZVq', NULL, NULL, NULL, 1, 'http://localhost:3014/uploads/images/c20534bf-8090-40ac-841e-e85c3ca3aa16.jpg', NULL, NULL, NULL, 'USER'),
 (11, 'letrinhxuan', 'letrinhxuan@gmail.com', NULL, '$2a$10$bLPUPfgErXseoS3iAvmZkueOWgD0IP2ozk9tBtUiFTcL7i7gb/A4q', NULL, NULL, NULL, 1, 'https://via.placeholder.com/150', NULL, NULL, NULL, 'USER');
 
@@ -969,6 +981,31 @@ CREATE TABLE `variant_attributes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `votes`
+--
+
+CREATE TABLE `votes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci,
+  `rating` int(11) NOT NULL DEFAULT '0',
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `status` enum('published','draft','pending') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `votes`
+--
+
+INSERT INTO `votes` (`id`, `comment`, `rating`, `product_id`, `user_id`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'Cũng bình thường', 4, 7, 9, 'pending', '2024-11-15 16:12:28', NULL),
+(3, 'Chán quá', 2, 16, 9, 'pending', '2024-11-15 16:14:28', NULL);
 
 --
 -- Indexes for dumped tables
@@ -1256,6 +1293,14 @@ ALTER TABLE `variant_attributes`
   ADD KEY `variant_attributes_attribute_value_id_foreign` (`attribute_value_id`);
 
 --
+-- Indexes for table `votes`
+--
+ALTER TABLE `votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `votes_product_id_foreign` (`product_id`),
+  ADD KEY `votes_user_id_foreign` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1329,7 +1374,7 @@ ALTER TABLE `ec_brands`
 -- AUTO_INCREMENT for table `ec_orders`
 --
 ALTER TABLE `ec_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `ec_products`
@@ -1377,7 +1422,7 @@ ALTER TABLE `ec_stock_outs`
 -- AUTO_INCREMENT for table `ec_transactions`
 --
 ALTER TABLE `ec_transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1389,7 +1434,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -1474,6 +1519,12 @@ ALTER TABLE `users_wallets_transactions`
 --
 ALTER TABLE `variant_attributes`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `votes`
+--
+ALTER TABLE `votes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -1603,6 +1654,13 @@ ALTER TABLE `users_wallets_transactions`
 ALTER TABLE `variant_attributes`
   ADD CONSTRAINT `variant_attributes_attribute_value_id_foreign` FOREIGN KEY (`attribute_value_id`) REFERENCES `ec_attribute_values` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `variant_attributes_variant_id_foreign` FOREIGN KEY (`variant_id`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `votes`
+--
+ALTER TABLE `votes`
+  ADD CONSTRAINT `votes_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `votes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

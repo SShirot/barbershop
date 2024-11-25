@@ -15,7 +15,6 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
         dispatch(logout()); // Dispatch action logout để đăng xuất người dùng
         navigate('/login');
     };
-    console.info("===========[] ===========[OK VAO DAY] : ");
 
     return (
         <>
@@ -47,6 +46,7 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product-labels">Nhãn sản phẩm</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product">Sản phẩm</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/order">Đơn hàng</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/admin/ecommerce/vote">Đánh giá</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         <Dropdown as={Nav.Item}>

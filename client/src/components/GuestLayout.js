@@ -65,7 +65,7 @@ const GuestLayout = () => {
                             <Dropdown.Menu>
                                 {categories?.length > 0 ? (
                                     categories.map((category) => (
-                                        <Dropdown.Item as={Link} to={`/c/${createSlug(category.name)}`} key={category._id}>
+                                        <Dropdown.Item as={Link} to={`/c/${createSlug(category.name)}`} key={category.id}>
                                             {category.name}
                                         </Dropdown.Item>
                                     ))

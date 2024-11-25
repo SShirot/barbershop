@@ -10,6 +10,7 @@ import BoardingManager from "../pages/user/BoardingManager";
 import OrderManager from "../pages/user/OrderManager";
 import ProductManager from "../pages/user/ProductManager";
 import AdminLayout from "../components/AdminLayout";
+import VoteManager from "../pages/user/VoteManager";
 
 const UserRoutes = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -23,11 +24,13 @@ const UserRoutes = () => {
             <Route element={<UserLayout isAuthenticated={isAuthenticated} user={user} />}>
                 <Route path="profile" element={<Profile />} />
                 <Route path="dashboard" element={<UserDashboard />} />
+                <Route path="/" index element={<UserDashboard />} />
                 <Route path="pets" element={<PetManager />} />
                 <Route path="posts" element={<PostManager />} />
                 <Route path="orders" element={<OrderManager />} />
                 <Route path="boarding" element={<BoardingManager />} />
                 <Route path="products" element={<ProductManager />} />
+                <Route path="vote" element={<VoteManager />} />
             </Route>
         </Routes>
     );

@@ -7,6 +7,7 @@ router.use('/tags', require('./tags'));
 router.use('/articles', require('./post'));
 router.use('/categories', require('./category'));
 router.use('/order', require('./order'));
+router.use('/vote', require('./vote'));
 router.use('/services', require('./service'));
 router.use('/products', require('./product'));
 router.use('/product-labels', require('./productLabel'));

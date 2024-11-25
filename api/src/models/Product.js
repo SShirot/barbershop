@@ -147,6 +147,14 @@ const Product = {
             const categoryQuery = `SELECT id, name FROM categories WHERE id = ?`;
             const [categoryResult] = await db.query(categoryQuery, [product.category_id]);
             product.category = categoryResult[0] || null;
+
+            const labelsQuery = `
+            SELECT l.id, l.name, l.slug, l.description, l.status, l.created_at, l.updated_at
+            FROM ec_product_labels l
+            INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
+            WHERE pl.product_id = ?`;
+            const [labels] = await db.query(labelsQuery, [product.id]);
+            product.labels = labels;
         }
 
         return product;
@@ -223,6 +231,27 @@ const Product = {
         const query = `DELETE FROM ${Product.tableName} WHERE id = ?`;
         const [result] = await db.query(query, [id]);
         return result.affectedRows > 0;
+    },
+    showDashboardVoteDetail: async (id) => {
+        const [rows] = await db.query(
+            `
+            SELECT 
+                ROUND(AVG(rating), 1) AS average_rating,
+                COUNT(*) AS total_reviews,
+                SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) AS five_star,
+                SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) AS four_star,
+                SUM(CASE WHEN rating = 3 THEN 1 ELSE 0 END) AS three_star,
+                SUM(CASE WHEN rating = 2 THEN 1 ELSE 0 END) AS two_star,
+                SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) AS one_star
+            FROM votes
+            WHERE product_id = ? ;`,
+            [id]
+        );
+
+        if (!rows || rows.length === 0) {
+            return null;
+        }
+        return rows[0];
     }
 };
 

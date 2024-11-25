@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {Container, Row, Col, Button, Badge, Form, ProgressBar, Nav} from 'react-bootstrap';
-import { FaStar, FaRegStar, FaTruck, FaShieldAlt, FaExchangeAlt } from 'react-icons/fa';
+import {FaStar, FaRegStar, FaTruck, FaShieldAlt, FaExchangeAlt, FaStarHalfAlt} from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice';
 import apiProductService from '../../api/apiProductService';
-import {createSlug, formatPrice} from '../../helpers/formatters';
+import {createSlug, formatPrice, renderStarsItem} from '../../helpers/formatters';
 import './style/ProductDetail.css';
+
+const DashboardVoteProduct = React.lazy(() => import('./../components/vote/DashboardVoteProduct'));
 
 const ProductDetail = () => {
     const { slug } = useParams();
@@ -17,8 +19,8 @@ const ProductDetail = () => {
     const dispatch = useDispatch();
 
 
-
     useEffect(() => {
+
         const fetchProduct = async () => {
             if (slug) {
                 const id = slug.split('-').pop();
@@ -49,30 +51,8 @@ const ProductDetail = () => {
         dispatch(addToCart({ ...product, quantity }));
     };
 
-    const renderStars = (rating) => {
-        return [...Array(5)].map((_, index) => (
-            <span key={index}>
-        {index < rating ? (
-            <FaStar className="text-warning" />
-        ) : (
-            <FaRegStar className="text-warning" />
-        )}
-      </span>
-        ));
-    };
-
-    const renderRatingFilters = () => {
-        const filters = ['Mới nhất', 'Có hình ảnh', 'Đã mua hàng', '5 sao', '4 sao', '3 sao', '2 sao', '1 sao'];
-        return (
-            <div className="rating-filters">
-                {filters.map((filter, index) => (
-                    <Button key={index} variant="outline-secondary" size="sm" className="me-2 mb-2">
-                        {filter}
-                    </Button>
-                ))}
-            </div>
-        );
-    };
+    const colors = ["primary", "secondary", "success", "danger", "info"];
+    const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
     return (
         <Container className="product-detail-container my-4">
@@ -101,14 +81,21 @@ const ProductDetail = () => {
                 <Col md={5}>
                     <div className="product-info">
                         <div className="d-flex align-items-center mb-2">
-                            <Badge bg="primary" className="me-2">Tiki Trading</Badge>
-                            <Badge bg="success">Chính hãng</Badge>
+                            {product?.labels.map((label) => (
+                                <Badge key={label.id} bg={getRandomColor()} className="me-2">
+                                    {label.name}
+                                </Badge>
+                            ))}
                         </div>
                         <h1 className="product-title">{product.name}</h1>
                         <div className="d-flex align-items-center mb-2">
                             <div className="rating me-2">
-                                {renderStars(5)}
-                                <span className="rating-count ms-1">(2)</span>
+                                { product.total_rating_score > 0 ? (
+                                    renderStarsItem(product.total_rating_score / product.total_vote_count )
+                                ) : (
+                                    renderStarsItem(0)
+                                )}
+                                <span className="rating-count ms-1">({product.total_rating_score})</span>
                             </div>
                             <div className="sold-count">| Đã bán 47</div>
                         </div>
@@ -178,38 +165,7 @@ const ProductDetail = () => {
             </Row>
 
             {/* Customer Reviews Section */}
-            <Row className="mt-5">
-                <Col lg={8} className="mx-auto">
-                    <div className="customer-reviews bg-white p-4 rounded">
-                        <h2 className="mb-4">Khách hàng đánh giá</h2>
-                        <div className="d-flex mb-4">
-                            <div className="rating-summary text-center me-5">
-                                <div className="rating-average display-4">5.0</div>
-                                <div className="rating-stars mb-2">
-                                    {renderStars(5)}
-                                </div>
-                                <div className="rating-count text-muted">(2 đánh giá)</div>
-                            </div>
-                            <div className="rating-bars flex-grow-1">
-                                {[5, 4, 3, 2, 1].map((stars) => (
-                                    <div key={stars} className="d-flex align-items-center mb-2">
-                                        <div className="me-2" style={{ width: '60px' }}>
-                                            {stars} sao
-                                        </div>
-                                        <ProgressBar
-                                            now={stars === 5 ? 100 : 0}
-                                            className="flex-grow-1 me-2"
-                                            style={{ height: '8px' }}
-                                        />
-                                        <div style={{ width: '30px' }}>{stars === 5 ? 2 : 0}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        {renderRatingFilters()}
-                    </div>
-                </Col>
-            </Row>
+            <DashboardVoteProduct product={product} />
 
             {/* Related Products Section */}
             <Row className="mt-5">
@@ -233,7 +189,12 @@ const ProductDetail = () => {
                                             </Nav.Link>
                                         </h3>
                                         <div className="rating-small mb-2">
-                                            {renderStars(5)}
+                                            { relatedProduct.total_rating_score > 0 ? (
+                                                renderStarsItem(relatedProduct.total_rating_score / relatedProduct.total_vote_count )
+                                            ) : (
+                                                renderStarsItem(0)
+                                            )}
+
                                         </div>
                                         <div className="price-small">
                                             {formatPrice(relatedProduct.price)}

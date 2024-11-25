@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Container, Nav, Dropdown, Navbar } from 'react-bootstrap';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaBars, FaTimes, FaBox, FaPaw, FaShoppingCart, FaShareAlt, FaClipboardList } from 'react-icons/fa'; // Thêm icon từ react-icons
+import {
+    FaBars,
+    FaTimes,
+    FaBox,
+    FaPaw,
+    FaShoppingCart,
+    FaShareAlt,
+    FaClipboardList,
+    FaInternetExplorer
+} from 'react-icons/fa'; // Thêm icon từ react-icons
 import './UserLayout.css'; // CSS tùy chỉnh
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -23,6 +32,8 @@ const UserLayout = ({ isAuthenticated, user }) => {
                     <Navbar.Brand as={Link} to="/user">Xin chào {user?.name}</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/user/orders">Đơn hàng</Nav.Link>
+                        <Nav.Link as={Link} to="/user/vote">Đánh giá</Nav.Link>
+                        <Nav.Link as={Link} to="/" className={'d-flex align-items-center'} target={'_blank'}>Vào website <FaInternetExplorer  className={'ms-2'}/></Nav.Link>
                     </Nav>
                     <Nav>
                         <Dropdown align="end">

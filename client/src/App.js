@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'toastr/build/toastr.min.css';
 import './App.css';
-// import GuestLayout from './components/GuestLayout';
-// import LoginLayout from './components/LoginLayout';
-// import RegisterLayout from './components/RegisterLayout';
 
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';

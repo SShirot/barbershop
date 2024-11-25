@@ -12,6 +12,9 @@ const apiProductService = {
     showProductDetail: (id) => {
         return apiHelper.get(`products/show/${id}`);
     },
+    showDashboardVoteDetail: (id) => {
+        return apiHelper.get(`products/vote-dashboard/${id}`);
+    },
 };
 
 export default apiProductService;
