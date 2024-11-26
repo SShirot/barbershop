@@ -18,6 +18,7 @@ import ServiceManager from "../pages/admin/service/ServiceManager";
 import ServiceUserManager from "../pages/admin/service/ServiceUserManager";
 import VoteManager from "../pages/admin/ecm/VoteManager";
 import BrandManager from "../pages/admin/ecm/BrandManager";
+import InformationManage from "../pages/admin/setting/InformationManage";
 
 const AdminRoutes = () => {
 
@@ -75,6 +76,7 @@ const AdminRoutes = () => {
 
                         <Route path="slides" element={<SlideManager />} />
                         <Route path="profile" element={<ProfileManager />} />
+                        <Route path="setting/information" element={<InformationManage />} />
                         {/* Add other admin-only routes here */}
                     </>
                 )}

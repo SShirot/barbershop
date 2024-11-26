@@ -9,6 +9,7 @@ import { FaSave, FaTrash, FaPlus } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import categoryService from './../../../../api/categoryService';
 import productLabelService from '../../../../api/productLabelService';
+import brandService from '../../../../api/brandService';
 import { formatCurrencyInput } from '../../../../helpers/formatters';
 import apiUpload from "../../../../api/apiUpload";
 
@@ -23,6 +24,7 @@ const ProductModal = ({
                           // previewAlbumImages
                       }) => {
     const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
     const [productLabels, setProductLabels] = useState([]);
     const [description, setDescription] = useState(editingProduct?.description || '');
     const [albumImages, setAlbumImages] = useState([]);
@@ -33,12 +35,14 @@ const ProductModal = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [categoriesRes, labelsRes] = await Promise.all([
+                const [categoriesRes, labelsRes, brandsRes] = await Promise.all([
                     categoryService.getLists({ page: 1, page_size: 1000 }),
-                    productLabelService.getLists({ page: 1, page_size: 1000 })
+                    productLabelService.getLists({ page: 1, page_size: 1000 }),
+                    brandService.getLists({ page: 1, page_size: 1000 }),
                 ]);
 
                 setCategories(categoriesRes.data.data);
+                setBrands(brandsRes.data.data);
                 setProductLabels(labelsRes.data.data.map(label => ({
                     value: label.id,
                     label: label.name
@@ -104,6 +108,7 @@ const ProductModal = ({
                         name: editingProduct?.name || '',
                         price: editingProduct?.price || '',
                         category: editingProduct?.category?.id || '',
+                        brand: editingProduct?.brand?.id || '',
                         status: editingProduct?.status || 'pending',
                         number: editingProduct?.number || 0,
                         sale: editingProduct?.sale || 0,
@@ -113,6 +118,7 @@ const ProductModal = ({
                         name: Yup.string().required('Tên sản phẩm không được để trống'),
                         price: Yup.number().required('Giá sản phẩm không được để trống').positive('Giá phải là số dương'),
                         category: Yup.string().required('Danh mục không được để trống'),
+                        brand: Yup.string().required('Thương hiệu không được để trống'),
                     })}
                     onSubmit={(values) => {
                         handleAddEditProduct({ ...values, description, productImage, albumImages });
@@ -251,18 +257,37 @@ const ProductModal = ({
                                             </Col>
                                         </Row>
 
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Nhãn sản phẩm</Form.Label>
-                                            <Select
-                                                isMulti
-                                                options={productLabels}
-                                                value={productLabels?.filter(label => values.productsLabels.includes(label.value))}
-                                                onChange={(selectedOptions) => {
-                                                    const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
-                                                    setFieldValue("productsLabels", selectedValues);
-                                                }}
-                                            />
-                                        </Form.Group>
+                                        <Row>
+                                            <Col md={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Nhãn sản phẩm</Form.Label>
+                                                    <Select
+                                                        isMulti
+                                                        options={productLabels}
+                                                        value={productLabels?.filter(label => values.productsLabels.includes(label.value))}
+                                                        onChange={(selectedOptions) => {
+                                                            const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                                                            setFieldValue("productsLabels", selectedValues);
+                                                        }}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col md={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Thương hiệu</Form.Label>
+                                                    <Field as="select" name="brand" className="form-control">
+                                                        <option value="">Chọn thương hiệu</option>
+                                                        {brands.map((brand) => (
+                                                            <option key={brand.id} value={brand.id}>
+                                                                {brand.name}
+                                                            </option>
+                                                        ))}
+                                                    </Field>
+                                                    <ErrorMessage name="brand" component="div" className="text-danger" />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+
 
                                         <Form.Group className="mb-3">
                                             <Form.Label>Mô tả</Form.Label>

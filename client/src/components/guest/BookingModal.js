@@ -9,6 +9,7 @@ import {useSelector} from "react-redux";
 
 const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
     const [services, setServices] = useState([]);
+    const [admins, setAdmins] = useState([]);
     const [is_home_service, setIsHomeVisit] = useState(false);
     const user = useSelector((state) => state.auth.user);
 
@@ -16,6 +17,17 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
         axios.get(`${API}service`)
             .then(response => {
                 setServices(response.data.data.data);
+            })
+            .catch(error => {
+                console.error("There was an error fetching the services!", error);
+            });
+    }, [API]);
+
+    useEffect(() => {
+        axios.get(`${API}users?page=1&page_size=1000`)
+            .then(response => {
+                console.info("===========[] ===========[response] : ",response.data.data.data.data);
+                setAdmins(response.data.data.data.data);
             })
             .catch(error => {
                 console.error("There was an error fetching the services!", error);
@@ -32,6 +44,7 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
             const bookingData = {
                 user_id: user.id,
                 service_id: values.service,
+                admin_id: values.admin,
                 name: selectedService.name,
                 price: selectedService.price,
                 status: 'pending',
@@ -107,6 +120,25 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.service}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group controlId="action" className={'mb-2'}>
+                                <Form.Label>Chọn nhân viên</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="admin"
+                                    value={values.admin}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={touched.admin && !!errors.admin}
+                                >
+                                    <option value="">Chọn nhân viên...</option>
+                                    {admins.map(admin => (
+                                        <option key={admin.id} value={admin.id}>{admin.name}</option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.admin}
                                 </Form.Control.Feedback>
                             </Form.Group>
 

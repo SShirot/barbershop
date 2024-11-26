@@ -13,9 +13,6 @@ root.render(
         <React.Fragment>
             <App/>
         </React.Fragment>
-        {/*<React.StrictMode>*/}
-        {/*    <App/>*/}
-        {/*</React.StrictMode>*/}
     </Provider>
 );
 reportWebVitals();

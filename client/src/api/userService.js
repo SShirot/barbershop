@@ -5,6 +5,10 @@ const userService = {
         const paramsSearch = new URLSearchParams(params);
         return apiHelper.get(`admin/users?${paramsSearch.toString()}`);
     },
+    getListsAdmin: (params) => {
+        const paramsSearch = new URLSearchParams(params);
+        return apiHelper.get(`users?user_type=ADMIN&${paramsSearch.toString()}`);
+    },
 
     add: (petData) => {
         return apiHelper.post('admin/users', petData);

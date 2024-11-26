@@ -206,6 +206,9 @@ const Order = {
             // Sử dụng giá trị `code` từ `updateData` nếu có, nếu không lấy từ `existingOrder`
             const code = updateData.code || existingOrder.code;
 
+            // Tính tổng giá trị đơn hàng (bao gồm phí vận chuyển nếu có)
+            const subTotal = updateData.total_amount + (updateData.shipping_fee || 0);
+
             // Cập nhật thông tin đơn hàng trong bảng `ec_orders`
             const query = `
             UPDATE ${Order.tableName} 
@@ -223,7 +226,7 @@ const Order = {
                 updateData.shipping_fee || 0,
                 updateData.tax_amount || 0,
                 updateData.discount_amount || 0,
-                updateData.sub_total || 0,
+                subTotal,
                 updateData.completed_at || null,
                 updateData.notes || null,
                 id

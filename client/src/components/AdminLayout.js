@@ -6,6 +6,7 @@ import {logout} from "../redux/slices/authSlice";
 import {useDispatch} from "react-redux";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {FaInternetExplorer} from "react-icons/fa";
 
 const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
 
@@ -65,8 +66,10 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/slides">Quản lý slide</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/admin/setting/information">Thông tin website</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+                        <Nav.Link as={Link} to="/" className={'d-flex align-items-center'} target={'_blank'}>Vào website <FaInternetExplorer  className={'ms-2'}/></Nav.Link>
                     </Nav>
                     <Nav>
                         <Dropdown align="end">

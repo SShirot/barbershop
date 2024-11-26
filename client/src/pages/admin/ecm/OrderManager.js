@@ -82,6 +82,25 @@ const OrderManager = () => {
         }
     };
 
+    const getVariantPayment = (status) => {
+        switch (status) {
+            case 'pending':
+                return 'warning'; // Màu vàng
+            case 'completed':
+                return 'success'; // Màu xanh lá
+            case 'refunding':
+                return 'info'; // Màu xanh nhạt
+            case 'refunded':
+                return 'primary'; // Màu xanh đậm
+            case 'fraud':
+                return 'danger'; // Màu đỏ
+            case 'failed':
+                return 'dark'; // Màu xám đậm
+            default:
+                return 'secondary'; // Màu xám nhạt
+        }
+    };
+
     return (
         <Container>
             <Row className="gutters mt-3">
@@ -106,6 +125,7 @@ const OrderManager = () => {
                             <th>SĐT</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
+                            <th>Thanh toán</th>
                             <th>Thao tác</th>
                         </tr>
                         </thead>
@@ -119,6 +139,9 @@ const OrderManager = () => {
                                 <td onClick={() => handleOrderClick(order)}>{formatCurrency(order.sub_total)}</td>
                                 <td onClick={() => handleOrderClick(order)}>
                                     <span className={`text-${getVariant(order.status)}`}>{order.status}</span>
+                                </td>
+                                <td onClick={() => handleOrderClick(order)}>
+                                    <span className={`text-${getVariantPayment(order.payment_status)}`}>{order.payment_status}</span>
                                 </td>
                                 <td>
                                     <Button

@@ -47,8 +47,8 @@ const Brand = {
     // Thêm mới brand
     create: async (brandData) => {
         const query = `INSERT INTO ${Brand.tableName} 
-            (name, slug, avatar, status, description, title_seo, description_seo, keywords_seo, index_seo) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            (name, slug, avatar, status, description, title_seo, description_seo, keywords_seo, index_seo, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`;
         const values = [
             brandData.name,
             brandData.slug,

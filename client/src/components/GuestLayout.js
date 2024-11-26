@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FaShoppingCart } from 'react-icons/fa';
 import { loadUserFromLocalStorage, logout } from '../redux/slices/authSlice';
 import categoryService from "../api/categoryService";
+import apiSettingInformation from "../api/apiSettingInformation";
 import { createSlug } from "../helpers/formatters";
 import './GuestLayout.css';
 
@@ -31,6 +32,7 @@ const GuestLayout = () => {
     const [showBooking, setShowBooking] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [categories, setCategories] = useState([]);
+    const [information, setInformation] = useState([]);
     const navigate = useNavigate();
 
     const handleBookingClose = () => setShowBooking(false);
@@ -50,12 +52,25 @@ const GuestLayout = () => {
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        const fetchSettingInfo = async () => {
+            try {
+                const response = await apiSettingInformation.getInfo({});
+                setInformation(response.data?.data);
+            } catch (error) {
+                console.error('Failed to fetch settingInfo', error);
+            }
+        };
+
+        fetchSettingInfo();
+    }, []);
+
     return (
         <>
             <Navbar bg="dark" variant="dark" expand="lg" className="sticky-top">
                 <Container>
                     <Navbar.Brand as={Link} to="/">
-                        <img src={'https://shop.30shine.com/images/Logo_30shine.svg'} alt="Logo" style={{ width: '80px' }} />
+                        <img src={ information?.logo ? information?.logo : 'https://shop.30shine.com/images/Logo_30shine.svg'} alt="Logo" style={{ width: '80px' }} />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbar-nav" />
                     <Navbar.Collapse id="navbar-nav">
@@ -136,7 +151,7 @@ const GuestLayout = () => {
             <Container>
                 <Outlet />
             </Container>
-            <Footer />
+            <Footer information={information}/>
             <BookingModal
                 show={showBooking}
                 handleClose={handleBookingClose}

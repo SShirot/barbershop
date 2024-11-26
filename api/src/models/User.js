@@ -20,23 +20,36 @@ const User = {
         updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     },
 
-    getAll: async (page = 1, pageSize = 10, name = null) => {
+    getAll: async (page = 1, pageSize = 10, name = null, user_type = null) => {
         const offset = (page - 1) * pageSize;
         let query = `SELECT * FROM ${User.tableName}`;
         let countQuery = `SELECT COUNT(*) as total FROM ${User.tableName}`;
         const queryParams = [];
+        const countParams = [];
 
+        const conditions = [];
         if (name) {
-            query += ' WHERE name LIKE ?';
-            countQuery += ' WHERE name LIKE ?';
+            conditions.push('name LIKE ?');
             queryParams.push(`%${name}%`);
+            countParams.push(`%${name}%`);
+        }
+        if (user_type) {
+            conditions.push('user_type LIKE ?');
+            queryParams.push(`%${user_type}%`);
+            countParams.push(`%${user_type}%`);
+        }
+
+        if (conditions.length > 0) {
+            const whereClause = ` WHERE ${conditions.join(' AND ')}`;
+            query += whereClause;
+            countQuery += whereClause;
         }
 
         query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
 
         const [rows] = await db.query(query, queryParams);
-        const [countResult] = await db.query(countQuery, name ? [`%${name}%`] : []);
+        const [countResult] = await db.query(countQuery, countParams);
         const total = countResult[0].total;
 
         return {
@@ -51,6 +64,7 @@ const User = {
                 total_page: Math.ceil(total / pageSize),
             }
         };
+
     },
 
     // Tạo phương thức findOne để tìm người dùng theo email

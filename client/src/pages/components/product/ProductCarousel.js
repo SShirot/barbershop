@@ -34,12 +34,7 @@ const ProductCarousel = (props) => {
                     <h6 className="text-start my-4">{title}</h6>
                 </div>
             )}
-            {/*{showTitle && (*/}
-            {/*    <div className={'carousel-title'}>*/}
-            {/*        <h2 className="text-center my-4">{title}</h2>*/}
-            {/*    </div>*/}
-            {/*)}*/}
-            {/*<p className="text-center mb-4">Các loại hạt, pate, bánh thưởng thơm ngon, bổ dưỡng cho Boss</p>*/}
+
             <Carousel>
                 {productChunks.map((productChunk, idx) => (
                     <Carousel.Item key={idx}>

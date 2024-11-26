@@ -7,11 +7,13 @@ const router = express.Router();
 router.use('/auth', require('./auth/auth'));
 router.use('/admin', require('./admin'));
 router.use('/user', require('./user'));
+router.use('/users', require('./guest/admin'));
 router.use('/products', require('./guest/product'));
 router.use('/order', require('./user/order'));
 router.use('/categories', require('./guest/category'));
 router.use('/slides', require('./guest/slide'));
 router.use('/service', require('./guest/service'));
+router.use('/setting/info', require('./guest/setting'));
 
 // router.use('/guest', require('./guest/guest'));
 router.get(

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Table, Image } from 'react-bootstrap';
+import {Modal, Button, Form, Table, Image, Row, Col} from 'react-bootstrap';
 import Select from 'react-select';
 import apiCustomerService from "../../../../api/apiCustomerService";
 import apiOrderService from "../../../../api/apiOrderService";
@@ -17,6 +17,28 @@ const NewOrderModal = ({ show, onHide, orderToUpdate, refreshOrders }) => {
     const [products, setProducts] = useState([]);
     const [shippingFee, setShippingFee] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
+
+    // Thêm state cho payment_status và order_status
+    const [paymentStatus, setPaymentStatus] = useState({ value: 'pending', label: 'Pending' });
+    const [orderStatus, setOrderStatus] = useState({ value: 'pending', label: 'Pending' });
+
+    // Danh sách payment_status và order_status
+    const paymentStatusOptions = [
+        { value: 'pending', label: 'Pending' },
+        { value: 'completed', label: 'Completed' },
+        { value: 'refunding', label: 'Refunding' },
+        { value: 'refunded', label: 'Refunded' },
+        { value: 'fraud', label: 'Fraud' },
+        { value: 'failed', label: 'Failed' },
+    ];
+
+    const orderStatusOptions = [
+        { value: 'pending', label: 'Pending' },
+        { value: 'processing', label: 'Processing' },
+        { value: 'completed', label: 'Completed' },
+        { value: 'canceled', label: 'Canceled' },
+        { value: 'returned', label: 'Returned' },
+    ];
 
     const handleProductChange = (selectedOptions) => {
         const updatedProducts = selectedOptions.map(option => ({
@@ -76,11 +98,16 @@ const NewOrderModal = ({ show, onHide, orderToUpdate, refreshOrders }) => {
                 quantity: product.quantity,
                 avatar: product.avatar,
             })));
+            // Gán payment_status và order_status từ orderToUpdate
+            setPaymentStatus({ value: orderToUpdate.payment_status, label: orderToUpdate.payment_status });
+            setOrderStatus({ value: orderToUpdate.status, label: orderToUpdate.status });
         } else {
             setUser(null);
             setShippingFee(0);
             setTotalAmount(0);
             setSelectedProducts([]);
+            setPaymentStatus({ value: 'pending', label: 'Pending' });
+            setOrderStatus({ value: 'pending', label: 'Pending' });
         }
     }, [orderToUpdate]);
 
@@ -120,6 +147,8 @@ const NewOrderModal = ({ show, onHide, orderToUpdate, refreshOrders }) => {
             shipping_fee: shippingFee,
             total_amount: totalAmount,
             payment_method_id: 1,
+            payment_status: paymentStatus.value,
+            status: orderStatus.value,
         };
         if (orderToUpdate && Object.keys(orderToUpdate).length > 0) {
             await apiOrderService.updateOrder(orderToUpdate.id, orderData);
@@ -156,6 +185,33 @@ const NewOrderModal = ({ show, onHide, orderToUpdate, refreshOrders }) => {
                         placeholder="Chọn sản phẩm"
                     />
                 </Form.Group>
+                <Row>
+                    <Col md={6}>
+                        {/* Thêm order_status */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Trạng thái đơn hàng</Form.Label>
+                            <Select
+                                value={orderStatus}
+                                onChange={setOrderStatus}
+                                options={orderStatusOptions}
+                                placeholder="Chọn trạng thái đơn hàng"
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                        {/* Thêm payment_status */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Trạng thái thanh toán</Form.Label>
+                            <Select
+                                value={paymentStatus}
+                                onChange={setPaymentStatus}
+                                options={paymentStatusOptions}
+                                placeholder="Chọn trạng thái thanh toán"
+                            />
+                        </Form.Group>
+
+                    </Col>
+                </Row>
                 <Table responsive>
                     <thead>
                     <tr>

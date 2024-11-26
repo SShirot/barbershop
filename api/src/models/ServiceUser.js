@@ -6,6 +6,7 @@ const ServiceUser = {
     columns: {
         id: 'bigint(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
         user_id: 'int(11) NOT NULL',                    // ID người dùng, bắt buộc
+        action_id: 'int(11) NOT NULL',                    // ID người nhân viên
         service_id: 'int(11) NOT NULL',                  // ID dịch vụ, bắt buộc
         price: 'int(11) DEFAULT 0',                      // Giá của dịch vụ, mặc định là 0
         status: "enum('pending', 'processing', 'completed', 'canceled') DEFAULT 'pending'", // Trạng thái dịch vụ

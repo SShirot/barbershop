@@ -96,7 +96,7 @@ const Product = {
         // Giới hạn và offset cho phân trang
         query += ' LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
-        console.info("===========[] ===========[query] : ",query);
+
         const [products] = await db.query(query, queryParams);
         const [countResult] = await db.query(countQuery, queryParams.slice(0, -2));
         const total = countResult[0].total;
@@ -107,6 +107,10 @@ const Product = {
             const categoryQuery = `SELECT id, name FROM categories WHERE id = ?`;
             const [categoryResult] = await db.query(categoryQuery, [product.category_id]);
             product.category = categoryResult[0] || null;
+
+            const brandQuery = `SELECT id, name FROM ec_brands WHERE id = ?`;
+            const [brandResult] = await db.query(brandQuery, [product.brand_id]);
+            product.brand = brandResult[0] || null;
 
             // Lấy các labels của sản phẩm
             const labelsQuery = `
@@ -178,7 +182,7 @@ const Product = {
             productData.width || null,
             productData.height || null,
             productData.categoryId,
-            productData.brand_id
+            productData.brand
         ];
         const [result] = await db.query(query, values);
 
@@ -209,7 +213,7 @@ const Product = {
             updateData.width || null,
             updateData.height || null,
             updateData.categoryId,
-            updateData.brand_id,
+            updateData.brand,
             id
         ];
         const [result] = await db.query(query, values);
