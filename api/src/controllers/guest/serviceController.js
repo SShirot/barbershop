@@ -27,17 +27,8 @@ exports.findById = async (req, res) => {
 
 exports.registerService = async (req, res) => {
     try {
-        const {user_id ,service_id, price, status, name, is_home_service } = req.body;
-
         // Lưu thông tin đăng ký dịch vụ vào cơ sở dữ liệu
-        const result = await ServiceUser.create({
-            user_id,
-            service_id,
-            price,
-            status,
-            name,
-            is_home_service
-        });
+        const result = await ServiceUser.create(req.body);
 
         if (!result) {
             return errorResponse(res, 'Failed to register service');

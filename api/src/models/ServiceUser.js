@@ -19,8 +19,8 @@ const ServiceUser = {
     },
     getAll: async (page = 1, pageSize = 10, user_id = null) => {
         const offset = (page - 1) * pageSize;
-        let query = `SELECT su.*, u.id AS user_id, u.name AS user_name, u.email AS user_email, u.phone AS user_phone
-            FROM ${ServiceUser.tableName} su LEFT JOIN users u ON su.user_id = u.id`;
+        let query = `SELECT su.*, u.id AS user_id, u.name AS user_name, u.email AS user_email, u.phone AS user_phone, ua.name as adm_name
+            FROM ${ServiceUser.tableName} su LEFT JOIN users u ON su.user_id = u.id LEFT JOIN users ua ON su.action_id = ua.id`;
         let countQuery = `SELECT COUNT(*) as total FROM ${ServiceUser.tableName}`;
         const queryParams = [];
 
@@ -53,15 +53,16 @@ const ServiceUser = {
     // Phương thức thêm đăng ký dịch vụ mới
     create: async (userServiceData) => {
         const query = `
-            INSERT INTO ${ServiceUser.tableName} (user_id, service_id, price, status, name, is_home_service)
-            VALUES (?, ?, ?, ?, ?, ?)`;
+            INSERT INTO ${ServiceUser.tableName} (user_id, service_id, price, status, name, is_home_service, action_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             userServiceData.user_id,
             userServiceData.service_id,
             userServiceData.price || 0,
             userServiceData.status || 'pending',
             userServiceData.name || null,
-            userServiceData.is_home_service || false
+            userServiceData.is_home_service || false,
+            userServiceData.admin_id || 0
         ];
 
         const [result] = await db.query(query, values);

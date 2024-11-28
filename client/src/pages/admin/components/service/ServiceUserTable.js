@@ -13,6 +13,7 @@ const ServiceUserTable = ({ services, openServiceModal, setServiceToDelete, setS
                 <th>#</th>
                 <th>Khách hàng</th>
                 <th>Tên dịch vụ</th>
+                <th>Nhân viên</th>
                 <th>Tại nhà</th>
                 <th>Giá</th>
                 <th>Ngày tạo</th>
@@ -25,6 +26,7 @@ const ServiceUserTable = ({ services, openServiceModal, setServiceToDelete, setS
                     <td>{index + 1}</td>
                     <td>{service.user_name}</td>
                     <td>{service.name}</td>
+                    <td>{service.adm_name ?? "Chưa chọn"}</td>
                     <td>{service.is_home_service ? "Tại nhà" : "Tại cửa hàng" }</td>
                     <td>{new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
