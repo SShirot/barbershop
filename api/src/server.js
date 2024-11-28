@@ -1,9 +1,36 @@
 const express = require('express');
+const mysql = require('mysql2/promise');
 const swaggerSetup = require('./config/swagger');
 require('dotenv').config(); // Load environment variables
 const cors = require('cors');
 const app = express();
+const http = require('http');
+const { Server } = require('socket.io');
 
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*', // Cho phép mọi nguồn truy cập
+    },
+});
+
+const db = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+});
+
+// Kết nối
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('Error connecting to database:', err.stack);
+        return;
+    }
+    console.log('Connected to MySQL as id ' + connection.threadId);
+    connection.release(); // Giải phóng kết nối sau khi sử dụng
+});
 
 // Init Middleware
 app.use(express.json({ extended: false }));

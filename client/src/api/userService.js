@@ -33,6 +33,9 @@ const userService = {
     resetPassword: (data) => {
         return apiHelper.post(`auth/reset-password`,data);
     },
+    verifyAccount: (token) => {
+        return apiHelper.post(`auth/verify/${token}`);
+    },
 };
 
 export default userService;

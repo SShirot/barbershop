@@ -15,6 +15,7 @@ import AdminRoutes from './routes/AdminRoutes';
 import UserRoutes from './routes/UserRoutes';
 import ResetPassword from "./pages/auth/ResetPassword";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import Verify from "./pages/auth/Verify";
 
 
 const AuthLayout = React.lazy(() => import('./components/AuthLayout'));
@@ -23,7 +24,7 @@ const GuestLayout = React.lazy(() => import('./components/GuestLayout'));
 // Import các component sử dụng lazy loading
 const Home = React.lazy(() => import('./pages/guest/Home'));
 const Product = React.lazy(() => import('./pages/guest/Product'));
-const ProductDetail = React.lazy(() => import('./pages/guest/ProductDetail'));
+const ProductDetail = React.lazy(() => import('./pages/guest/pages/product-detail/ProductDetail'));
 const Cart = React.lazy(() => import('./pages/guest/Cart'));
 const Category = React.lazy(() => import('./pages/guest/Category'));
 
@@ -75,6 +76,9 @@ const App = () => {
                 {/* Routes dành cho login và register */}
                 <Route path="login" element={<AuthLayout />}>
                     <Route index element={<Login />} />
+                </Route>
+                <Route path="/verify/:token" element={<AuthLayout />}>
+                    <Route index element={<Verify />} />
                 </Route>
                 <Route path="register" element={<AuthLayout />}>
                     <Route index element={<Register />} />
