@@ -71,7 +71,7 @@ exports.createUser = async (req, res) => {
         return errorResponse(res, 'Invalid data', 400, 1, errors.array());
     }
 
-    const { name, email, password, avatar = 'https://via.placeholder.com/150', user_type } = req.body;
+    const { name, email, password, avatar = 'https://via.placeholder.com/150' } = req.body;
 
     try {
         // Check if the user already exists by email
@@ -89,8 +89,7 @@ exports.createUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            avatar,
-            user_type
+            avatar
         };
 
         const userId = await User.create(newUser);

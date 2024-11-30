@@ -3,6 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminDashboard from '../pages/admin/Dashboard';
 import {useSelector} from 'react-redux';
+import PromotionManager from "../pages/admin/PromotionManager";
 import UserManager from "../pages/admin/account/UserManager";
 import MenuManager from "../pages/admin/news/MenuManager";
 import CategoryManager from "../pages/admin/ecm/CategoryManager";
@@ -18,7 +19,6 @@ import ServiceUserManager from "../pages/admin/service/ServiceUserManager";
 import VoteManager from "../pages/admin/ecm/VoteManager";
 import BrandManager from "../pages/admin/ecm/BrandManager";
 import InformationManage from "../pages/admin/setting/InformationManage";
-import AttributeManager from "../pages/admin/ecm/AttributeManager";
 
 const AdminRoutes = () => {
 
@@ -40,14 +40,22 @@ const AdminRoutes = () => {
         // return <Navigate to="/login" />; // Redirect to login if not authenticated
     }
 
-    console.info("===========[AdminLayout] ===========[user] : ",user);
-    if(user && user.user_type !== "ADMIN") {
-        return <Navigate to="/unauthorized" />;
-    }
+    // if (user.role !== 'admin' && user.role !== 'staff') {
+    //     return <Navigate to="/unauthorized" />;
+    // }
 
     return (
         <Routes>
             <Route element={<AdminLayout isAuthenticated={isAuthenticated} user={user} />}>
+                {/* Common Routes for both admin and staff */}
+
+                {/*<Route path="services" element={<ServiceManager />} />*/}
+                {/*<Route path="promotions" element={<PromotionManager />} />*/}
+                {/*<Route path="appointments" element={<AppointmentManager />} />*/}
+                {/*<Route path="products" element={<ProductManager />} />*/}
+                {/*<Route path="orders" element={<OrderManager />} />*/}
+
+                {/* Admin-only Routes */}
                 {user && (
                 // {user.role === 'admin' && (
                     <>
@@ -58,7 +66,6 @@ const AdminRoutes = () => {
                         <Route path="news/tags" element={<TagManager />} />
                         <Route path="news/articles" element={<ArticleManager />} />
                         <Route path="ecommerce/categories" element={<CategoryManager />} />
-                        <Route path="ecommerce/attributes" element={<AttributeManager />} />
                         <Route path="ecommerce/product-labels" element={<ProductLabelManager />} />
                         <Route path="ecommerce/product" element={<ProductManager />} />
                         <Route path="ecommerce/order" element={<OrderManager />} />

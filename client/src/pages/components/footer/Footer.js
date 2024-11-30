@@ -42,7 +42,7 @@ const Footer = ({information}) => {
                         <img src={require('./../../../assets/images/instagram.png')} alt="Instagram" className="footer-icon" />
                     </Col>
                 </Row>
-                <Row className="justify-content-center mt-3" style={{ borderTop: '1px solid #f2f2f2',paddingTop: '20px'}}>
+                <Row className="justify-content-center mt-3">
                     <Col md={12} className="text-center">
                         <p>© 2024 {information?.copyright}.</p>
                         {/*<p>Đang online: 5 | Tháng: 7339 | Tổng truy cập: 1530656</p>*/}

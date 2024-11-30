@@ -15,25 +15,17 @@ import AdminRoutes from './routes/AdminRoutes';
 import UserRoutes from './routes/UserRoutes';
 import ResetPassword from "./pages/auth/ResetPassword";
 import ForgotPassword from "./pages/auth/ForgotPassword";
-import Verify from "./pages/auth/Verify";
-import EmptyLayout from "./components/EmptyLayout";
-import PaymentFailure from "./pages/site/shopping-cart/PaymentFailure";
-import PaymentSuccess from "./pages/site/shopping-cart/PaymentSuccess";
-import UserManager from "./pages/admin/account/UserManager";
-import ImageUploadPage from "./pages/site/ImageUploadPage";
-import UnauthorizedPage from "./pages/site/errors/Unauthorized";
 
 
 const AuthLayout = React.lazy(() => import('./components/AuthLayout'));
 const GuestLayout = React.lazy(() => import('./components/GuestLayout'));
 
 // Import các component sử dụng lazy loading
-const Home = React.lazy(() => import('./pages/site/home/Home'));
-const Search = React.lazy(() => import('./pages/site/search/Search'));
-const ProductDetail = React.lazy(() => import('./pages/site/product-detail/ProductDetail'));
-const Cart = React.lazy(() => import('./pages/site/shopping-cart/Cart'));
-const Checkout = React.lazy(() => import('./pages/site/shopping-cart/Checkout'));
-const Category = React.lazy(() => import('./pages/site/category/Category'));
+const Home = React.lazy(() => import('./pages/guest/Home'));
+const Product = React.lazy(() => import('./pages/guest/Product'));
+const ProductDetail = React.lazy(() => import('./pages/guest/ProductDetail'));
+const Cart = React.lazy(() => import('./pages/guest/Cart'));
+const Category = React.lazy(() => import('./pages/guest/Category'));
 
 const App = () => {
     const dispatch = useDispatch();
@@ -52,14 +44,9 @@ const App = () => {
                             <Home />
                         </Suspense>
                     } />
-                    {/*<Route path="product" element={*/}
-                    {/*    <Suspense fallback={<div>Loading Products...</div>}>*/}
-                    {/*        <Product />*/}
-                    {/*    </Suspense>*/}
-                    {/*} />*/}
-                    <Route path="upload-preview" element={
+                    <Route path="product" element={
                         <Suspense fallback={<div>Loading Products...</div>}>
-                            <ImageUploadPage />
+                            <Product />
                         </Suspense>
                     } />
                     <Route path="p/:slug" element={
@@ -77,18 +64,6 @@ const App = () => {
                             <Category />
                         </Suspense>
                     } />
-                    <Route path="search" element={
-                        <Suspense fallback={<div>Loading Search...</div>}>
-                            <Search />
-                        </Suspense>
-                    } />
-                </Route>
-
-                <Route path="/*" element={<EmptyLayout />}>
-                    <Route index path="checkout" element={<Checkout />} />
-                    <Route path="checkout/failure" element={<PaymentFailure />} />
-                    <Route path="checkout/success" element={<PaymentSuccess />} />
-                    <Route path="unauthorized" element={<UnauthorizedPage />} />
                 </Route>
 
                 {/* Sử dụng AdminRoutes */}
@@ -100,9 +75,6 @@ const App = () => {
                 {/* Routes dành cho login và register */}
                 <Route path="login" element={<AuthLayout />}>
                     <Route index element={<Login />} />
-                </Route>
-                <Route path="/verify/:token" element={<AuthLayout />}>
-                    <Route index element={<Verify />} />
                 </Route>
                 <Route path="register" element={<AuthLayout />}>
                     <Route index element={<Register />} />

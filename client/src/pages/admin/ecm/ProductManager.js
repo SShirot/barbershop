@@ -21,7 +21,7 @@ const ProductManager = () => {
     const [previewAlbumImages, setPreviewAlbumImages] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const defaultImage = "http://localhost:3014/uploads/images/default.png";
+    const defaultImage = "https://via.placeholder.com/150";
 
     const fetchProducts = async (params) => {
         try {
@@ -39,15 +39,12 @@ const ProductManager = () => {
     }, [searchParams]);
 
     const handleAddEditProduct = async (values) => {
-        // const editorContent = quillRef.current.getEditor().getText();
         const productData = {
             ...values,
             price: Number(values.price, 10),
             avatar: productImage || editingProduct?.avatar || defaultImage,
             content: description,
             categoryId: values.category,
-            brandId: values.brand,
-            images: null,
             slug: createSlug(values.name)
         };
         try {

@@ -34,11 +34,10 @@ exports.create = async (req, res) => {
     try {
 
         const productsData = req.body;
-        const LabelsIds = req.body.productsLabels || [];
-        const variants = req.body.variants || [];
+        const LabelsIds = req.body.productsLabels || [];  // Array of tag IDs
 
         // Tạo mới
-        const newProduct = await Model.create(productsData, LabelsIds, variants);
+        const newProduct = await Model.create(productsData, LabelsIds);
 
         return successResponse(res, { data: newProduct }, 'data created successfully', 201);
     } catch (err) {
@@ -53,9 +52,8 @@ exports.update = async (req, res) => {
         const id = req.params.id;
         const updateData = req.body;
         const LabelsIds = req.body.productsLabels || [];  // Array of tag IDs
-        const variants = req.body.variants || [];
         // Cập nhật
-        const updatedTag = await Model.updateById(id, updateData, LabelsIds, variants);
+        const updatedTag = await Model.updateById(id, updateData, LabelsIds);
 
         if (!updatedTag) {
             return errorResponse(res, 'Tag not found', 404, 404);

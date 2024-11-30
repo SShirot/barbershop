@@ -1,20 +1,32 @@
 import React, {startTransition} from 'react';
 import {Container, Navbar, Nav, NavDropdown, Dropdown} from 'react-bootstrap';
 import {Outlet, Link, useNavigate} from 'react-router-dom';
-import './style/UserLayout.css';
+import './UserLayout.css';
+import {logout} from "../redux/slices/authSlice";
+import {useDispatch} from "react-redux";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {FaInternetExplorer} from "react-icons/fa";
 
 const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const handleLogout = () => {
+        dispatch(logout()); // Dispatch action logout để đăng xuất người dùng
+        navigate('/login');
+    };
+
     return (
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
                     <Navbar.Brand as={Link} to="/admin">ADMIN</Navbar.Brand>
                     <Nav className="me-auto">
+                        {/*<Nav.Link as={Link} to="/admin/orders">Đơn hàng</Nav.Link>*/}
+                        {/*<Nav.Link as={Link} to="/admin/services">Dịch Vụ</Nav.Link>*/}
+                        {/*<Nav.Link as={Link} to="/admin/appointments">Đặt lịch</Nav.Link>*/}
+                        {/*<Nav.Link as={Link} to="/admin/promotions">Khuyến mãi</Nav.Link>*/}
                         <Nav.Link as={Link} to="/admin/user">Tài khoản</Nav.Link>
                         <Dropdown as={Nav.Item}>
                             <Dropdown.Toggle as={Nav.Link} id="dropdown-news">
@@ -32,7 +44,6 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/categories">Danh mục</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/admin/ecommerce/attributes">Thuộc tính</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/brands">Thương hiệu</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product-labels">Nhãn sản phẩm</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/product">Sản phẩm</Dropdown.Item>

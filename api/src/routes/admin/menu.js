@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/admin/menuController');
+const menuController = require('../../controllers/admin/menuController');
 const auth = require("../../middleware/auth");
 
-// Get all
-router.get('/', auth, controller.getAll);
+// Get all menus
+router.get('/', auth, menuController.getAllMenus);
 
-// find by ID
-router.get('/:id', auth,controller.findById);
+// Get a specific menu by ID
+router.get('/:id', auth,menuController.getMenuById);
 
-// Create
-router.post('/', auth, controller.create);
+// Create a new menu
+router.post('/', auth, menuController.createMenu);
 
-// Update
-router.put('/:id', auth, controller.update);
+// Update a menu by ID
+router.put('/:id', auth, menuController.updateMenu);
 
-// Delete
-router.delete('/:id',auth, controller.delete);
+// Delete a menu by ID
+router.delete('/:id',auth, menuController.deleteMenu);
 
 module.exports = router;

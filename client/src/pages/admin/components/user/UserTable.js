@@ -3,19 +3,6 @@ import {Table, Button, Image, Badge, ButtonGroup, Dropdown} from 'react-bootstra
 import moment from 'moment';
 import { FaEdit, FaTrash, FaEye, FaListUl } from 'react-icons/fa';
 
-const getStatusLabel = (status) => {
-    switch (status) {
-        case 1:
-            return <Badge bg="warning">Chờ xác thực</Badge>; // Màu vàng
-        case 2:
-            return <Badge bg="success">Đã xác thực</Badge>; // Màu xanh
-        case -1:
-            return <Badge bg="danger">Đã block</Badge>; // Màu đỏ
-        default:
-            return <Badge bg="secondary">Không xác định</Badge>; // Màu xám
-    }
-};
-
 const UserTable = ({ users, openUserModal, setUserToDelete, setShowDeleteModal }) => {
     const defaultImage = "https://via.placeholder.com/150";
     return (
@@ -27,7 +14,6 @@ const UserTable = ({ users, openUserModal, setUserToDelete, setShowDeleteModal }
                 <th>Họ tên</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
-                <th>Trạng thái</th>
                 <th>Ngày tạo</th>
                 <th>Role</th>
                 <th>Thao tác</th>
@@ -50,7 +36,6 @@ const UserTable = ({ users, openUserModal, setUserToDelete, setShowDeleteModal }
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone}</td>
-                    <td>{getStatusLabel(user.status)}</td>
                     <td>{moment(user.dateOfBirth).format('DD-MM-YYYY')}</td>
                     <td>
                         {user.user_type}
