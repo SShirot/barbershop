@@ -38,9 +38,10 @@ const Order = {
     getAll: async (page = 1, pageSize = 10, code = null, user_id = null) => {
         const offset = (page - 1) * pageSize;
         let query = `
-        SELECT o.*, u.id AS user_id, u.name AS user_name, u.email AS user_email, u.phone AS user_phone
+        SELECT o.*, u.id AS user_id, u.name AS user_name, u.email AS user_email, u.phone AS user_phone, pm.name as payment_name
         FROM ${Order.tableName} o
         LEFT JOIN users u ON o.user_id = u.id
+        LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
     `;
         let countQuery = `SELECT COUNT(*) as total FROM ${Order.tableName} o LEFT JOIN users u ON o.user_id = u.id`;
         const queryParams = [];

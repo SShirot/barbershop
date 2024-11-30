@@ -27,6 +27,9 @@
     font-weight: 700;
     color: #888;
 }
+/*.item-prod .card-prod{*/
+/*    width: 100%;*/
+/*}*/
 .item-prod button{
     position: absolute;
     top: 5px;

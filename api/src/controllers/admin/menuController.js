@@ -1,11 +1,10 @@
-const Menu = require('../../models/Menu');
+const MenuService = require('./../../services/admin/menuService');
 const { successResponse, errorResponse } = require("../../utils/response");
 
-// Get all menus
-exports.getAllMenus = async (req, res) => {
+exports.getAll = async (req, res) => {
     try {
         const { page, page_size: pageSize, name } = req.query;
-        const result = await Menu.getAll(Number(page), Number(pageSize), name);
+        const result = await MenuService.getAll(Number(page), Number(pageSize), name);
 
         return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
     } catch (err) {
@@ -14,10 +13,9 @@ exports.getAllMenus = async (req, res) => {
     }
 };
 
-// Get menu by ID
-exports.getMenuById = async (req, res) => {
+exports.findById = async (req, res) => {
     try {
-        const menu = await Menu.findById(req.params.id);
+        const menu = await MenuService.findById(req.params.id);
         if (!menu) {
             return errorResponse(res, 'Menu not found', 404, 404);
         }
@@ -30,12 +28,12 @@ exports.getMenuById = async (req, res) => {
 };
 
 // Create new menu
-exports.createMenu = async (req, res) => {
+exports.create = async (req, res) => {
     try {
         const menuData = req.body;
 
         // Tạo mới menu
-        const newMenu = await Menu.create(menuData);
+        const newMenu = await MenuService.create(menuData);
 
         return successResponse(res, { data: newMenu }, 'Menu created successfully', 201);
     } catch (err) {
@@ -45,13 +43,13 @@ exports.createMenu = async (req, res) => {
 };
 
 // Update menu
-exports.updateMenu = async (req, res) => {
+exports.update = async (req, res) => {
     try {
         const id = req.params.id;
         const updateData = req.body;
 
         // Cập nhật menu
-        const updatedMenu = await Menu.updateById(id, updateData);
+        const updatedMenu = await MenuService.update(id, updateData);
 
         if (!updatedMenu) {
             return errorResponse(res, 'Menu not found', 404, 404);
@@ -64,13 +62,12 @@ exports.updateMenu = async (req, res) => {
     }
 };
 
-// Delete menu
-exports.deleteMenu = async (req, res) => {
+exports.delete = async (req, res) => {
     try {
         const id = req.params.id;
 
         // Xóa menu
-        const isDeleted = await Menu.deleteById(id);
+        const isDeleted = await MenuService.delete(id);
 
         if (!isDeleted) {
             return errorResponse(res, 'Menu not found', 404, 404);

@@ -14,6 +14,13 @@ router.use('/categories', require('./guest/category'));
 router.use('/slides', require('./guest/slide'));
 router.use('/service', require('./guest/service'));
 router.use('/setting/info', require('./guest/setting'));
+<<<<<<< HEAD
+router.use('/votes', require('./guest/vote'));
+router.use('/brand', require('./guest/brand'));
+router.use('/payment-methods', require('./guest/payment_methods'));
+router.use('/work-preferences', require('./guest/work_preferences'));
+=======
+>>>>>>> parent of fed03cf (verify account)
 
 // router.use('/guest', require('./guest/guest'));
 router.get(
