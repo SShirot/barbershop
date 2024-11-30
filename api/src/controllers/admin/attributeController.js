@@ -1,10 +1,10 @@
-const MenuService = require('./../../services/admin/menuService');
+const AttributeService = require('./../../services/admin/attributeService');
 const { successResponse, errorResponse } = require("../../utils/response");
 
 exports.getAll = async (req, res) => {
     try {
         const { page, page_size: pageSize, name } = req.query;
-        const result = await MenuService.getAll(Number(page), Number(pageSize), name);
+        const result = await AttributeService.getAll(Number(page), Number(pageSize), name);
 
         return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
     } catch (err) {
@@ -15,12 +15,12 @@ exports.getAll = async (req, res) => {
 
 exports.findById = async (req, res) => {
     try {
-        const menu = await MenuService.findById(req.params.id);
+        const menu = await AttributeService.findById(req.params.id);
         if (!menu) {
-            return errorResponse(res, 'Menu not found', 404, 404);
+            return errorResponse(res, 'Attribute not found', 404, 404);
         }
 
-        return successResponse(res, { data: menu }, 'Menu found successfully');
+        return successResponse(res, { data: menu }, 'Attribute found successfully');
     } catch (err) {
         console.error(err);
         return errorResponse(res);
@@ -33,9 +33,9 @@ exports.create = async (req, res) => {
         const menuData = req.body;
 
         // Tạo mới menu
-        const newMenu = await MenuService.create(menuData);
+        const newMenu = await AttributeService.create(menuData);
 
-        return successResponse(res, { data: newMenu }, 'Menu created successfully', 201);
+        return successResponse(res, { data: newMenu }, 'Attribute created successfully', 201);
     } catch (err) {
         console.error(err);
         return errorResponse(res);
@@ -49,10 +49,10 @@ exports.update = async (req, res) => {
         const updateData = req.body;
 
         // Cập nhật menu
-        const updatedMenu = await MenuService.update(id, updateData);
+        const updatedMenu = await AttributeService.update(id, updateData);
 
         if (!updatedMenu) {
-            return errorResponse(res, 'Menu not found', 404, 404);
+            return errorResponse(res, 'Attribute not found', 404, 404);
         }
 
         return successResponse(res, { data: updatedMenu }, 'Menu updated successfully');
@@ -67,7 +67,7 @@ exports.delete = async (req, res) => {
         const id = req.params.id;
 
         // Xóa menu
-        const isDeleted = await MenuService.delete(id);
+        const isDeleted = await AttributeService.delete(id);
 
         if (!isDeleted) {
             return errorResponse(res, 'Menu not found', 404, 404);

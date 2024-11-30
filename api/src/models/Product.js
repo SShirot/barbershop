@@ -2,7 +2,8 @@ const db = require('../config/dbMysql');
 const ProductsLabels = require('./ProductsLabels');
 
 const Product = {
-    tableName: 'ec_products',  // Tên bảng
+    tableName: 'ec_products', // Tên bảng sản phẩm
+    variantTable: 'ec_product_variants', // Tên bảng biến thể sản phẩm
 
     columns: {
         id: 'bigint(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -22,32 +23,34 @@ const Product = {
         category_id: 'bigint(20) UNSIGNED',
         brand_id: 'bigint(20) UNSIGNED',
         created_at: 'timestamp DEFAULT CURRENT_TIMESTAMP',
-        updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
+        updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
     },
 
-    getAll: async (page = 1, pageSize = 10, name = null,
-                   category_id = null, sort = 'newest', rating = null, label_id = null) => {
+    // Lấy danh sách sản phẩm
+    getAll: async (page = 1, pageSize = 10, name = null, category_id = null, sort = 'newest', label_id = null) => {
         const offset = (page - 1) * pageSize;
         let query = `SELECT p.* FROM ${Product.tableName} p`;
         let countQuery = `SELECT COUNT(*) as total FROM ${Product.tableName} p`;
         const queryParams = [];
 
-        // Điều kiện để join bảng nhãn khi lọc theo label_id
-        if (label_id && label_id !== 'null' && label_id !== null) {
-            console.info("===========[1] ===========[label_id] : ",label_id);
+        // Điều kiện join bảng nhãn
+        if (label_id > 0) {
+            console.info("===========[] ===========[label_id] : ",label_id);
             query += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
             countQuery += ` INNER JOIN ec_products_labels pl ON p.id = pl.product_id`;
         }
 
         // Điều kiện tìm kiếm theo tên
-        if (name) {
+        if (name != null) {
+            console.info("===========[] ===========[name] : ",name);
             query += ' WHERE p.name LIKE ?';
             countQuery += ' WHERE p.name LIKE ?';
             queryParams.push(`%${name}%`);
         }
 
         // Điều kiện lọc theo category_id
-        if (category_id) {
+        if (category_id > 0) {
+            console.info("===========[] ===========[category_id] : ",category_id);
             query += name ? ' AND' : ' WHERE';
             query += ` p.category_id = ?`;
             countQuery += name ? ' AND' : ' WHERE';
@@ -55,21 +58,12 @@ const Product = {
             queryParams.push(category_id);
         }
 
-        // Điều kiện lọc theo rating
-        // if (rating) {
-        //     query += (name || category_id) ? ' AND' : ' WHERE';
-        //     query += ` p.rating = ?`;
-        //     countQuery += (name || category_id) ? ' AND' : ' WHERE';
-        //     countQuery += ` p.rating = ?`;
-        //     queryParams.push(rating);
-        // }
-
         // Điều kiện lọc theo label_id
-        if (label_id && label_id !== 'null' && label_id !== null) {
-            console.info("===========[2] ===========[label_id] : ",label_id);
-            query += (name || category_id || rating) ? ' AND' : ' WHERE';
+        if (label_id > 0) {
+            console.info("===========[] ===========[label_id] : ",label_id);
+            query += (name || category_id) ? ' AND' : ' WHERE';
             query += ` pl.product_label_id = ?`;
-            countQuery += (name || category_id || rating) ? ' AND' : ' WHERE';
+            countQuery += (name || category_id) ? ' AND' : ' WHERE';
             countQuery += ` pl.product_label_id = ?`;
             queryParams.push(label_id);
         }
@@ -93,7 +87,7 @@ const Product = {
                 break;
         }
 
-        // Giới hạn và offset cho phân trang
+        // Giới hạn phân trang
         query += ' LIMIT ? OFFSET ?';
         queryParams.push(pageSize, offset);
 
@@ -101,25 +95,12 @@ const Product = {
         const [countResult] = await db.query(countQuery, queryParams.slice(0, -2));
         const total = countResult[0].total;
 
-        // Lấy thông tin category và tags cho từng sản phẩm
+        // Gắn thêm thông tin category, labels, và biến thể
         for (let product of products) {
-            // Lấy thông tin chi tiết category
-            const categoryQuery = `SELECT id, name FROM categories WHERE id = ?`;
-            const [categoryResult] = await db.query(categoryQuery, [product.category_id]);
-            product.category = categoryResult[0] || null;
-
-            const brandQuery = `SELECT id, name FROM ec_brands WHERE id = ?`;
-            const [brandResult] = await db.query(brandQuery, [product.brand_id]);
-            product.brand = brandResult[0] || null;
-
-            // Lấy các labels của sản phẩm
-            const labelsQuery = `
-        SELECT l.id, l.name, l.slug, l.description, l.status, l.created_at, l.updated_at
-        FROM ec_product_labels l
-        INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
-        WHERE pl.product_id = ?`;
-            const [labels] = await db.query(labelsQuery, [product.id]);
-            product.labels = labels;
+            product.category = await Product.getCategory(product.category_id);
+            product.labels = await Product.getLabels(product.id);
+            product.variants = await Product.getVariants(product.id); // Bao gồm thông tin attributes
+            product.brand = await Product.getBrand(product.brand_id);
         }
 
         return {
@@ -129,50 +110,36 @@ const Product = {
                 perPage: pageSize,
                 currentPage: page,
                 lastPage: Math.ceil(total / pageSize),
-                page_size: pageSize,
-                total_page: Math.ceil(total / pageSize),
-            }
+            },
         };
     },
 
-
-    // Phương thức lấy sản phẩm theo ID cùng với tags
+    // Lấy sản phẩm theo ID
     findById: async (id) => {
         const query = `SELECT * FROM ${Product.tableName} WHERE id = ? LIMIT 1`;
         const [rows] = await db.query(query, [id]);
         const product = rows.length > 0 ? rows[0] : null;
 
         if (product) {
-            // Lấy các tag_id liên quan từ bảng trung gian
-            // const tagsQuery = `SELECT tag_id FROM ec_products_tags WHERE product_id = ?`;
-            // const [tags] = await db.query(tagsQuery, [id]);
-            // product.tags = tags.map(tag => tag.tag_id);
-
-            const categoryQuery = `SELECT id, name FROM categories WHERE id = ?`;
-            const [categoryResult] = await db.query(categoryQuery, [product.category_id]);
-            product.category = categoryResult[0] || null;
-
-            const labelsQuery = `
-            SELECT l.id, l.name, l.slug, l.description, l.status, l.created_at, l.updated_at
-            FROM ec_product_labels l
-            INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
-            WHERE pl.product_id = ?`;
-            const [labels] = await db.query(labelsQuery, [product.id]);
-            product.labels = labels;
+            product.category = await Product.getCategory(product.category_id);
+            product.labels = await Product.getLabels(product.id);
+            product.variants = await Product.getVariants(product.id);
         }
 
         return product;
     },
 
-    // Phương thức tạo mới sản phẩm cùng với tags
-    create: async (productData, LabelsIds = []) => {
-        const query = `INSERT INTO ${Product.tableName} (name, slug, description, avatar, images, status, number, price, sale, contents, length, width, height, category_id, brand_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    // Tạo sản phẩm mới
+    create: async (productData, LabelsIds = [], variants = []) => {
+        const query = `
+            INSERT INTO ${Product.tableName} (name, slug, description, avatar, status, number, price, sale, contents, length, width, height, category_id, brand_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             productData.name,
             productData.slug,
             productData.description || null,
             productData.avatar || null,
-            JSON.stringify(productData.images || []),
+            // JSON.stringify(productData.images || []),
             productData.status || 'pending',
             productData.number || 0,
             productData.price || 0,
@@ -182,28 +149,33 @@ const Product = {
             productData.width || null,
             productData.height || null,
             productData.categoryId,
-            productData.brand
+            productData.brandId,
         ];
         const [result] = await db.query(query, values);
+        const productId = result.insertId;
 
-        // Lưu các tags cho sản phẩm vào bảng trung gian
-        await ProductsLabels.assignLabel(result.insertId, LabelsIds);
+        // Lưu labels
+        await ProductsLabels.assignLabel(productId, LabelsIds);
 
-        return await Product.findById(result.insertId);
+        // Lưu biến thể
+        for (const variant of variants) {
+            await Product.createVariant(productId, variant);
+        }
+
+        return await Product.findById(productId);
     },
 
-    // Phương thức cập nhật sản phẩm và tags theo ID
-    updateById: async (id, updateData, LabelsIds = []) => {
+    // Cập nhật sản phẩm
+    updateById: async (id, updateData, LabelsIds = [], variants = []) => {
         const query = `
             UPDATE ${Product.tableName} 
-            SET name = ?, slug = ?, description = ?, avatar = ?,images = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
+            SET name = ?, slug = ?, description = ?, avatar = ?, status = ?, number = ?, price = ?, sale = ?, contents = ?, length = ?, width = ?, height = ?, category_id = ?, brand_id = ?
             WHERE id = ?`;
         const values = [
             updateData.name,
             updateData.slug,
             updateData.description || null,
             updateData.avatar || null,
-            JSON.stringify(updateData.images || []),
             updateData.status || 'pending',
             updateData.number || 0,
             updateData.price || 0,
@@ -213,28 +185,136 @@ const Product = {
             updateData.width || null,
             updateData.height || null,
             updateData.categoryId,
-            updateData.brand,
-            id
+            updateData.brandId,
+            id,
         ];
         const [result] = await db.query(query, values);
 
         if (result.affectedRows > 0) {
+            // Cập nhật labels
             await ProductsLabels.assignLabel(id, LabelsIds);
+
+            // Cập nhật biến thể
+            await Product.updateVariants(id, variants);
+
             return await Product.findById(id);
         }
 
         return null;
     },
 
-    // Phương thức xóa sản phẩm theo ID
+    // Xóa sản phẩm
     deleteById: async (id) => {
-
-        // const deleteTagsQuery = `DELETE FROM ec_products_tags WHERE product_id = ?`;
-        // await db.query(deleteTagsQuery, [id]);
-
+        await Product.deleteVariants(id);
         const query = `DELETE FROM ${Product.tableName} WHERE id = ?`;
         const [result] = await db.query(query, [id]);
         return result.affectedRows > 0;
+    },
+
+    // Xử lý biến thể
+    getVariants: async (productId) => {
+        const query = `
+        SELECT 
+            v.*, 
+            GROUP_CONCAT(
+                CONCAT(va.attribute_value_id, ':', av.title, ':', av.is_default)
+            ) AS attributes
+        FROM ec_product_variants v
+        LEFT JOIN ec_variant_attributes va ON v.id = va.variant_id
+        LEFT JOIN ec_attribute_values av ON va.attribute_value_id = av.id
+        WHERE v.product_id = ?
+        GROUP BY v.id
+    `;
+        const [variants] = await db.query(query, [productId]);
+
+        // Xử lý dữ liệu attributes để đưa về dạng cấu trúc mong muốn
+        return variants.map(variant => {
+            const attributes = variant.attributes
+                ? variant.attributes.split(',').map(attr => {
+                    const [id, label, isDefault] = attr.split(':');
+                    return {
+                        attribute_value_id: id,
+                        attribute_label: label,
+                        is_default: Boolean(Number(isDefault))
+                    };
+                })
+                : [];
+            return { ...variant, attributes };
+        });
+    },
+
+    createVariant: async (productId, variant) => {
+        console.info("===========[] ===========[insert variant] : ",variant);
+        const query = `
+            INSERT INTO ${Product.variantTable} (product_id, sku, price, stock) 
+            VALUES (?, ?, ?, ?)`;
+        const values = [
+            productId,
+            variant.sku,
+            variant.price || 0,
+            variant.stock || 0
+        ];
+        const [result] = await db.query(query, values);
+        console.info("===========[createVariant] ===========[result] : ",result);
+        const variantId = result.insertId;
+        console.info("===========[createVariant] ===========[variantId] : ",variantId);
+        if (variant.attributes && variant.attributes.length > 0) {
+            await Product.createVariantAttributes(variantId, variant.attributes);
+        }
+        return variantId;
+    },
+
+    updateVariants: async (productId, variants) => {
+        await Product.deleteVariants(productId);
+        for (const variant of variants) {
+            // await Product.createVariant(productId, variant);
+            const variantId = await Product.createVariant(productId, variant);
+            console.info("===========[updateVariants] ===========[variantId] : ",variantId);
+            // Nếu variant có attributes, lưu vào bảng ec_variant_attributes
+            if (variant.attributes && variant.attributes.length > 0) {
+                await Product.createVariantAttributes(variantId, variant.attributes);
+            }
+        }
+    },
+
+    createVariantAttributes: async (variantId, attributes) => {
+        console.info("===========[createVariantAttributes] ===========[variantId] : ",variantId);
+        console.info("===========[createVariantAttributes] ===========[attributes] : ",attributes);
+        const query = `
+        INSERT INTO ec_variant_attributes (variant_id, attribute_value_id) 
+        VALUES (?, ?)`;
+        for (const attributeId of attributes) {
+            console.info("===========[item] ===========[attributeId] : ",attributeId);
+            await db.query(query, [variantId, attributeId.value.value]);
+        }
+    },
+
+    deleteVariants: async (productId) => {
+        const query = `DELETE FROM ${Product.variantTable} WHERE product_id = ?`;
+        await db.query(query, [productId]);
+    },
+
+    // Lấy thông tin category
+    getCategory: async (categoryId) => {
+        const query = `SELECT id, name FROM categories WHERE id = ?`;
+        const [category] = await db.query(query, [categoryId]);
+        return category.length > 0 ? category[0] : null;
+    },
+
+    getBrand: async (brandId) => {
+        const query = `SELECT id, name FROM ec_brands WHERE id = ?`;
+        const [brand] = await db.query(query, [brandId]);
+        return brand.length > 0 ? brand[0] : null;
+    },
+
+    // Lấy thông tin labels
+    getLabels: async (productId) => {
+        const query = `
+            SELECT l.* FROM ec_product_labels l
+            INNER JOIN ec_products_labels pl ON l.id = pl.product_label_id
+            WHERE pl.product_id = ?`;
+        const [labels] = await db.query(query, [productId]);
+        return labels;
     },
     showDashboardVoteDetail: async (id) => {
         const [rows] = await db.query(
@@ -252,10 +332,7 @@ const Product = {
             [id]
         );
 
-        if (!rows || rows.length === 0) {
-            return null;
-        }
-        return rows[0];
+        return rows;
     }
 };
 
