@@ -7,5 +7,6 @@ router.use('/menus', require('./menu'));
 router.use('/order', require('./order'));
 router.use('/vote', require('./vote'));
 router.use('/products', require('./product'));
+router.use('/dashboard', require('./dashboard'));
 
 module.exports = router;

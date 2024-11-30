@@ -38,7 +38,7 @@ const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action) => {
             state.items = state.items || [];
-            const existingProductIndex = state.items.findIndex(item => item._id === action.payload._id);
+            const existingProductIndex = state.items.findIndex(item => item.id === action.payload.id);
 
             if (existingProductIndex >= 0) {
                 // Nếu sản phẩm đã tồn tại, tăng số lượng
@@ -56,7 +56,7 @@ const cartSlice = createSlice({
         },
         removeFromCart: (state, action) => {
             state.items = state.items || [];
-            const updatedItems = state.items?.filter(item => item._id !== action.payload._id);
+            const updatedItems = state.items?.filter(item => item.id !== action.payload.id);
             state.items = updatedItems;
 
             // Tính lại itemCount sau khi xóa sản phẩm

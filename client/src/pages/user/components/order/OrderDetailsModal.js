@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button, Table, Nav } from 'react-bootstrap';
 import ProductReviewModal from "./ProductReviewModal";
 import apiVoteService from "../../../../api/apiVoteService";
 import toastr from "toastr";
+import { createSlug } from '../../../../helpers/formatters';
 
 const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -61,7 +62,9 @@ const OrderDetailsModal = ({ show, onHide, order }) => {
                         {order?.products?.map((item, idx) => (
                             <tr key={item.id}>
                                 <td>{idx + 1}</td>
-                                <td>{item.name}</td>
+                                <td>
+                                    <Nav.Link as="a" target="_blank" rel="noopener noreferrer" href={`/p/${createSlug(item.name)}-${item.id}`}>{item.name}</Nav.Link>
+                                </td>
                                 <td>{item.qty}</td>
                                 <td>{formatCurrency(item.price)}</td>
                                 <td>{formatCurrency(item.price * item.qty)}</td>

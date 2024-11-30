@@ -1,0 +1,55 @@
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    font-size: 14px;
+    color: #6c757d !important;
+}
+
+.nav-link:hover {
+    color: #007bff !important;
+}
+
+.bg-warning {
+    font-size: 14px;
+}
+
+.navbar-brand {
+    font-size: 20px;
+}
+
+.suggestions-dropdown {
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1050;
+}
+
+.suggestions-dropdown .list-group-item {
+    cursor: pointer;
+}
+
+.nav-menu-header a {
+    color: rgb(128, 128, 137) !important;
+    font-size: 16px;
+}
+.nav-menu-header a svg {
+    font-size: 30px;
+}
+
+.nav-menu-header a.dropdown-item{
+    color: #212121 !important;
+}
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030; /* Đảm bảo header nằm trên các thành phần khác */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+}
+
+.header-spacing {
+    margin-top: 100px; /* Đảm bảo nội dung không bị header che mất */
+}
+

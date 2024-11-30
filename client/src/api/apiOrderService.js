@@ -18,6 +18,9 @@ const apiOrderService = {
         const paramsSearch = new URLSearchParams(params);
         return apiHelper.get(`user/order?${paramsSearch.toString()}`);
     },
+    updateStatusPayment: (data) => {
+        return apiHelper.post(`order/update-status-payment`, data);
+    },
     deleteOrder: (id) => {
         return apiHelper.delete(`user/order/${id}`);
     },
@@ -26,7 +29,10 @@ const apiOrderService = {
     },
     updateOrderStatus: (id, data) => {
         return apiHelper.post(`admin/order/update-status/${id}`,data);
-    }
+    },
+    getPaymentMethods: () => {
+        return apiHelper.get(`payment-methods`);
+    },
 };
 
 export default apiOrderService;

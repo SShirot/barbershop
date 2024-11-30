@@ -9,7 +9,6 @@ import PostManager from "../pages/user/PostManager";
 import BoardingManager from "../pages/user/BoardingManager";
 import OrderManager from "../pages/user/OrderManager";
 import ProductManager from "../pages/user/ProductManager";
-import AdminLayout from "../components/AdminLayout";
 import VoteManager from "../pages/user/VoteManager";
 
 const UserRoutes = () => {

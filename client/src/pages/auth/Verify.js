@@ -1,12 +1,7 @@
 import React, {startTransition, useEffect, useState} from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import '../guest/style/Login.css';
-import {loginUser, logout} from "../../redux/slices/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {unwrapResult} from "@reduxjs/toolkit";
+import '../site/style/Login.css';
 import bgImage from '../../assets/images/bg-login.jpg';
 import toastr from 'toastr';
 import slideService from "../../api/slideService";
@@ -57,34 +52,6 @@ const Verify = () => {
 
         fetchSlides();
     }, []);
-
-
-
-    // const onSubmit = async (values, { setSubmitting }) => {
-    //     try {
-    //         const result = await dispatch(loginUser(values));
-    //         console.info("===========[userLogin] ===========[response] : ",result);
-    //         if (loginUser?.fulfilled.match(result)) {
-    //             let response = await unwrapResult(result);
-    //             console.info("===========[userLogin] ===========[response math] : ",response);
-    //             if(response.user.user_type === 'ADMIN') {
-    //                 navigate('/admin');
-    //             }else {
-    //                 navigate('/');
-    //             }
-    //             return true;
-    //         }else {
-    //             console.info("===========[] ===========[FAIL ROI] : ");
-    //             // toastr.error('Sai thông tin hoạc tài khoản không hợp lệ', 'Error');
-    //             setSubmitting(false);
-    //             return true;
-    //         }
-    //     } catch (err) {
-    //         console.info("===========[err] ===========[FAIL ROI] : ");
-    //         toastr.error('Sai thông tin hoạc tài khoản không hợp lệ', 'Error');
-    //         setSubmitting(false);
-    //     }
-    // };
 
     return (
         <Row className="no-gutter">

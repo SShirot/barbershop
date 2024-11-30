@@ -89,17 +89,21 @@ const Vote = {
         if (existingVotes.length > 0) {
             return { status: 'already_reviewed' };
         }
+        let imagesJSON = null;
+        if(voteData.images)
+            imagesJSON = JSON.stringify(voteData.images);
 
         const query = `
-            INSERT INTO ${Vote.tableName} (comment, rating, product_id, user_id, status, created_at)
-            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            INSERT INTO ${Vote.tableName} (comment, rating, product_id, user_id, status, images, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         `;
         const values = [
             voteData.comment || null,
             voteData.rating || 0,
             voteData.product_id,
             voteData.user_id,
-            voteData.status || 'pending'
+            voteData.status || 'pending',
+            imagesJSON,
         ];
         const [result] = await db.query(query, values);
 
