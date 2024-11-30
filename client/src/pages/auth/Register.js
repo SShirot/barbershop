@@ -27,26 +27,26 @@ const Register = () => {
 
     const validationSchema = Yup.object({
         email: Yup.string()
-            .email('Email không hợp lệ')
-            .required('Email không được để trống'),
+            .email('Invalid email format')
+            .required('Required'),
         name: Yup.string()
-            .matches(/^[a-zA-Z\s]*$/, 'Tên không được chứa số')  // Regex để kiểm tra không chứa số
-            .required('Tên không được để trống'),
+            .matches(/^[a-zA-Z\s]*$/, 'Name cannot contain numbers')  // Regex để kiểm tra không chứa số
+            .required('Required'),
         password: Yup.string()
-            .min(6, 'Mật khẩu ít nhất 6 ký tự')
-            .matches(/[a-z]/, 'Mật khẩu có ít nhất 1 chữ thường')  // Kiểm tra có ít nhất 1 chữ thường
-            .matches(/[A-Z]/, 'Mật khẩu có ít nhất 1 chữ in hoa')  // Kiểm tra có ít nhất 1 chữ in hoa
-            .matches(/\d/, 'Mật khẩu có ít nhất 1 chữ số')              // Kiểm tra có ít nhất 1 số
-            .required('Mật khẩu không được để trống'),
+            .min(6, 'Password must be at least 6 characters')
+            .matches(/[a-z]/, 'Password must contain at least one lowercase letter')  // Kiểm tra có ít nhất 1 chữ thường
+            .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')  // Kiểm tra có ít nhất 1 chữ in hoa
+            .matches(/\d/, 'Password must contain at least one number')              // Kiểm tra có ít nhất 1 số
+            .required('Required'),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận không khớp')
-            .required('Mật khẩu xác nhận không được để trống')
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Required')
     });
 
     const onSubmit = async (values, { setSubmitting, setErrors }) => {
         const result = await dispatch(registerUser(values));
         if (registerUser.fulfilled.match(result)) {
-            toastr.success('Đăng ký thành công, xin vui lòng kiểm tra email để kích hoạt tài khoản', 'Success');
+            toastr.success('Đăng ký thành công, xin vui lòng đăng nhập hệ thống', 'Success');
             navigate('/login');
         } else {
             setErrors({ submit: "Đăng ký thất bại, vui lòng thử lại." });

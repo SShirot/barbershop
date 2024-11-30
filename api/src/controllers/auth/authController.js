@@ -48,35 +48,6 @@ exports.register = async (req, res) => {
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '100h'});
 
-        const verificationToken = crypto.randomBytes(32).toString('hex');
-        const verificationLink = `http://localhost:3000/verify/${verificationToken}`;
-        await User.update(userId, {
-            remember_token: verificationToken,
-        });
-        const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: { user: 'svdtxl123@gmail.com', pass: 'jruejvxlzzejhzjd' }
-        });
-        const htmlTemplate = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-                <h2 style="color: #333;">Kích hoạt tài khoản</h2>
-                <p>Nhấn vào nút bên dưới để tiến hành kích hoạt tài khoản:</p>
-                <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; margin-top: 20px; color: #fff; background-color: #007bff; border-radius: 5px; text-decoration: none;">Kích hoạt</a>
-                <p style="margin-top: 20px;">Hoặc, bạn có thể sao chép và dán đường link sau vào trình duyệt của mình:</p>
-                <p><a href="${verificationLink}" target="_blank" style="color: #007bff;">${verificationLink}</a></p>
-                <p>Trân trọng,<br/>Đội ngũ hỗ trợ của chúng tôi</p>
-            </div>
-        `;
-
-        const mailOptions = {
-            to: email,
-            from: 'codethue94@gmail.com',
-            subject: 'Kích hoạt tài khoản',
-            html: htmlTemplate
-        };
-
-        transporter.sendMail(mailOptions);
-
         // Trả về token và thông tin người dùng
         return successResponse(res, {token}, 'Registered successfully');
     } catch (err) {
@@ -100,9 +71,6 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return errorResponse(res, 'Mật khẩu không chính xác', 400, 1);
-        }
-        if(user.status !== 2) {
-            return errorResponse(res, "Tài khoản chưa được kích hoạt", 404, 404);
         }
 
         // Tạo token
@@ -199,42 +167,6 @@ exports.resetPassword = async (req, res) => {
 
         // Trả về token và thông tin người dùng
         return successResponse(res, {user}, 'Đổi mật khẩu thành công, xin vui lòng đăng nhập');
-    } catch (err) {
-        console.error(err.message);
-        return errorResponse(res);
-    }
-};
-exports.verifyAccount = async (req, res) => {
-    try {
-
-        let token = req.params.token;
-        console.info("===========[] ===========[] : ",token);
-        const [rows] = await db.execute(
-            `SELECT * FROM users WHERE remember_token = ?`,
-            [token]
-        );
-
-        if (rows.length === 0) {
-            return errorResponse(res, "Token không hợp lệ hoặc đã hết hạn", 404, 404);
-        }
-        const user = rows[0];
-
-        await db.execute(
-            `UPDATE users SET status = ?, remember_token = NULL WHERE id = ?`,
-            [2, user.id]
-        );
-
-        // Tạo token
-        const payload = {
-            user: {
-                id: user.id
-            }
-        };
-
-        token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '100h'});
-
-        // Trả về token và thông tin người dùng
-        return successResponse(res, {token}, 'Kích hoạt tài khoản thành công');
     } catch (err) {
         console.error(err.message);
         return errorResponse(res);

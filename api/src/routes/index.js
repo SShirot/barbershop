@@ -14,7 +14,6 @@ router.use('/categories', require('./guest/category'));
 router.use('/slides', require('./guest/slide'));
 router.use('/service', require('./guest/service'));
 router.use('/setting/info', require('./guest/setting'));
-router.use('/votes', require('./guest/vote'));
 
 // router.use('/guest', require('./guest/guest'));
 router.get(
