@@ -1,0 +1,29 @@
+.footer {
+    background-color: white;
+    color: #000;
+    padding: 2rem 0;
+    position: relative;
+    border-top: 1px solid #f2f2f2;
+}
+
+.footer-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+}
+
+.footer h5 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.footer p {
+    font-size: 0.9rem;
+}
+
+.footer .row .col-md-1 img {
+    width: 30px;
+    height: 30px;
+}

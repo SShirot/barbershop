@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
--- Host: localhost    Database: barbershop_online
+-- Host: localhost    Database: bbs_online
 -- ------------------------------------------------------
 -- Server version	8.0.40
 
@@ -94,7 +94,7 @@ CREATE TABLE `acl_permissions` (
 
 LOCK TABLES `acl_permissions` WRITE;
 /*!40000 ALTER TABLE `acl_permissions` DISABLE KEYS */;
-INSERT INTO `acl_permissions` VALUES (1,'all','api','all','Toàn quyền','2024-10-20 03:47:11','2024-10-20 03:47:11'),(2,'product_index','api','product_index','Danh sách sản phẩm','2024-10-20 03:47:11','2024-10-20 03:47:11');
+INSERT INTO `acl_permissions` VALUES (1,'all','api','all','Toàn quyền','2024-11-22 00:26:19','2024-11-22 00:26:19'),(2,'product_index','api','product_index','Danh sách sản phẩm','2024-11-22 00:26:19','2024-11-22 00:26:19');
 /*!40000 ALTER TABLE `acl_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +149,7 @@ CREATE TABLE `acl_roles` (
 
 LOCK TABLES `acl_roles` WRITE;
 /*!40000 ALTER TABLE `acl_roles` DISABLE KEYS */;
-INSERT INTO `acl_roles` VALUES (1,'administrator','api','Toàn quyền','2024-10-20 03:47:11','2024-10-20 03:47:11'),(2,'manage','api','Quản lý','2024-10-20 03:47:11','2024-10-20 03:47:11'),(3,'general_director','api','Tổng giám đốc','2024-10-20 03:47:11','2024-10-20 03:47:11'),(4,'staff','api','Nhân viên','2024-10-20 03:47:11','2024-10-20 03:47:11');
+INSERT INTO `acl_roles` VALUES (1,'administrator','api','Toàn quyền','2024-11-22 00:26:19','2024-11-22 00:26:19'),(2,'manage','api','Quản lý','2024-11-22 00:26:19','2024-11-22 00:26:19'),(3,'general_director','api','Tổng giám đốc','2024-11-22 00:26:19','2024-11-22 00:26:19'),(4,'staff','api','Nhân viên','2024-11-22 00:26:19','2024-11-22 00:26:19');
 /*!40000 ALTER TABLE `acl_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `bl_articles` (
   KEY `bl_articles_menu_id_foreign` (`menu_id`),
   KEY `bl_articles_author_id_index` (`author_id`),
   CONSTRAINT `bl_articles_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `bl_menus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,7 +216,7 @@ CREATE TABLE `bl_articles` (
 
 LOCK TABLES `bl_articles` WRITE;
 /*!40000 ALTER TABLE `bl_articles` DISABLE KEYS */;
-INSERT INTO `bl_articles` VALUES (4,'ĐỘC QUYỀN WEBSITE - VOUCHER 100K CHO KHÁCH HÀNG ĐĂNG KÍ EMAIL',NULL,'adadadadada','<p>Nội dung1212</p>','pending',NULL,4,0,'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/4.%20%C4%90%C4%82NG%20K%C3%8D%20TH%C3%94NG%20TIN.jpg',0,'2024-10-20 03:47:11',NULL),(7,'Tặng ngay Voucher 25K cho khách hàng Follow Zalo YODY trong tháng 10',NULL,'Ưu đãi cực Hot trong tháng 10, chỉ cần quý khách thao tác theo dõi kênh Zalo OA của YODY sẽ được nhận ngay Voucher giảm giá','<p>Nội dung</p>','published',NULL,3,0,'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/2.%20ZALO%20YODY%2050K.jpg',0,'2024-10-27 05:42:41',NULL),(8,'Ưu đãi lớn nhất năm 2024 - SALE CUỐI MÙA LÊN ĐẾN 50%',NULL,'Quý khách có thể thực hiện mua sắm trực tiếp tại hệ thống Online Yody bao gồm Website, Fanpge, Zalo OA hoặc trực tiếp tại hơn 270 cửa hàng YODY trên toàn quốc.','<p>Nội dung</p>','pending',NULL,4,0,'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/yody-sale-cuoi-mua.png',0,'2024-10-27 05:42:41',NULL),(11,'ĐỘC QUYỀN WEBSITE - VOUCHER 100K CHO KHÁCH HÀNG ĐĂNG KÍ EMAIL',NULL,'Thời gian nhận và sử dụng mã khuyến mãi kéo dài từ ngày 01/10/2024 đến ngày 31/10/2024. Sau khi nhận mã, khách hàng sẽ sử dụng trực tiếp để mua hàng trên Website (không áp dụng tại cửa hàng).','<p>Nội dung</p>','pending',NULL,3,0,'https://m.yodycdn.com/fit-in/filters:format(webp)/products/media/articles/4.%20%C4%90%C4%82NG%20K%C3%8D%20TH%C3%94NG%20TIN.jpg',0,NULL,NULL),(13,'1212121',NULL,'21','<p>12212121</p>','pending',NULL,3,0,'http://localhost:3014/uploads/images/264f3cbf-b3e6-49c0-9e4b-3bfe4b18a32f.png',0,NULL,NULL);
+INSERT INTO `bl_articles` VALUES (1,'Huy','huy','aaa','<p>nguyen khac huy dep trai</p>','pending',NULL,1,1,'http://localhost:3014/uploads/images/5060c3fa-ee58-456d-bc71-8e81cae68679.jpg',0,NULL,NULL);
 /*!40000 ALTER TABLE `bl_articles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +236,7 @@ CREATE TABLE `bl_articles_tags` (
   KEY `bl_articles_tags_tag_id_foreign` (`tag_id`),
   CONSTRAINT `bl_articles_tags_article_id_foreign` FOREIGN KEY (`article_id`) REFERENCES `bl_articles` (`id`),
   CONSTRAINT `bl_articles_tags_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `bl_tags` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +245,7 @@ CREATE TABLE `bl_articles_tags` (
 
 LOCK TABLES `bl_articles_tags` WRITE;
 /*!40000 ALTER TABLE `bl_articles_tags` DISABLE KEYS */;
-INSERT INTO `bl_articles_tags` VALUES (18,7,11),(19,7,4);
+INSERT INTO `bl_articles_tags` VALUES (2,1,1);
 /*!40000 ALTER TABLE `bl_articles_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +266,7 @@ CREATE TABLE `bl_menus` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +275,7 @@ CREATE TABLE `bl_menus` (
 
 LOCK TABLES `bl_menus` WRITE;
 /*!40000 ALTER TABLE `bl_menus` DISABLE KEYS */;
-INSERT INTO `bl_menus` VALUES (2,'Thời trang thế giới','thoi-trang-the-gioi','Thời trang thế giới','published',1,'2024-10-20 03:47:11',NULL),(3,'Đồng phục','dong-phuc','Đồng phục','published',1,'2024-10-20 03:47:11',NULL),(4,'Tin tức thời trang',NULL,'Tin tức thời trang','published',1,'2024-10-25 02:53:11',NULL);
+INSERT INTO `bl_menus` VALUES (1,'tóc','toc','aa','pending',1,NULL,NULL);
 /*!40000 ALTER TABLE `bl_menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,7 +296,7 @@ CREATE TABLE `bl_tags` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,7 +305,7 @@ CREATE TABLE `bl_tags` (
 
 LOCK TABLES `bl_tags` WRITE;
 /*!40000 ALTER TABLE `bl_tags` DISABLE KEYS */;
-INSERT INTO `bl_tags` VALUES (1,'thời trang nổi bật',NULL,'thời trang nổi bật','published',1,'2024-10-20 03:47:11',NULL),(3,'Đồng phục',NULL,'Đồng phục','published',1,'2024-10-20 03:47:11',NULL),(4,'thời trang nổi bật',NULL,'thời trang nổi bật','published',1,'2024-10-25 02:58:38',NULL),(5,'xu hướng',NULL,'xu hướng','published',1,'2024-10-25 02:58:38',NULL),(6,'thoáng mát',NULL,'thoáng mát','published',1,'2024-10-25 02:58:38',NULL),(7,'thời trang nổi bật',NULL,'thời trang nổi bật','published',1,'2024-10-25 03:12:45',NULL),(8,'xu hướng',NULL,'xu hướng','published',1,'2024-10-25 03:12:45',NULL),(9,'thoáng mát',NULL,'thoáng mát','published',1,'2024-10-25 03:12:45',NULL),(11,'xu hướng 1221',NULL,'xu hướng','pending',0,'2024-10-25 20:51:50',NULL),(12,'thoáng mát','thoang-mat','thoáng mát','published',1,'2024-10-25 20:51:50',NULL),(14,'2212',NULL,'2121211','pending',0,NULL,NULL),(16,'từ khoá mới nhập',NULL,'từ khoá mới nhập','pending',0,NULL,NULL);
+INSERT INTO `bl_tags` VALUES (1,'Huy','huy','dep','pending',1,NULL,NULL);
 /*!40000 ALTER TABLE `bl_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,7 +333,7 @@ CREATE TABLE `categories` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `categories_parent_id_index` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,7 +342,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (5,'Dầu dưỡng xả','dau-duong-xa',NULL,NULL,'pending','Dầu dưỡng xả',0,NULL,NULL,NULL,1,'2024-10-20 03:47:11',NULL),(7,'Tạo kiểu tóc','tao-kieu-toc',NULL,NULL,'pending','Tạo kiểu tóc',0,NULL,NULL,NULL,1,'2024-10-25 01:47:55',NULL),(8,'Chăm sóc da mặt','cham-soc-da-mat',NULL,NULL,'pending','Chăm sóc da mặt',0,NULL,NULL,NULL,1,'2024-10-25 01:47:55',NULL),(10,'Chăm sóc tóc','cham-soc-toc',NULL,NULL,'pending','Chăm sóc tóc',0,NULL,NULL,NULL,1,'2024-10-25 01:47:55',NULL),(11,'Chăm sóc cơ thể','cham-soc-co-the',NULL,NULL,'pending','Chăm sóc cơ thể',0,NULL,NULL,NULL,1,'2024-10-25 01:47:55',NULL),(12,'Thực phẩm chức năng','thuc-pham-chuc-nang',NULL,NULL,'pending','Thực phẩm chức năng',0,NULL,NULL,NULL,1,'2024-10-25 01:47:55',NULL);
+INSERT INTO `categories` VALUES (1,'Sáp Vuốt Tóc','sap-vuot-toc',NULL,NULL,'pending','Sáp vuốt tóc nam giới',0,NULL,NULL,NULL,1,'2024-11-22 00:26:18',NULL),(2,'Dầu Dưỡng Tóc','dau-duong-toc',NULL,NULL,'pending','Quần áo nữ',0,NULL,NULL,NULL,1,NULL,NULL),(3,'Gôm','gom',NULL,NULL,'pending','Gôm xịt giữ nếp cho tóc',0,NULL,NULL,NULL,1,NULL,NULL);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +366,7 @@ CREATE TABLE `ec_attribute_values` (
   PRIMARY KEY (`id`),
   KEY `ec_attribute_values_attribute_id_foreign` (`attribute_id`),
   CONSTRAINT `ec_attribute_values_attribute_id_foreign` FOREIGN KEY (`attribute_id`) REFERENCES `ec_attributes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,6 +375,7 @@ CREATE TABLE `ec_attribute_values` (
 
 LOCK TABLES `ec_attribute_values` WRITE;
 /*!40000 ALTER TABLE `ec_attribute_values` DISABLE KEYS */;
+INSERT INTO `ec_attribute_values` VALUES (30,13,1,'#000000',NULL,'Tốt','tốt','2024-12-03 19:56:54','2024-12-03 19:56:54'),(31,13,0,'#ffffff',NULL,'Trung bình','trung-bình','2024-12-03 19:56:54','2024-12-03 19:56:54'),(32,13,0,'#ffffff',NULL,'Yếu','yếu','2024-12-03 19:56:54','2024-12-03 19:56:54'),(35,5,1,'#1475db',NULL,'Tốt','tốt','2024-12-03 19:57:24','2024-12-03 19:57:24'),(36,5,0,'#f00000',NULL,'Trung bình','trung-bình','2024-12-03 19:57:24','2024-12-03 19:57:24');
 /*!40000 ALTER TABLE `ec_attribute_values` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +397,7 @@ CREATE TABLE `ec_attributes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,6 +406,7 @@ CREATE TABLE `ec_attributes` (
 
 LOCK TABLES `ec_attributes` WRITE;
 /*!40000 ALTER TABLE `ec_attributes` DISABLE KEYS */;
+INSERT INTO `ec_attributes` VALUES (5,'Độ mượt','do-muot',0,0,0,'pending','2024-11-23 14:17:52','2024-12-03 19:57:24'),(13,'Độ giữ nếp','do-giu-nep',0,0,0,'pending','2024-11-23 14:21:15','2024-12-03 19:56:54');
 /*!40000 ALTER TABLE `ec_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,7 +431,7 @@ CREATE TABLE `ec_brands` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,7 +440,7 @@ CREATE TABLE `ec_brands` (
 
 LOCK TABLES `ec_brands` WRITE;
 /*!40000 ALTER TABLE `ec_brands` DISABLE KEYS */;
-INSERT INTO `ec_brands` VALUES (1,'Chanel','chanel','https://cdn-copck.nitrocdn.com/WwybsgZzWtFojdWowVAajDJCKuMAXRVm/assets/images/optimized/rev-327d879/rubicmarketing.com/wp-content/uploads/2022/11/logo-chanel.jpg','published',NULL,NULL,NULL,NULL,1,'2024-10-20 03:47:11',NULL),(2,'Gucci','gucci','https://inkythuatso.com/uploads/thumbnails/800/2021/11/gucci-logo-inkythuatso-01-02-10-02-14.jpg','published',NULL,NULL,NULL,NULL,1,'2024-10-20 03:47:11',NULL),(3,'Zara','zara','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Zara_Logo.svg/1280px-Zara_Logo.svg.png','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(4,'H&M','hm','https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/H%26M-Logo.svg/1200px-H%26M-Logo.svg.png','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(5,'Adidas','adidas','https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(6,'Nike','nike','https://img.favpng.com/25/2/1/swoosh-nike-logo-just-do-it-adidas-png-favpng-KMjV5sizT4FG7v09BEnKe7mRA.jpg','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(7,'Levi\'s','levis','https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Levi%27s_logo.svg/2560px-Levi%27s_logo.svg.png','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(8,'Puma','puma','https://www.logodesignvalley.com/blog/wp-content/uploads/2023/05/puma-2.png','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(9,'Balenciage','balenciage','https://bizweb.dktcdn.net/thumb/grande/100/106/923/products/balenciaga-logo-3.png?v=1617552563317','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL),(10,'Yody','yody','https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-Yody.png','published',NULL,NULL,NULL,NULL,1,'2024-10-25 01:50:40',NULL);
+INSERT INTO `ec_brands` VALUES (1,'VOLCANIC','volcanic',NULL,'pending','Volcanic wax',NULL,NULL,NULL,1,'2024-11-22 00:26:18',NULL);
 /*!40000 ALTER TABLE `ec_brands` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,7 +476,7 @@ CREATE TABLE `ec_orders` (
   KEY `ec_orders_payment_method_id_foreign` (`payment_method_id`),
   CONSTRAINT `ec_orders_payment_method_id_foreign` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_methods` (`id`),
   CONSTRAINT `ec_orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -483,7 +485,7 @@ CREATE TABLE `ec_orders` (
 
 LOCK TABLES `ec_orders` WRITE;
 /*!40000 ALTER TABLE `ec_orders` DISABLE KEYS */;
-INSERT INTO `ec_orders` VALUES (6,6,1,'OD6BQzSyDk',0,'pending','pending',NULL,200000.00,0.00,0.00,0.00,200000.00,NULL,NULL,NULL,NULL,0),(7,4,1,'ODlilEo2YY',0,'pending','pending',NULL,340000.00,0.00,0.00,0.00,340000.00,NULL,NULL,NULL,NULL,0),(8,9,1,'ODevL1SVMI',0,'pending','pending',NULL,4050000.00,0.00,0.00,0.00,4050000.00,NULL,NULL,NULL,NULL,0),(11,10,1,'ODlV5sCoQK',0,'pending','pending',NULL,900000.00,0.00,0.00,0.00,0.00,NULL,NULL,NULL,NULL,0),(12,12,1,'ODoz1pvwOG',111111,'pending','pending',NULL,351111.00,111111.00,0.00,0.00,0.00,NULL,NULL,'2024-11-16 07:45:48',NULL,0),(13,12,1,'ODEaZoAI90',122222,'pending','pending',NULL,0.00,122222.00,0.00,0.00,0.00,NULL,NULL,'2024-11-17 10:37:48',NULL,0);
+INSERT INTO `ec_orders` VALUES (33,3,2,'ODJjNHQzKi',0,'pending','pending',NULL,950000.00,0.00,0.00,0.00,950000.00,NULL,NULL,'2024-12-03 21:44:38',NULL,0),(34,3,2,'ODNAJiSBZH',0,'failed','pending',NULL,500000.00,0.00,0.00,0.00,500000.00,NULL,NULL,'2024-12-03 21:45:01','2024-12-03 21:46:17',0);
 /*!40000 ALTER TABLE `ec_orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,7 +515,7 @@ CREATE TABLE `ec_product_labels` (
 
 LOCK TABLES `ec_product_labels` WRITE;
 /*!40000 ALTER TABLE `ec_product_labels` DISABLE KEYS */;
-INSERT INTO `ec_product_labels` VALUES (1,'New','Sản phẩm mới','new',0,'published','2024-10-20 03:47:11',NULL),(2,'Hot','Sản phẩm nổi bật','hot',0,'pending','2024-10-20 03:47:11',NULL),(3,'Sale','Sản phẩm khuyến mãi 2','sale',0,'published',NULL,NULL);
+INSERT INTO `ec_product_labels` VALUES (1,'New','New','new',0,'pending',NULL,NULL),(2,'Hot','Hot','hot',0,'pending',NULL,NULL),(3,'Sale','Sale','sale',0,'pending',NULL,NULL);
 /*!40000 ALTER TABLE `ec_product_labels` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -575,6 +577,39 @@ LOCK TABLES `ec_product_options_values` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ec_product_variants`
+--
+
+DROP TABLE IF EXISTS `ec_product_variants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ec_product_variants` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` bigint unsigned NOT NULL,
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` int NOT NULL,
+  `stock` int NOT NULL,
+  `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ec_product_variants_product_id_foreign` (`product_id`),
+  CONSTRAINT `ec_product_variants_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ec_product_variants`
+--
+
+LOCK TABLES `ec_product_variants` WRITE;
+/*!40000 ALTER TABLE `ec_product_variants` DISABLE KEYS */;
+INSERT INTO `ec_product_variants` VALUES (3,9,'',0,0,'active',NULL,NULL,NULL),(8,1,'muot',20000,111,'active',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `ec_product_variants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `ec_products`
 --
 
@@ -599,13 +634,14 @@ CREATE TABLE `ec_products` (
   `brand_id` bigint unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `images` json DEFAULT NULL,
+  `total_vote_count` int NOT NULL DEFAULT '0',
+  `total_rating_score` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `ec_products_category_id_foreign` (`category_id`),
   KEY `ec_products_brand_id_foreign` (`brand_id`),
   CONSTRAINT `ec_products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `ec_brands` (`id`),
   CONSTRAINT `ec_products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -614,7 +650,7 @@ CREATE TABLE `ec_products` (
 
 LOCK TABLES `ec_products` WRITE;
 /*!40000 ALTER TABLE `ec_products` DISABLE KEYS */;
-INSERT INTO `ec_products` VALUES (1,'Dầu dưỡng xả Dove','dau-duong-xa-dove',NULL,'http://localhost:3014/uploads/images/e330475a-9145-47ef-989a-ffdd05c0dbc3.jpg','pending',20,200000,0,NULL,NULL,NULL,NULL,5,NULL,'2024-10-20 03:47:11',NULL,'[]'),(7,'BROSH X FUSTY WORKS POMADE','brosh-x-fusty-works-pomade',NULL,'http://localhost:3014/uploads/images/053324ee-52ca-4256-8248-67723603a60b.jpeg','pending',0,340000,0,NULL,NULL,NULL,NULL,7,NULL,NULL,NULL,'[]'),(8,'BROSH CLAY FIBER POMADE (mini)','brosh-clay-fiber-pomade-mini',NULL,'http://localhost:3014/uploads/images/52af08f6-35ba-4587-b6e6-3e1619d43b1a.jpg','pending',0,450000,0,NULL,NULL,NULL,NULL,7,NULL,NULL,NULL,'[]'),(9,'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml','tinh-dau-duong-toc-ats-for-man-styling-oil-80ml',NULL,'http://localhost:3014/uploads/images/4d7e4e3b-45d8-44a9-a38f-59a3deb1cd6e.png','pending',200,650000,0,NULL,NULL,NULL,NULL,8,NULL,NULL,NULL,'[]'),(10,'Tinh chất nuôi dưỡng chăm sóc tóc khô và hư tổn UNOVE SILK OIL ESSENCE 70ml','tinh-chat-nuoi-duong-cham-soc-toc-kho-va-hu-ton-unove-silk-oil-essence-70ml',NULL,'http://localhost:3014/uploads/images/537c1978-7e92-42af-ba3d-f99bd8037138.jpg','pending',10,250000,0,NULL,NULL,NULL,NULL,7,NULL,NULL,NULL,NULL),(11,'Mặt nạ phục hồi tóc Laborie Derma Molecular Repair Hair Mask','mat-na-phuc-hoi-toc-laborie-derma-molecular-repair-hair-mask',NULL,'http://localhost:3014/uploads/images/535b24fd-6e20-4373-b8a2-440e3473bb91.jpg','pending',100,450000,0,NULL,NULL,NULL,NULL,8,NULL,NULL,NULL,'[]'),(12,'Tinh dầu dưỡng tóc Arren Men\'s Grooming 100ml','tinh-dau-duong-toc-arren-mens-grooming-100ml',NULL,'http://localhost:3014/uploads/images/389ddfa8-5c8f-448c-9e80-76fe6b8269f3.jpg','pending',10,450000,0,NULL,NULL,NULL,NULL,5,NULL,NULL,NULL,'[]'),(13,'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml','tinh-dau-duong-toc-ats-for-man-styling-oil-80ml',NULL,'http://localhost:3014/uploads/images/a26592e2-ff7c-411f-a77b-709ca706cad8.jpg','pending',100,560000,0,NULL,NULL,NULL,NULL,10,NULL,NULL,NULL,NULL),(14,'Dầu gội cho da đầu nhạy cảm và rụng tóc Laborie Derma Scalp Shampoo 250ml','dau-goi-cho-da-dau-nhay-cam-va-rung-toc-laborie-derma-scalp-shampoo-250ml',NULL,'http://localhost:3014/uploads/images/34a74fd6-743f-429b-b374-a17fd2411f36.jpg','pending',100,900000,0,NULL,NULL,NULL,NULL,10,NULL,NULL,NULL,NULL),(16,'Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml','dau-xa-blairsom-thao-moc-phuc-hoi-500ml','<p>Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml</p>','http://localhost:3014/uploads/images/fd92cbd0-6832-47ea-bb1a-95a92d79f2e7.jpg','pending',100,560000,0,NULL,NULL,NULL,NULL,10,NULL,NULL,NULL,NULL);
+INSERT INTO `ec_products` VALUES (1,'Dầu dưỡng xả Dove','dau-duong-xa-dove',NULL,'http://localhost:3014/uploads/images/83395c80-d47a-4a51-ae0f-0f91edae9d42.jpg','published',100,500000,0,NULL,NULL,NULL,NULL,1,1,NULL,NULL,0,0),(2,'BROSH X FUSTY WORKS POMADE','brosh-x-fusty-works-pomade',NULL,'http://localhost:3014/uploads/images/8ee7366c-3eeb-4cbb-bf01-ca52bcd3b182.jpeg','published',111,450000,0,NULL,NULL,NULL,NULL,1,1,NULL,NULL,0,0),(3,'BROSH CLAY FIBER POMADE (mini)','brosh-clay-fiber-pomade-mini',NULL,'http://localhost:3014/uploads/images/9058b89e-2c9a-4462-94fe-e1e77e3a6fe6.jpg','pending',111,1900000,0,NULL,NULL,NULL,NULL,1,1,NULL,NULL,1,5),(4,'Tinh dầu dưỡng tóc ATS For man Styling Oil 80ml','tinh-dau-duong-toc-ats-for-man-styling-oil-80ml',NULL,'http://localhost:3014/uploads/images/151fd671-7186-43a3-b0d0-86cc71c90918.jpg','pending',100,590000,0,NULL,NULL,NULL,NULL,3,1,NULL,NULL,0,0),(5,'Tinh chất nuôi dưỡng chăm sóc tóc khô và hư tổn UNOVE SILK OIL ESSENCE 70ml','tinh-chat-nuoi-duong-cham-soc-toc-kho-va-hu-ton-unove-silk-oil-essence-70ml',NULL,'http://localhost:3014/uploads/images/ac5d84a7-8f77-43a3-9afc-84b0dd08a16b.jpg','pending',100,500000,0,NULL,NULL,NULL,NULL,1,1,NULL,NULL,0,0),(6,'Mặt nạ phục hồi tóc Laborie Derma Molecular Repair Hair Mask','mat-na-phuc-hoi-toc-laborie-derma-molecular-repair-hair-mask',NULL,'http://localhost:3014/uploads/images/5e11c6e7-892a-42ec-be19-d9e4f1f772cc.jpg','pending',100,1490000,0,NULL,NULL,NULL,NULL,2,1,NULL,NULL,0,0),(7,'Tinh dầu dưỡng tóc Arren Men\'s Grooming 100ml','tinh-dau-duong-toc-arren-mens-grooming-100ml',NULL,'http://localhost:3014/uploads/images/ee090834-78c1-42d0-8787-0126cfeeb88d.png','pending',111,1700000,0,NULL,NULL,NULL,NULL,2,1,NULL,NULL,0,0),(8,'Dầu gội cho da đầu nhạy cảm và rụng tóc Laborie Derma Scalp Shampoo 250ml','dau-goi-cho-da-dau-nhay-cam-va-rung-toc-laborie-derma-scalp-shampoo-250ml',NULL,'http://localhost:3014/uploads/images/909376fd-372d-4da0-8206-96553fc62bd8.jpg','published',100,950000,0,NULL,NULL,NULL,NULL,2,1,NULL,NULL,0,0),(9,'Dầu xả Blairsom Thảo Mộc Phục Hồi 500ml','dau-xa-blairsom-thao-moc-phuc-hoi-500ml',NULL,'http://localhost:3014/uploads/images/d3786130-9acc-4587-b48d-543222d75b86.png','pending',100,50000,0,NULL,NULL,NULL,NULL,3,1,NULL,NULL,0,0),(19,'VOLCANIC CLAY WAX','volcanic-clay-wax',NULL,'http://localhost:3014/uploads/images/3d88d2d6-b792-41a9-857a-68566e569dba.jpg','pending',111,200000,0,NULL,NULL,NULL,NULL,1,1,NULL,NULL,0,0),(20,'Dầu Dưỡng Tóc','dau-duong-toc','<p>dầu dưỡng xả</p>','http://localhost:3014/uploads/images/26570fb7-3e15-4001-81e7-92d294a40d1c.jpg','published',111,200000,0,NULL,NULL,NULL,NULL,2,1,NULL,NULL,0,0);
 /*!40000 ALTER TABLE `ec_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -636,7 +672,7 @@ CREATE TABLE `ec_products_labels` (
   KEY `ec_products_labels_product_label_id_foreign` (`product_label_id`),
   CONSTRAINT `ec_products_labels_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `ec_products_labels_product_label_id_foreign` FOREIGN KEY (`product_label_id`) REFERENCES `ec_product_labels` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -645,7 +681,7 @@ CREATE TABLE `ec_products_labels` (
 
 LOCK TABLES `ec_products_labels` WRITE;
 /*!40000 ALTER TABLE `ec_products_labels` DISABLE KEYS */;
-INSERT INTO `ec_products_labels` VALUES (34,10,1,NULL,NULL),(35,10,2,NULL,NULL),(38,12,1,NULL,NULL),(42,16,1,NULL,NULL),(46,11,1,NULL,NULL),(47,11,3,NULL,NULL),(49,1,1,NULL,NULL),(50,7,1,NULL,NULL),(51,8,1,NULL,NULL),(52,8,3,NULL,NULL),(53,8,2,NULL,NULL),(54,9,1,NULL,NULL);
+INSERT INTO `ec_products_labels` VALUES (26,4,1,NULL,NULL),(27,6,1,NULL,NULL),(28,6,3,NULL,NULL),(31,19,2,NULL,NULL),(34,3,2,NULL,NULL),(35,3,3,NULL,NULL),(38,9,1,NULL,NULL),(40,8,2,NULL,NULL),(43,2,3,NULL,NULL),(46,20,2,NULL,NULL),(50,1,2,NULL,NULL);
 /*!40000 ALTER TABLE `ec_products_labels` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -668,7 +704,7 @@ CREATE TABLE `ec_stock_ins` (
   PRIMARY KEY (`id`),
   KEY `ec_stock_ins_product_id_foreign` (`product_id`),
   CONSTRAINT `ec_stock_ins_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -677,7 +713,6 @@ CREATE TABLE `ec_stock_ins` (
 
 LOCK TABLES `ec_stock_ins` WRITE;
 /*!40000 ALTER TABLE `ec_stock_ins` DISABLE KEYS */;
-INSERT INTO `ec_stock_ins` VALUES (1,1,10,10000,'2024-10-28','2024-10-28 09:18:40','2024-10-28 09:18:40',NULL),(2,1,30,30000,'2024-10-28','2024-10-28 09:32:56','2024-10-28 09:32:56',NULL);
 /*!40000 ALTER TABLE `ec_stock_ins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -704,7 +739,7 @@ CREATE TABLE `ec_stock_outs` (
   KEY `ec_stock_outs_user_id_foreign` (`user_id`),
   CONSTRAINT `ec_stock_outs_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `ec_stock_outs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -713,7 +748,6 @@ CREATE TABLE `ec_stock_outs` (
 
 LOCK TABLES `ec_stock_outs` WRITE;
 /*!40000 ALTER TABLE `ec_stock_outs` DISABLE KEYS */;
-INSERT INTO `ec_stock_outs` VALUES (1,1,2,20000,1,'2024-10-28','2024-10-28 09:18:57','2024-10-28 09:18:57',NULL,0),(2,1,3,20000,1,'2024-10-28','2024-10-28 09:32:08','2024-10-28 09:32:08',NULL,0);
 /*!40000 ALTER TABLE `ec_stock_outs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -739,7 +773,7 @@ CREATE TABLE `ec_transactions` (
   KEY `ec_transactions_product_id_foreign` (`product_id`),
   CONSTRAINT `ec_transactions_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `ec_orders` (`id`),
   CONSTRAINT `ec_transactions_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -748,8 +782,68 @@ CREATE TABLE `ec_transactions` (
 
 LOCK TABLES `ec_transactions` WRITE;
 /*!40000 ALTER TABLE `ec_transactions` DISABLE KEYS */;
-INSERT INTO `ec_transactions` VALUES (8,6,1,1,200000,200000,'pending',NULL,NULL),(9,7,7,1,340000,340000,'pending',NULL,NULL),(17,11,11,1,450000,450000,'pending',NULL,NULL),(18,11,8,1,450000,450000,'pending',NULL,NULL),(27,13,7,1,340000,340000,'pending',NULL,NULL),(28,13,9,1,650000,650000,'pending',NULL,NULL),(29,12,7,1,340000,340000,'pending',NULL,NULL);
+INSERT INTO `ec_transactions` VALUES (39,33,8,1,950000,950000,'pending',NULL,NULL),(40,34,1,1,500000,500000,'pending',NULL,NULL);
 /*!40000 ALTER TABLE `ec_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ec_variant_attributes`
+--
+
+DROP TABLE IF EXISTS `ec_variant_attributes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ec_variant_attributes` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `variant_id` bigint unsigned NOT NULL,
+  `attribute_value_id` bigint unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ec_variant_attributes_variant_id_foreign` (`variant_id`),
+  KEY `ec_variant_attributes_attribute_value_id_foreign` (`attribute_value_id`),
+  CONSTRAINT `ec_variant_attributes_attribute_value_id_foreign` FOREIGN KEY (`attribute_value_id`) REFERENCES `ec_attribute_values` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ec_variant_attributes_variant_id_foreign` FOREIGN KEY (`variant_id`) REFERENCES `ec_product_variants` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ec_variant_attributes`
+--
+
+LOCK TABLES `ec_variant_attributes` WRITE;
+/*!40000 ALTER TABLE `ec_variant_attributes` DISABLE KEYS */;
+INSERT INTO `ec_variant_attributes` VALUES (23,8,35,NULL,NULL),(24,8,35,NULL,NULL);
+/*!40000 ALTER TABLE `ec_variant_attributes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ec_warehouses`
+--
+
+DROP TABLE IF EXISTS `ec_warehouses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ec_warehouses` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('published','draft','pending') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ec_warehouses`
+--
+
+LOCK TABLES `ec_warehouses` WRITE;
+/*!40000 ALTER TABLE `ec_warehouses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ec_warehouses` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -793,7 +887,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -802,7 +896,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (33,'2014_10_12_000000_create_users_table',1),(34,'2014_10_12_100000_create_password_reset_tokens_table',1),(35,'2019_08_19_000000_create_failed_jobs_table',1),(36,'2019_12_14_000001_create_personal_access_tokens_table',1),(37,'2024_08_24_073329_create_products_table',1),(38,'2024_09_29_001703_create_permission_tables',1),(39,'2024_10_13_163624_create_csdl_base_module_admin',1),(40,'2024_10_15_155633_create_csdl_blogs_module_admin',1),(41,'2024_11_01_045329_create_supplier',2),(42,'2024_11_02_082440_alter_add_column_order_id',2),(43,'2024_11_07_164654_create_services_table',2),(46,'2024_11_13_041229_create_services_user_table',3);
+INSERT INTO `migrations` VALUES (57,'2014_10_12_000000_create_users_table',1),(58,'2014_10_12_100000_create_password_reset_tokens_table',1),(59,'2019_08_19_000000_create_failed_jobs_table',1),(60,'2019_12_14_000001_create_personal_access_tokens_table',1),(61,'2024_08_24_073329_create_products_table',1),(62,'2024_09_29_001703_create_permission_tables',1),(63,'2024_10_13_163624_create_csdl_base_module_admin',1),(64,'2024_10_15_155633_create_csdl_blogs_module_admin',1),(65,'2024_11_01_045329_create_supplier',1),(66,'2024_11_02_082440_alter_add_column_order_id',1),(67,'2024_11_07_164654_create_services_table',1),(68,'2024_11_13_041229_create_services_user_table',1),(69,'2024_11_15_102428_create_votes_table',1),(70,'2024_11_18_013349_create_setting_informations_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -849,7 +943,7 @@ CREATE TABLE `payment_methods` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,7 +952,7 @@ CREATE TABLE `payment_methods` (
 
 LOCK TABLES `payment_methods` WRITE;
 /*!40000 ALTER TABLE `payment_methods` DISABLE KEYS */;
-INSERT INTO `payment_methods` VALUES (1,'VND','COD',NULL,'Nhận hàng thanh toán',1,'active',NULL,'2024-10-20 03:47:11',NULL);
+INSERT INTO `payment_methods` VALUES (1,'VND','COD',NULL,'Nhận hàng thanh toán',1,'active',NULL,'2024-11-22 00:26:18',NULL),(2,'VND','Thanh toán online',NULL,'VnPay',0,'active',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `payment_methods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -883,7 +977,7 @@ CREATE TABLE `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -892,38 +986,7 @@ CREATE TABLE `personal_access_tokens` (
 
 LOCK TABLES `personal_access_tokens` WRITE;
 /*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-INSERT INTO `personal_access_tokens` VALUES (1,'App\\Models\\User',1,'MyApp','e88cb3d3fe9007e3e07a4e0691fe2b9febe38a4904b09cee57e12d61df341204','[\"*\"]','2024-10-27 05:54:58',NULL,'2024-10-24 23:58:56','2024-10-27 05:54:58'),(2,'App\\Models\\User',1,'MyApp','40582587078b7bba038b6a1ed450ba40d95b0b890dc8d80f1bb1fad33c591fbb','[\"*\"]','2024-11-02 05:08:09',NULL,'2024-10-25 21:25:40','2024-11-02 05:08:09');
 /*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `product_variants`
---
-
-DROP TABLE IF EXISTS `product_variants`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_variants` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` bigint unsigned NOT NULL,
-  `price` int NOT NULL,
-  `stock` int NOT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `product_variants_product_id_foreign` (`product_id`),
-  CONSTRAINT `product_variants_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_variants`
---
-
-LOCK TABLES `product_variants` WRITE;
-/*!40000 ALTER TABLE `product_variants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_variants` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -943,7 +1006,7 @@ CREATE TABLE `services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -952,7 +1015,7 @@ CREATE TABLE `services` (
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES (1,'Dịch vụ bảo hành',NULL,1,10000,'<p>Dịch vụ bảo hành</p>',NULL,NULL),(2,'Dịch vụ 10 bước gội đầu',NULL,0,100000,'<p>Dịch vụ 10 bước gội đầu</p>',NULL,NULL);
+INSERT INTO `services` VALUES (1,'Dịch vụ massage thư giãn',NULL,0,100000,'<p>Dịch vụ thư giãn massage gội đầu</p>',NULL,NULL),(2,'Gói combo 7 bước',NULL,0,100000,'<p>combo cắt - uốn - gội - nhuộm - massage - gội đầu - tạo kiểu</p>',NULL,NULL),(3,'Dịch vụ hớt tóc',NULL,1,90000,'<p>Cắt tóc tạo kiểu</p>',NULL,NULL);
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -967,6 +1030,7 @@ CREATE TABLE `services_user` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `service_id` int NOT NULL,
+  `action_id` int NOT NULL COMMENT 'nhân viên được giao',
   `price` int NOT NULL DEFAULT '0',
   `status` enum('pending','processing','completed','canceled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -977,8 +1041,9 @@ CREATE TABLE `services_user` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `services_user_user_id_index` (`user_id`),
-  KEY `services_user_service_id_index` (`service_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `services_user_service_id_index` (`service_id`),
+  KEY `services_user_action_id_index` (`action_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -987,8 +1052,42 @@ CREATE TABLE `services_user` (
 
 LOCK TABLES `services_user` WRITE;
 /*!40000 ALTER TABLE `services_user` DISABLE KEYS */;
-INSERT INTO `services_user` VALUES (1,9,1,10000,'pending','Dịch vụ bảo hành',NULL,NULL,0,NULL,NULL),(2,10,2,100000,'pending','Dịch vụ 10 bước gội đầu',NULL,NULL,0,NULL,NULL),(3,12,1,10000,'pending','Dịch vụ bảo hành',NULL,NULL,0,NULL,NULL);
+INSERT INTO `services_user` VALUES (1,3,2,3,100000,'pending','Gói combo 7 bước',NULL,NULL,0,NULL,NULL),(2,3,1,3,100000,'pending','Dịch vụ massage thư giãn',NULL,NULL,0,NULL,NULL),(3,3,1,3,100000,'pending','Dịch vụ massage thư giãn',NULL,NULL,0,NULL,NULL);
 /*!40000 ALTER TABLE `services_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `setting_information`
+--
+
+DROP TABLE IF EXISTS `setting_information`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `setting_information` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `favicon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `map` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `fax` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `copyright` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `setting_information`
+--
+
+LOCK TABLES `setting_information` WRITE;
+/*!40000 ALTER TABLE `setting_information` DISABLE KEYS */;
+INSERT INTO `setting_information` VALUES (1,'http://localhost:3014/uploads/images/27dccfb0-33e6-482e-8aa6-cf115c7d1b80.png',NULL,'SShirot - Neptune','hudony00800@gmail.com','Quận 9 - TP Hồ Chí Minh',NULL,NULL,'0352344402','SShirot - Neptune',NULL,NULL);
+/*!40000 ALTER TABLE `setting_information` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1010,7 +1109,7 @@ CREATE TABLE `slides` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1019,7 +1118,7 @@ CREATE TABLE `slides` (
 
 LOCK TABLES `slides` WRITE;
 /*!40000 ALTER TABLE `slides` DISABLE KEYS */;
-INSERT INTO `slides` VALUES (9,'Sản phẩm thông minh','Bộ sưu tập ưu đãi mùa đông 2024',1,'home','https://123code.net','http://localhost:3014/uploads/images/3ba03011-5a90-4c96-b74c-f9aca5590c20.jpg','pending','2024-10-25 02:41:41',NULL),(10,'MCN','Bộ sưu tập ưu đãi mùa đông 2024',1,'home','https://123code.net','http://localhost:3014/uploads/images/049f7e00-c3bc-4b9b-a0a2-019f7ad404af.jpg','pending','2024-10-25 02:41:41',NULL);
+INSERT INTO `slides` VALUES (1,'Danh Hiệu','Top 1 barbershop toàn quốc',1,'home','http://30shine.com','http://localhost:3014/uploads/images/12e238cf-bf7f-4b34-b0fe-1cb80639f34d.jpg','pending',NULL,NULL),(2,'Combo Haircut','Combo 7 bước',1,'home','http://30shine.com','http://localhost:3014/uploads/images/922f034d-fabb-40ea-8195-eea6a052450e.jpg','pending',NULL,NULL);
 /*!40000 ALTER TABLE `slides` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1067,13 +1166,13 @@ CREATE TABLE `users` (
   `provider_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint NOT NULL DEFAULT '1',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_type` enum('ADMIN','USER','STAFF') COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `user_type` enum('USER','ADMIN') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1082,7 +1181,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'ADMIN','admin@gmail.com',NULL,'$2y$12$w5.p9RDFwrnZJ0LMJEgdJuzSM8R3LajfSxiVGUWkbjyHFkqcW7p8W','0986420994',NULL,NULL,1,'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg',NULL,'2024-10-20 03:47:10','2024-10-20 03:47:10','ADMIN'),(4,'Hạ Linh','codethue9402@gmail.com',NULL,'$2a$10$tai56eo5T0CB1DY9uywD1OQjN7H2/k26Ba0sJuPbamNpUA.B8MSY.','0986787625',NULL,NULL,1,'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg',NULL,NULL,NULL,'USER'),(6,'Bích ngọc','admin2@gmail.com',NULL,'$2a$10$XdpPkBpM6tZTMWghviq7vOzzrNSkNc8pHa19xZt38eWxmzQ.E13I6','0986420994',NULL,NULL,1,NULL,NULL,NULL,NULL,'USER'),(7,'Nhã An','phuphandata@gmail.com',NULL,'$2a$10$urkwF3Ax7M6NzPqyjBV47enG0WHwuvCIywv.qp5R1Zz2rtHXCVXf6','0978656212',NULL,NULL,1,'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg',NULL,NULL,NULL,'USER'),(9,'Phú PT','phupt.humg.94@gmail.com',NULL,'$2a$10$N9dTqUb0jYYxhmICY1f/FODdIKYUvkT71cpt/8CE1AoLsQywflsCa','0987676222',NULL,NULL,1,'http://localhost:3014/uploads/images/46973176-09b2-4642-bf00-de0d995408cd.jpg',NULL,NULL,NULL,'USER'),(10,'ngoc na','ngoc@gmail.com',NULL,'$2a$10$KLfvLksRuqlrLkuAh/EjeO6uqFtFtzWntsyc.PZJSqlG22fxGCZVq',NULL,NULL,NULL,1,'http://localhost:3014/uploads/images/c20534bf-8090-40ac-841e-e85c3ca3aa16.jpg',NULL,NULL,NULL,'USER'),(11,'letrinhxuan','letrinhxuan@gmail.com',NULL,'$2a$10$bLPUPfgErXseoS3iAvmZkueOWgD0IP2ozk9tBtUiFTcL7i7gb/A4q',NULL,NULL,NULL,1,'https://via.placeholder.com/150',NULL,NULL,NULL,'USER'),(12,'Huy','Hudony00800@gmail.com',NULL,'$2a$10$YVUHngnBwzusiLPdMCpOHezINDZDcPgVnKGHXNIhGhVcHYi0w5kZ.',NULL,NULL,NULL,1,'https://via.placeholder.com/150',NULL,NULL,NULL,'ADMIN'),(13,'Huy khac','Hudony008010@gmail.com',NULL,'$2a$10$suO75ABrlaH1X/8qQqmFk.Q8MNFjixBhUA.HK5Z998HW2s3TCscGK',NULL,NULL,NULL,1,'https://via.placeholder.com/150',NULL,NULL,NULL,NULL),(14,'Huy','vietfarmers1235@gmail.com',NULL,'$2a$10$XRxW6EM/HwRP0JBr85GHUuCxDB.WjRRfgwE6cfbVRfMR1iG5FwZ9e','00001231231',NULL,NULL,1,'https://img.freepik.com/premium-vector/gray-avatar-icon-vector-illustration_276184-163.jpg',NULL,NULL,NULL,'ADMIN');
+INSERT INTO `users` VALUES (3,'Nguyen Khac Huy','hudony00800@gmail.com',NULL,'$2a$10$OYVau1493FzDtTtuJYGDnudYD7saDLlYqgYEUa66ALcG3JzKgVSaO','0352344059',NULL,NULL,2,'http://localhost:3014/uploads/images/67c8a2af-78d4-47a5-be7f-49f025167335.jpg','ADMIN',NULL,NULL,NULL),(4,'Le Bui Huu Phuc','21110773@student.hcmute.edu.vn',NULL,'$2a$10$w1GUvJpRYbo34OiGunWuOeIaSq8y2dXrIATM34/QEWhqDJr/Jp98S',NULL,NULL,NULL,2,'https://via.placeholder.com/150','STAFF',NULL,NULL,NULL),(5,'Huy User','tik876964@gmail.com',NULL,'$2a$10$.bUIB2chmAn5dPSIcPNjDOqowRJshlesbtARn7k7hnoDSerGPVcDa','0352344059',NULL,NULL,2,'https://via.placeholder.com/150','USER',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1147,7 +1246,7 @@ CREATE TABLE `users_has_types` (
 
 LOCK TABLES `users_has_types` WRITE;
 /*!40000 ALTER TABLE `users_has_types` DISABLE KEYS */;
-INSERT INTO `users_has_types` VALUES (1,1,2,NULL,NULL),(2,1,1,NULL,NULL);
+INSERT INTO `users_has_types` VALUES (1,4,4,NULL,NULL);
 /*!40000 ALTER TABLE `users_has_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1165,7 +1264,7 @@ CREATE TABLE `users_types` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_types_name_unique` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1174,7 +1273,7 @@ CREATE TABLE `users_types` (
 
 LOCK TABLES `users_types` WRITE;
 /*!40000 ALTER TABLE `users_types` DISABLE KEYS */;
-INSERT INTO `users_types` VALUES (1,'ADMIN','2024-10-20 03:47:09','2024-10-20 03:47:09'),(2,'USER','2024-10-20 03:47:09','2024-10-20 03:47:09'),(3,'SYSTEM','2024-10-20 03:47:09','2024-10-20 03:47:09');
+INSERT INTO `users_types` VALUES (1,'ADMIN','2024-11-22 00:26:16','2024-11-22 00:26:16'),(2,'USER','2024-11-22 00:26:16','2024-11-22 00:26:16'),(3,'SYSTEM','2024-11-22 00:26:16','2024-11-22 00:26:16'),(4,'STAFF','2024-11-22 00:26:16','2024-11-22 00:26:16');
 /*!40000 ALTER TABLE `users_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1241,33 +1340,38 @@ LOCK TABLES `users_wallets_transactions` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `variant_attributes`
+-- Table structure for table `votes`
 --
 
-DROP TABLE IF EXISTS `variant_attributes`;
+DROP TABLE IF EXISTS `votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `variant_attributes` (
+CREATE TABLE `votes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `variant_id` bigint unsigned NOT NULL,
-  `attribute_value_id` bigint unsigned NOT NULL,
+  `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `rating` int NOT NULL DEFAULT '0',
+  `product_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `status` enum('published','draft','pending') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `images` json DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `variant_attributes_variant_id_foreign` (`variant_id`),
-  KEY `variant_attributes_attribute_value_id_foreign` (`attribute_value_id`),
-  CONSTRAINT `variant_attributes_attribute_value_id_foreign` FOREIGN KEY (`attribute_value_id`) REFERENCES `ec_attribute_values` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `variant_attributes_variant_id_foreign` FOREIGN KEY (`variant_id`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `votes_product_id_foreign` (`product_id`),
+  KEY `votes_user_id_foreign` (`user_id`),
+  CONSTRAINT `votes_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `ec_products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `votes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `variant_attributes`
+-- Dumping data for table `votes`
 --
 
-LOCK TABLES `variant_attributes` WRITE;
-/*!40000 ALTER TABLE `variant_attributes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `variant_attributes` ENABLE KEYS */;
+LOCK TABLES `votes` WRITE;
+/*!40000 ALTER TABLE `votes` DISABLE KEYS */;
+INSERT INTO `votes` VALUES (2,'aa ggwp',5,3,3,'pending','2024-11-30 07:42:22',NULL,'[]');
+/*!40000 ALTER TABLE `votes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1279,4 +1383,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-30 20:30:27
+-- Dump completed on 2024-12-04 10:32:23

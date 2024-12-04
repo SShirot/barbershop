@@ -1,0 +1,19 @@
+.navbar-expand .navbar-nav .nav-link {
+    color: white;
+    font-weight: 500;
+}
+
+.home-categories {
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border-color: #f2f2f2;
+}
+
+.home-categories:hover {
+    transform: scale(1.05);
+}
+
+.home-categories img {
+    object-fit: cover;
+}

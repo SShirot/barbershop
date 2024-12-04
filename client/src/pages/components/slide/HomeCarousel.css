@@ -1,0 +1,60 @@
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 75vh; /* Set height to approximately 75% of the viewport height */
+    overflow: hidden;
+}
+
+/*.carousel-fullscreen .carousel-item {*/
+/*    height: 75vh; !* Match the height of the wrapper *!*/
+/*}*/
+
+.carousel-fullscreen .carousel-item img {
+    object-fit: cover;
+    /*height: 75vh; !* Match the height of the wrapper *!*/
+    width: 100%;
+}
+
+.carousel-fullscreen .carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+
+.carousel-fullscreen {
+    position: relative;
+    height: auto;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.carousel-item img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .carousel-item img {
+        max-height: 300px; /* Điều chỉnh chiều cao cho màn hình nhỏ */
+    }
+
+    .carousel-caption {
+        bottom: 20px;
+    }
+
+    .slide-title {
+        font-size: 16px;
+    }
+
+    .slide-description {
+        font-size: 14px;
+        display: none; /* Ẩn mô tả trên mobile nếu cần */
+    }
+}
+
+@media (min-width: 769px) {
+    .slide-description {
+        font-size: 18px;
+    }
+}

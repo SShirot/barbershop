@@ -3,14 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import {Container, Row, Col, Button, Badge, Form, ProgressBar, Nav} from 'react-bootstrap';
 import {FaStar, FaRegStar, FaTruck, FaShieldAlt, FaExchangeAlt, FaStarHalfAlt} from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../../../redux/slices/cartSlice';
-import apiProductService from '../../../../api/apiProductService';
-import {formatPrice, renderStarsItem} from '../../../../helpers/formatters';
-import '../../style/ProductDetail.css';
-import apiVoteService from "../../../../api/apiVoteService";
+import { addToCart } from '../../../redux/slices/cartSlice';
+import apiProductService from '../../../api/apiProductService';
+import {formatPrice, renderStarsItem} from '../../../helpers/formatters';
+import '../style/ProductDetail.css';
+import apiVoteService from "../../../api/apiVoteService";
 
-const DashboardVoteProduct = React.lazy(() => import('../../../components/vote/DashboardVoteProduct'));
-const RelatedProducts = React.lazy(() => import('../../../components/product/RelatedProducts'));
+const DashboardVoteProduct = React.lazy(() => import('../../components/vote/DashboardVoteProduct'));
+const RelatedProducts = React.lazy(() => import('../../components/product/RelatedProducts'));
 
 const ProductDetail = () => {
     const { slug } = useParams();
