@@ -1,6 +1,6 @@
 # BARBERSHOP WEB APPLICATION WITH INTEGRATED  HAIRSTYLE TRANSFER]
 ●	Clone project : “git clone https://github.com/SShirot/barbershop.git”
-●	import core_ecm.sql to mySQL
+●	import bbs_db.sql to mySQL
 1.	Front-end Install 
 -	Require npm and npx 10.x.x version or higher
 -	Git: For cloning project
