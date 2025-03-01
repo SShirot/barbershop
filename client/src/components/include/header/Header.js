@@ -240,7 +240,7 @@ const Header = ({ information }) => {
           <div>
             <Dropdown>
               <Dropdown.Toggle variant="light" id="dropdown-basic">
-                Giao đến: Quận Hoàn Kiếm, Hà Nội
+                Giao đến: Quận 9, TP Hồ Chí Minh
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href="#/action-1">

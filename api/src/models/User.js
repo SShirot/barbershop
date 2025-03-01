@@ -9,7 +9,7 @@ const User = {
         email: 'varchar(255)',
         email_verified_at: 'timestamp NULL',
         password: 'varchar(255)',
-        user_type: "enum('USER', 'ADMIN') DEFAULT 'USER'",
+        user_type: "enum('USER', 'ADMIN','STAFF') DEFAULT 'USER'",
         phone: 'varchar(255)',
         provider: 'varchar(255) NULL',
         provider_id: 'varchar(255) NULL',
