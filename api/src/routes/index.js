@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use('/auth', require('./auth/auth'));
 router.use('/admin', require('./admin'));
+router.use('/staff', require('./staff'));
 router.use('/user', require('./user'));
 router.use('/users', require('./guest/admin'));
 router.use('/products', require('./guest/product'));

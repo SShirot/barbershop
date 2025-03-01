@@ -111,7 +111,7 @@ const CategoryManager = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/ecommerce/categories">Danh mục</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/ecommerce/categories">Danh mục</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>

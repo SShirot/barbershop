@@ -9,7 +9,7 @@ const OrderBreadcrumbs = () => {
                 <Nav.Link as={Link} to="/">Home</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link as={Link} to="/user/orders">Orders</Nav.Link>
+                <Nav.Link as={Link} to="/admin/ecommerce/order">Orders</Nav.Link>
             </Nav.Item>
             <Breadcrumb.Item active>Index</Breadcrumb.Item>
         </Breadcrumb>

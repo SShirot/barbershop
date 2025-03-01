@@ -91,7 +91,7 @@ const ServiceUserManager = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/services">Dịch vụ</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/services">Dịch vụ</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>

@@ -95,7 +95,7 @@ const BrandManager = () => {
                             <Nav.Link as={Link} to="/">Trang chủ</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/ecommerce/brands">Thương hiệu</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/ecommerce/brands">Thương hiệu</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Danh sách</Breadcrumb.Item>
                     </Breadcrumb>

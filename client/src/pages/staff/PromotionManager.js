@@ -81,7 +81,7 @@ const PromotionManager = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/promotions">Promotions</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/promotions">Promotions</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>

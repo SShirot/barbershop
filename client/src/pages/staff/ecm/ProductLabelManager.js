@@ -113,7 +113,7 @@ const ProductLabelManager = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/ecommerce/product-labels">Product Label</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/ecommerce/product-labels">Product Label</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>

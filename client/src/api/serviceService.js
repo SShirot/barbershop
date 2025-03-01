@@ -26,6 +26,23 @@ const serviceService = {
     deleteUserService: (id) => {
         return apiHelper.delete(`admin/services/register/${id}`);
     },
+    // 🔵 STAFF APIs
+    getStaffServices: (params) => {
+        const paramsSearch = new URLSearchParams(params);
+        return apiHelper.get(`staff/services?${paramsSearch.toString()}`);
+    },
+    
+    addStaffService: (serviceData) => {
+        return apiHelper.post('staff/services', serviceData);
+    },
+
+    updateStaffService: (id, serviceData) => {
+        return apiHelper.put(`staff/services/${id}`, serviceData);
+    },
+
+    deleteStaffService: (id) => {
+        return apiHelper.delete(`staff/services/${id}`);
+    },
 };
 
 export default serviceService;

@@ -112,10 +112,10 @@ const AdminDashboard = () => {
                 <Col xl={12}>
                     <Breadcrumb>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/ ">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/Admin">Admin</Nav.Link>
+                            <Nav.Link as={Link} to="/Staff">Staff</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
                     </Breadcrumb>

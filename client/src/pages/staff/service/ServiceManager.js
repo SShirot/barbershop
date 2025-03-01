@@ -27,7 +27,7 @@ const ServiceManager = () => {
 
     const fetchServiceWithParams = async (params) => {
         try {
-            const response = await serviceService.getLists(params);
+            const response = await serviceService.getStaffServices(params);
             setServices(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
@@ -54,11 +54,11 @@ const ServiceManager = () => {
         };
         try {
             if (editingService) {
-                await serviceService.update(editingService.id, modelData);
+                await serviceService.updateStaffService(editingService.id, modelData);
                 const params = Object.fromEntries([...searchParams]);
                 await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
             } else {
-                await serviceService.add(modelData);
+                await serviceService.addStaffService(modelData);
                 const params = Object.fromEntries([...searchParams]);
                 await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
             }
@@ -76,7 +76,7 @@ const ServiceManager = () => {
 
     const handleDeleteData = async () => {
         try {
-            await serviceService.delete(serviceToDelete.id);
+            await serviceService.deleteStaffService(serviceToDelete.id);
             const params = Object.fromEntries([...searchParams]);
             fetchServiceWithParams({ ...params, page: params.page || 1, page_size: params.page_size || 10 });
             setShowDeleteModal(false);
@@ -94,7 +94,7 @@ const ServiceManager = () => {
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/services">Dịch vụ</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/services">Dịch vụ</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>
