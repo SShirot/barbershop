@@ -14,7 +14,7 @@ exports.getAllServices = async (req, res) => {
         return errorResponse(res);
     }
 };
-
+        
 exports.getAllServicesRegister = async (req, res) => {
     try {
         const { page, page_size: pageSize, name } = req.query;

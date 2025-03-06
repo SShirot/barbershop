@@ -64,7 +64,7 @@ const BoardingModal = ({ show, handleClose, API, setSuccessMessage }) => {
             handleClose();
             resetForm();
         } catch (error) {
-            toastr.error('Có lỗi xẩy ra, xin vui lòng thử lại', 'Error');
+            toastr.error('Có lỗi xảy ra, xin vui lòng thử lại', 'Error');
             console.error("There was an error creating the boarding!", error);
         } finally {
             setSubmitting(false);
