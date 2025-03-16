@@ -4,6 +4,7 @@ const authController = require("../controllers/auth/authController");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
+router.use('/chatbot', require('./chatbot/chatbot'));
 router.use('/auth', require('./auth/auth'));
 router.use('/admin', require('./admin'));
 router.use('/staff', require('./staff'));

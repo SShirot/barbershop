@@ -22,23 +22,26 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    // Chuẩn hóa phản hồi trả về
+    //console.log('Raw Backend Response:', response); // Debugging log
+
+    // Return the original Axios object for flat responses
+    if (!response.data.data && !response.data.status && !response.data.message) {
+      return response;
+    }
+
+    // Normalize nested responses
     return {
-      data: response.data.data,
-      status: response.data.status,
+      data: response.data.data || response.data, // Fallback to full data object
+      status: response.data.status || response.status, // Fallback to HTTP status code
       statusText: response.statusText,
-      message: response.data.message,
+      message: response.data.message || null, // Fallback to null if no message exists
     };
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Không redirect nếu người dùng là guest (không có token)
       const token = localStorage.getItem("token");
       if (token) {
         localStorage.removeItem("token");
-        console.info(
-          "===========[] ===========[window.location.href LOGIN] : "
-        );
         window.location.href = "/login";
       }
     }

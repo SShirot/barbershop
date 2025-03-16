@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState  } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -28,7 +28,9 @@ import PaymentSuccess from "./pages/site/shopping-cart/PaymentSuccess";
 import UserManager from "./pages/admin/account/UserManager";
 import ImageUploadPage from "./pages/site/ImageUploadPage";
 import UnauthorizedPage from "./pages/site/errors/Unauthorized";
-
+import Chatbot from "./components/ChatBot";
+import ChatbotIcon from './components/ChatbotIcon';
+import './components/ChatbotIcon.css';
 const AuthLayout = React.lazy(() => import("./components/AuthLayout"));
 const GuestLayout = React.lazy(() => import("./components/GuestLayout"));
 
@@ -45,6 +47,10 @@ const Checkout = React.lazy(() =>
 const Category = React.lazy(() => import("./pages/site/category/Category"));
 
 const App = () => {
+  const [showChat, setShowChat] = useState(false);
+  const handleToggleChat = () => {
+    setShowChat(prev => !prev);
+  };
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,6 +59,13 @@ const App = () => {
 
   return (
     <Router>
+      <div>
+        {showChat ? (
+          <Chatbot onClose={handleToggleChat} />
+        ) : (
+          <ChatbotIcon onClick={handleToggleChat} />
+        )}
+      </div>
       <Routes>
         {/* Routes dành cho guest, có thể truy cập bởi cả guest và người dùng đã đăng nhập */}
         <Route path="/*" element={<GuestLayout />}>
@@ -72,11 +85,24 @@ const App = () => {
           <Route
             path="upload-preview"
             element={
-              <Suspense fallback={<div>Loading Products...</div>}>
+              <Suspense fallback={<div>Loading Upload...</div>}>
                 <ImageUploadPage />
               </Suspense>
             }
           />
+          
+          <Route
+            path="chat-bot"
+            element={
+              <div>
+                {showChat ? (
+                  <Chatbot onClose={handleToggleChat} />
+                ) : (
+                  <ChatbotIcon onClick={handleToggleChat} />
+                )}
+              </div>
+            }
+          />  
           <Route
             path="p/:slug"
             element={
@@ -146,6 +172,7 @@ const App = () => {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
+    
   );
 };
 
