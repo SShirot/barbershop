@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, startTransition } from "react";
 import { Container, Nav, Dropdown, Navbar } from "react-bootstrap";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -46,7 +46,7 @@ const UserLayout = ({ isAuthenticated, user }) => {
               as={Link}
               to="/"
               className={"d-flex align-items-center"}
-              target={"_blank"}
+              
             >
               Vào website <FaInternetExplorer className={"ms-2"} />
             </Nav.Link>
@@ -72,7 +72,17 @@ const UserLayout = ({ isAuthenticated, user }) => {
                   Cập nhật thông tin
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                {/* 🚀 FIX lỗi logout */}
+                <Dropdown.Item
+                    onClick={(e) => {
+                        e.preventDefault();
+                        startTransition(() => {
+                            navigate("/login");
+                        });
+                    }}
+                >
+                    Đăng xuất
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Nav>

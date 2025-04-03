@@ -1,69 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Typing from 'react-typing-animation';
 import './ChatBot.css';
 import apiChatbotService from '../api/apiChatbot';
 
 function Chatbot({ onClose }) {
-  const [messages, setMessages] = useState([
-    { sender: 'bot', text: 'Welcome! How can I help you?' },
-  ]);
-  const [input, setInput] = useState('');
   const userId = '12345'; // Replace with dynamic user ID if needed
+
+  // Ref for the chat body container
+  const chatBodyRef = useRef(null);
+
+  const loadMessages = () => {
+    const savedMessages = sessionStorage.getItem('chat_history');
+    if (savedMessages) {
+      return JSON.parse(savedMessages).map((msg) => ({ ...msg, animated: false }));
+    }
+    return [{ sender: 'bot', text: 'Hello there! How can I help you today?', animated: false }];
+  };
+
+  const [messages, setMessages] = useState(loadMessages);
+  const [input, setInput] = useState('');
+
+  // Save messages to sessionStorage whenever messages state changes
+  useEffect(() => {
+    sessionStorage.setItem('chat_history', JSON.stringify(messages));
+  }, [messages]);
+
+  // Scroll to the bottom whenever a new message is added
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    const response = await apiChatbotService.sendMessage(userId, input);
-    console.log('Full Response from Backend:', response);
-    
-    console.log('Text box received:', input); // Log what textbox receives
-  
-    // Add user message to chat
+    console.log('Sending data:', { userId, message: input, chatHistory: messages });
     setMessages((prev) => [...prev, { sender: 'user', text: input }]);
-  
+
+    // Clear input immediately
+    setInput('');
+
     try {
-      const payload = { userId, message: input };
-      console.log('Payload sent to backend:', payload); // Log what is sent
-  
       const response = await apiChatbotService.sendMessage(userId, input);
-  
-      // Safely access the response data
       const botReply = response?.data?.reply || 'Sorry, no reply received.';
-      console.log('Response from backend:', botReply); // Log response received
-  
-      setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
-      setInput('');
+      setMessages((prev) => [...prev, { sender: 'bot', text: botReply, animated: true }]);
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages((prev) => [
         ...prev,
-        { sender: 'bot', text: 'Sorry, something went wrong.' },
+        { sender: 'bot', text: 'Sorry, something went wrong.', animated: true },
       ]);
     }
   };
-  
 
   return (
     <div className="chatbot-container">
-      {/* Header */}
       <div className="chatbot-header">
         <span>Chat with us!</span>
-        <button className="close-btn" onClick={onClose}>
-          X
-        </button>
+        <button className="close-btn" onClick={onClose}>X</button>
       </div>
 
-      {/* Chat Body */}
-      <div className="chatbot-body">
+      {/* Chat Body with ref */}
+      <div className="chatbot-body" ref={chatBodyRef}>
         {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
-          >
-            <p>{msg.text}</p>
+          <div key={idx} className={`message-bubble ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}>
+            {msg.sender === 'bot' && msg.animated ? (
+              <TypingEffect text={msg.text} />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: formatBotResponse(msg.text) }} />
+            )}
           </div>
         ))}
       </div>
 
-      {/* Input */}
       <div className="chatbot-input">
         <input
           type="text"
@@ -76,6 +85,26 @@ function Chatbot({ onClose }) {
       </div>
     </div>
   );
+}
+
+// TypingEffect component using react-typing-animation
+function TypingEffect({ text }) {
+  return (
+    <Typing speed={0}>
+      <span>{text}</span>
+    </Typing>
+  );
+}
+
+// Function to format bot responses into HTML
+function formatBotResponse(responseText) {
+  // Example of formatting logic for structured responses
+  return responseText
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text (e.g., **bold**)
+    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic text (e.g., *italic*)
+    .replace(/\n/g, '<br>') // Line breaks
+    .replace(/- (.*?)$/gm, '<li>$1</li>') // Bulleted lists (- item)
+    .replace(/(\d+)\.\s(.*?)$/gm, '<li><strong>$1.</strong> $2</li>'); // Numbered lists (1. item)
 }
 
 export default Chatbot;

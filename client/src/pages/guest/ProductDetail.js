@@ -141,8 +141,8 @@ const ProductDetail = () => {
                                 <Button variant="outline-secondary" onClick={() => setQuantity(quantity + 1)}>+</Button>
                             </div>
                         </div>
-                        <Button variant="danger" className="w-100 mb-2" onClick={handleAddToCart}>
-                            Chọn mua
+                        <Button variant="danger" className="w-100 mb-2" onClick={handleAddToCart} disabled={product.status !== "published"}>
+                            {product.status === "published" ? "Chọn mua" : "Hết hàng"}
                         </Button>
                         <Button variant="outline-primary" className="w-100 mb-3">
                             Mua trước trả sau

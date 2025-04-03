@@ -1,14 +1,14 @@
-import React, {startTransition} from 'react';
-import {Container, Navbar, Nav, NavDropdown, Dropdown} from 'react-bootstrap';
-import {Outlet, Link, useNavigate} from 'react-router-dom';
+import React, { startTransition } from 'react';
+import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import './style/UserLayout.css';
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {FaInternetExplorer} from "react-icons/fa";
+import { FaInternetExplorer } from "react-icons/fa";
 
 const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
-
     const navigate = useNavigate();
+
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -16,20 +16,18 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                     <Navbar.Brand as={Link} to="/admin">ADMIN</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/admin/user">Tài khoản</Nav.Link>
+                        
                         <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} id="dropdown-news">
-                                Tin tức
-                            </Dropdown.Toggle>
+                            <Dropdown.Toggle as={Nav.Link} id="dropdown-news">Tin tức</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/news/menus">Chuyên mục</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/news/tags">Từ khoá</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/news/articles">Bài viết</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+
                         <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">
-                                Bán hàng
-                            </Dropdown.Toggle>
+                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">Bán hàng</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/categories">Danh mục</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/attributes">Thuộc tính</Dropdown.Item>
@@ -40,26 +38,40 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                                 <Dropdown.Item as={Link} to="/admin/ecommerce/vote">Đánh giá</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+
                         <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">
-                                Dịch vụ
-                            </Dropdown.Toggle>
+                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">Dịch vụ</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/services/manage">Quản lý dịch vụ</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/admin/services/order">Khách đăng ký </Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/admin/services/order">Khách đăng ký</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+
                         <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">
-                                Dữ liệu website
-                            </Dropdown.Toggle>
+                            <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">Dữ liệu website</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/slides">Quản lý slide</Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/admin/setting/information">Thông tin website</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-                        <Nav.Link as={Link} to="/" className={'d-flex align-items-center'} target={'_blank'}>Vào website <FaInternetExplorer  className={'ms-2'}/></Nav.Link>
+
+                        <Nav.Link as={Link} to="/admin/work-schedules">Lịch làm việc</Nav.Link>
+
+                        {/* 🚀 FIX lỗi vào website */}
+                        <Nav.Link
+                            as={Link}
+                            to="/"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                startTransition(() => {
+                                    navigate("/");
+                                });
+                            }}
+                        >
+                            Vào website <FaInternetExplorer className="ms-2" />
+                        </Nav.Link>
                     </Nav>
+
                     <Nav>
                         <Dropdown align="end">
                             <Dropdown.Toggle as={Nav.Link} id="dropdown-user">
@@ -74,6 +86,8 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to="/admin/profile">Cập nhật thông tin</Dropdown.Item>
                                 <Dropdown.Divider />
+                                
+                                {/* 🚀 FIX lỗi logout */}
                                 <Dropdown.Item
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -81,15 +95,19 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                                             navigate("/login");
                                         });
                                     }}
-                                >Đăng xuất</Dropdown.Item>
+                                >
+                                    Đăng xuất
+                                </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Nav>
                 </Container>
             </Navbar>
-            <Container style={{ minHeight: '70vh',paddingBottom: '100px'}}>
+
+            <Container style={{ minHeight: '70vh', paddingBottom: '100px' }}>
                 <Outlet />
             </Container>
+
             <footer className="admin-footer text-center mt-4">
                 <div className="footer-content">
                     <p>&copy; {new Date().getFullYear()} Company Name. All rights reserved.</p>
@@ -100,6 +118,7 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                     </div>
                 </div>
             </footer>
+
             <ToastContainer position="bottom-right" autoClose={3000} />
         </>
     );

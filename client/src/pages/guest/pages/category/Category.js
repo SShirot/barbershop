@@ -251,7 +251,7 @@ const Category = () => {
                                             </div>
                                             <Card.Text>{formatPrice(product.price)}</Card.Text>
                                         </Card.Body>
-                                        <Button variant={product.status === 1 ? 'success' : 'danger'}>
+                                        <Button variant={product.status === "published" ? 'success' : 'danger'}>
                                             {product.status === 1 ? 'Còn hàng' : 'Hết hàng'}
                                         </Button>
                                     </Card>

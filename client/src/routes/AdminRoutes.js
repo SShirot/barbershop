@@ -19,7 +19,7 @@ import VoteManager from "../pages/admin/ecm/VoteManager";
 import BrandManager from "../pages/admin/ecm/BrandManager";
 import InformationManage from "../pages/admin/setting/InformationManage";
 import AttributeManager from "../pages/admin/ecm/AttributeManager";
-
+import WorkSchedulesManager from "../pages/admin/account/WorkSchedulesManager";
 const AdminRoutes = () => {
 
     const { isAuthenticated } = useSelector((state) => state.auth);
@@ -66,7 +66,7 @@ const AdminRoutes = () => {
                         <Route path="ecommerce/vote" element={<VoteManager />} />
                         <Route path="services/manage" element={<ServiceManager />} />
                         <Route path="services/order" element={<ServiceUserManager />} />
-
+                        <Route path="work-schedules" element={<WorkSchedulesManager />} />
                         <Route path="slides" element={<SlideManager />} />
                         <Route path="profile" element={<ProfileManager />} />
                         <Route path="setting/information" element={<InformationManage />} />

@@ -71,13 +71,18 @@ const StaffLayout = ({ isAuthenticated, user, onLogout }) => {
               </Dropdown.Menu>
             </Dropdown>
 
+            {/* 🚀 FIX lỗi vào website */}
             <Nav.Link
-              as={Link}
-              to="/"
-              className={"d-flex align-items-center"}
-              target={"_blank"}
+                as={Link}
+                to="/"
+                onClick={(e) => {
+                    e.preventDefault();
+                    startTransition(() => {
+                        navigate("/");
+                    });
+                }}
             >
-              Vào website <FaInternetExplorer className={"ms-2"} />
+                Vào website <FaInternetExplorer className="ms-2" />
             </Nav.Link>
           </Nav>
           <Nav>
@@ -101,15 +106,16 @@ const StaffLayout = ({ isAuthenticated, user, onLogout }) => {
                   Cập nhật thông tin
                 </Dropdown.Item>
                 <Dropdown.Divider />
+                {/* 🚀 FIX lỗi logout */}
                 <Dropdown.Item
-                  onClick={(e) => {
-                    e.preventDefault();
-                    startTransition(() => {
-                      navigate("/login");
-                    });
-                  }}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        startTransition(() => {
+                            navigate("/login");
+                        });
+                    }}
                 >
-                  Đăng xuất
+                    Đăng xuất
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

@@ -110,6 +110,8 @@ const Product = {
                 perPage: pageSize,
                 currentPage: page,
                 lastPage: Math.ceil(total / pageSize),
+                page_size: pageSize,
+                total_page: Math.ceil(total / pageSize)
             },
         };
     },
