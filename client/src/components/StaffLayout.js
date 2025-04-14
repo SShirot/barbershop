@@ -70,7 +70,16 @@ const StaffLayout = ({ isAuthenticated, user, onLogout }) => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-
+            <Dropdown as={Nav.Item}>
+              <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">
+                Hair Swap
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/staff/hairswap/manage">
+                  Quản lý mẫu ảnh
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             {/* 🚀 FIX lỗi vào website */}
             <Nav.Link
                 as={Link}

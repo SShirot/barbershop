@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Typing from 'react-typing-animation';
 import './ChatBot.css';
 import apiChatbotService from '../api/apiChatbot';
 
 function Chatbot({ onClose }) {
-  const userId = '12345'; // Replace with dynamic user ID if needed
-
   // Ref for the chat body container
   const chatBodyRef = useRef(null);
 
@@ -19,6 +16,7 @@ function Chatbot({ onClose }) {
 
   const [messages, setMessages] = useState(loadMessages);
   const [input, setInput] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Save messages to sessionStorage whenever messages state changes
   useEffect(() => {
@@ -34,21 +32,88 @@ function Chatbot({ onClose }) {
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    console.log('Sending data:', { userId, message: input, chatHistory: messages });
+    console.log('Sending data:', { message: input, chatHistory: messages });
     setMessages((prev) => [...prev, { sender: 'user', text: input }]);
 
     // Clear input immediately
     setInput('');
 
     try {
-      const response = await apiChatbotService.sendMessage(userId, input);
+      const response = await apiChatbotService.sendMessage(input, messages);
       const botReply = response?.data?.reply || 'Sorry, no reply received.';
-      setMessages((prev) => [...prev, { sender: 'bot', text: botReply, animated: true }]);
+      
+      // Check if the response includes product information
+      if (response?.data?.product) {
+        setSelectedProduct(response.data.product);
+        setMessages((prev) => [...prev, { 
+          sender: 'bot', 
+          text: botReply, 
+          animated: false,
+          product: response.data.product 
+        }]);
+      } else {
+        setSelectedProduct(null);
+        setMessages((prev) => [...prev, { sender: 'bot', text: botReply, animated: false }]);
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages((prev) => [
         ...prev,
-        { sender: 'bot', text: 'Sorry, something went wrong.', animated: true },
+        { sender: 'bot', text: 'Sorry, something went wrong.', animated: false },
+      ]);
+    }
+  };
+
+  // Function to handle product recommendation request
+  const handleProductRecommendation = async (preferences) => {
+    try {
+      const response = await apiChatbotService.getProductRecommendations(preferences);
+      const botReply = response?.data?.reply || 'Sorry, no recommendations available.';
+      
+      if (response?.data?.product) {
+        setSelectedProduct(response.data.product);
+        setMessages((prev) => [...prev, { 
+          sender: 'bot', 
+          text: botReply, 
+          animated: false,
+          product: response.data.product 
+        }]);
+      } else {
+        setSelectedProduct(null);
+        setMessages((prev) => [...prev, { sender: 'bot', text: botReply, animated: false }]);
+      }
+    } catch (error) {
+      console.error('Error getting product recommendations:', error);
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'Sorry, I could not find any recommendations.', animated: false },
+      ]);
+    }
+  };
+
+  // Function to handle product details request
+  const handleProductDetails = async (productName) => {
+    try {
+      const response = await apiChatbotService.getProductDetails(productName);
+      const botReply = response?.data?.reply || 'Sorry, no product details available.';
+      
+      if (response?.data?.product) {
+        setSelectedProduct(response.data.product);
+        setMessages((prev) => [...prev, { 
+          sender: 'bot', 
+          text: botReply, 
+          animated: false,
+          product: response.data.product 
+        }]);
+      } else {
+        setSelectedProduct(null);
+        setMessages((prev) => [...prev, { sender: 'bot', text: botReply, animated: false }]);
+      }
+    } catch (error) {
+      console.error('Error getting product details:', error);
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'bot', text: 'Sorry, I could not find details for that product.', animated: false },
       ]);
     }
   };
@@ -64,10 +129,29 @@ function Chatbot({ onClose }) {
       <div className="chatbot-body" ref={chatBodyRef}>
         {messages.map((msg, idx) => (
           <div key={idx} className={`message-bubble ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}>
-            {msg.sender === 'bot' && msg.animated ? (
-              <TypingEffect text={msg.text} />
-            ) : (
-              <div dangerouslySetInnerHTML={{ __html: formatBotResponse(msg.text) }} />
+            <div dangerouslySetInnerHTML={{ __html: formatBotResponse(msg.text) }} />
+            
+            {/* Display product information if available */}
+            {msg.product && (
+              <div className="product-card">
+                {msg.product.avatar && (
+                  <div className="product-image">
+                    <img src={msg.product.avatar} alt={msg.product.name} />
+                  </div>
+                )}
+                <div className="product-info">
+                  <h4>{msg.product.name}</h4>
+                  <p className="product-price">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(msg.product.price)}
+                  </p>
+                  <button 
+                    className="view-product-btn"
+                    onClick={() => window.location.href = `/products/${msg.product.id}`}
+                  >
+                    View Product
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         ))}
@@ -84,15 +168,6 @@ function Chatbot({ onClose }) {
         <button onClick={handleSendMessage}>Send</button>
       </div>
     </div>
-  );
-}
-
-// TypingEffect component using react-typing-animation
-function TypingEffect({ text }) {
-  return (
-    <Typing speed={0}>
-      <span>{text}</span>
-    </Typing>
   );
 }
 

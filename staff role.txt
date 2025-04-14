@@ -1,0 +1,17 @@
+staff role 
+
+models -> add role staff
+controllers -> create api for role staff 
+thêm routes trong routes folder
+
+
+
+sản phẩm de mark hết hang nhưng vẫn dat hang được
+phần chỉnh sửa sản phẩm của admin vẫn chưa published duoc sản phẩm
+sau khi dat hang thành công thì tông số sản phẩm vẫn chưa trừ số lượng dat hang
+dat lịch vẫn chưa hoàn thành
+chưa tìm kiếm theo tag duoc ( chỉ mới có thể tìm kiếm theo categories)
+cần clean db stuffs
+
+
+
