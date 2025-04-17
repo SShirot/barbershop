@@ -91,10 +91,10 @@ const ServiceManager = () => {
                 <Col xl={12}>
                     <Breadcrumb>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/staff">Home</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/staff/services">Dịch vụ</Nav.Link>
+                            <Nav.Link as={Link} to="/staff/services/manage">Dịch vụ</Nav.Link>
                         </Nav.Item>
                         <Breadcrumb.Item active>Index</Breadcrumb.Item>
                     </Breadcrumb>

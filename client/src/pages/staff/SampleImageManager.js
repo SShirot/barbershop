@@ -5,6 +5,7 @@ import sampleImageService from '../../api/sampleImageService';
 import SampleImageTable from './components/hairswap/SampleImageTable';
 import SampleImageFormModal from './components/hairswap/SampleImageFormModal';
 import SampleImageDeleteModal from './components/hairswap/SampleImageDeleteModal';
+import {FaPlusCircle} from "react-icons/fa";
 
 const SampleImageManager = () => {
     const [sampleImages, setSampleImages] = useState([]);
@@ -16,11 +17,11 @@ const SampleImageManager = () => {
     const [loading, setLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
+    
     const fetchSampleImagesWithParams = async (params) => {
         try {
-            const response = await sampleImageService.getLists(params);
-            setSampleImages(response.data.sampleImages);
+            const response = await sampleImageService.getList(params);
+            setSampleImages(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
             console.error("Error fetching sample images:", error);
@@ -29,17 +30,16 @@ const SampleImageManager = () => {
 
     useEffect(() => {
         const params = Object.fromEntries([...searchParams]);
-        fetchSampleImagesWithParams({ ...params, page: params.page || 1 });
+        fetchSampleImagesWithParams({ ...params, page: params.page || 1, page_size: params.page_size || 10 });
     }, [searchParams]);
-
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
     };
-
-    const handleAddSampleImage = async (values) => {
+    const handleAddSampleImage = async (hairData) => {
         try {
-            const response = await sampleImageService.create(values);
-            setSampleImages([...sampleImages, response.data.sampleImage]);
+            const response = await sampleImageService.add(hairData);
+            const newImage = response.data.data || response.data.sampleImage || response.data;
+            setSampleImages([...sampleImages, newImage]);
             setShowSampleImageModal(false);
         } catch (error) {
             console.error("Error adding sample image:", error);
@@ -47,8 +47,18 @@ const SampleImageManager = () => {
     };
 
     const handleUpdateSampleImage = async (values) => {
-        try {   
-            const response = await sampleImageService.update(editingSampleImage.id, values);
+        try {
+            let imageUrl = values.image;
+            // Nếu là file mới (user vừa chọn)
+            if (values.image instanceof File) {
+                const uploadRes = await import('../../api/apiUpload').then(m => m.default.uploadImage(values.image));
+                imageUrl = uploadRes.data.imageUrl;
+            }
+            const hairData = {
+                ...values,
+                avatar: imageUrl,
+            };
+            const response = await sampleImageService.update(editingSampleImage.id, hairData);
             setSampleImages(sampleImages.map(image => 
                 image.id === editingSampleImage.id ? response.data.sampleImage : image
             ));
@@ -57,6 +67,7 @@ const SampleImageManager = () => {
             console.error("Error updating sample image:", error);
         }
     };
+
 
     const handleDeleteSampleImage = async () => {
         try {
@@ -77,18 +88,20 @@ const SampleImageManager = () => {
         <Container>
             <Row>
                 <Col>
-                    <h1>Sample Image Manager</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item href="/staff">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/staff/sample-images">Sample Images</Breadcrumb.Item>
+                        <Breadcrumb.Item href="/staff/hairswap/manage">Sample Images</Breadcrumb.Item>
                     </Breadcrumb>
                 </Col>
             </Row>
-            <Row>
-                <Col>
-                    <Button variant="primary" onClick={() => openSampleImageModal()}>Add Sample Image</Button>
-                </Col>
-            </Row>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h2>Quản lý mẫu tóc</h2>
+                <div>
+                    <Button variant="primary" size={'sm'} onClick={() => openSampleImageModal(null)}>
+                                    Thêm mới <FaPlusCircle className={'mx-1'} />
+                    </Button>
+                </div>
+            </div>
 
             <Row>
                 <Col>

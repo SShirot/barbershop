@@ -20,7 +20,6 @@ router.use('/votes', require('./guest/vote'));
 router.use('/brand', require('./guest/brand'));
 router.use('/payment-methods', require('./guest/payment_methods'));
 router.use('/work-preferences', require('./guest/work_preferences'));
-
 // router.use('/guest', require('./guest/guest'));
 router.get(
     '/me',

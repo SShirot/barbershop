@@ -8,19 +8,33 @@ const SampleImageTable = ({ sampleImages, openSampleImageModal, setSampleImageTo
             <thead>
                 <tr>
                     <th>Tên mẫu ảnh</th>
-                    <th>Mô tả</th>
+                    <th>Giới tính</th>
                     <th>Ảnh mẫu</th>
-                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                {sampleImages.map((image) => (
-                    <tr key={image.id}>
-                        <td>{image.name}</td>
-                        <td>{image.description}</td>
-                        
-                    </tr>
-                ))}
+            {sampleImages.map((image, index) => (
+    <tr key={index}>
+      <td>{image.name || 'Không có tên'}</td>
+      <td>{image.description || 'Không có mô tả'}</td>
+      <td>
+        {image.avatar && (
+          <img src={image.avatar} alt="sample" width="100" />
+        )}
+      </td>
+      <td>
+        <Button variant="primary" onClick={() => openSampleImageModal(image)}>
+          <FaEdit />
+        </Button>{' '}
+        <Button variant="danger" onClick={() => {
+          setSampleImageToDelete(image);
+          setShowDeleteModal(true);
+        }}>
+          <FaTrash />
+        </Button>
+      </td>
+    </tr>
+  ))}
             </tbody>
         </Table>
     );

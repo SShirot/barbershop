@@ -3,11 +3,12 @@ import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { FaSave, FaPlus } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { formatCurrencyInput } from '../../../../helpers/formatters';
+import apiUpload from '../../../../api/apiUpload'; // Đảm bảo đã import đúng
 
 const SampleImageFormModal = ({ showSampleImageModal, setShowSampleImageModal, editingSampleImage, handleAddSampleImage, handleUpdateSampleImage, loading }) => {
     const [formData, setFormData] = useState({
         name: '',
-        description: '',
+        gender: '',
         image: null,
     });
 
@@ -23,37 +24,47 @@ const SampleImageFormModal = ({ showSampleImageModal, setShowSampleImageModal, e
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        setFormData({ ...formData, [name]: value });
         if (files && files[0]) {
+            setFormData({
+                ...formData,
+                image: value, // fakepath for display
+                imageFile: files[0], // real file for upload
+            });
             setPreviewImage(URL.createObjectURL(files[0]));
+        } else {
+            setFormData({ ...formData, [name]: value });
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsProcessing(true);
-
         try {
-            const formDataToSubmit = new FormData();        
-            formDataToSubmit.append('name', formData.name);
-            formDataToSubmit.append('description', formData.description);
-            if (formData.image) {
-                formDataToSubmit.append('image', formData.image);
+            let imageUrl = formData.image;
+            // Nếu có file thực, upload lên server
+            if (formData.imageFile instanceof File) {
+                const uploadRes = await apiUpload.uploadImage(formData.imageFile);
+                // Tùy backend trả về, có thể là uploadRes.data hoặc uploadRes.data.data
+                imageUrl = uploadRes.data.data || uploadRes.data.imageUrl || uploadRes.data;
             }
-
+            const hairData = {
+                name: formData.name,
+                gender: formData.gender,
+                avatar: imageUrl,
+            };
             if (editingSampleImage) {
-                await handleUpdateSampleImage(editingSampleImage.id, formDataToSubmit);
+                await handleUpdateSampleImage(editingSampleImage.id, hairData);
             } else {
-                await handleAddSampleImage(formDataToSubmit);
+                await handleAddSampleImage(hairData);
             }
-
             setShowSampleImageModal(false);
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
             setIsProcessing(false);
-        }   
+        }
     };
+
 
     return (
         <Modal show={showSampleImageModal} onHide={() => setShowSampleImageModal(false)}>
@@ -68,37 +79,53 @@ const SampleImageFormModal = ({ showSampleImageModal, setShowSampleImageModal, e
                             type="text"
                             name="name"
                             value={formData.name}
+                            placeholder='Nhập tên mẫu ảnh'
                             onChange={handleChange}
                             required
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Mô tả</Form.Label>
-                        <Form.Control 
-                            as="textarea"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                        />
+                        <Form.Label>Giới tính</Form.Label>
+                        <div>
+                            <Form.Check 
+                                inline
+                                label="Nam"
+                                name="gender"
+                                type="radio"
+                                value="male"
+                                checked={formData.gender === 'male'}
+                                onChange={handleChange}
+                            />
+                            <Form.Check 
+                                inline
+                                label="Nữ"
+                                name="gender"
+                                type="radio"
+                                value="female"
+                                checked={formData.gender === 'female'}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Ảnh mẫu</Form.Label>
                         <Form.Control 
                             type="file"
                             name="image"
+
                             onChange={handleChange}
                         />
                     </Form.Group>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowSampleImageModal(false)}>
+                        Hủy bỏ
+                    </Button>
+                    <Button variant="primary" type="submit" disabled={isProcessing}>
+                        {isProcessing ? 'Đang xử lý...' : 'Lưu'}
+                    </Button>
+                    </Modal.Footer>
                 </Form>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowSampleImageModal(false)}>
-                    Hủy bỏ
-                </Button>
-                <Button variant="primary" type="submit" disabled={isProcessing}>
-                    {isProcessing ? 'Đang xử lý...' : 'Lưu'}
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
 };
