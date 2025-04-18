@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Form, Spinner, Row, Col, Card, Tabs, Tab } from "react-bootstrap";
 import axios from "axios";
+import sampleImageService from "../../api/sampleImageService";
 
 const HairSwapApp = () => {
   const [idImage, setIdImage] = useState(null); // Ảnh mặt đã chọn
@@ -10,26 +11,8 @@ const HairSwapApp = () => {
   const [resultImage, setResultImage] = useState(null); // Kết quả đổi tóc
   const [isProcessing, setIsProcessing] = useState(false); // Trạng thái xử lý
   const [gender, setGender] = useState(null); // Giới tính đã chọn
-  const [activeTab, setActiveTab] = useState("upload"); // Tab đang active
-
-  // Dữ liệu mẫu tóc (sẽ được thay thế bằng dữ liệu từ API sau)
-  const [maleHairStyles, setMaleHairStyles] = useState([
-    { id: 1, name: "Kiểu tóc nam 1", image: "https://via.placeholder.com/150?text=Male+Hair+1" },
-    { id: 2, name: "Kiểu tóc nam 2", image: "https://via.placeholder.com/150?text=Male+Hair+2" },
-    { id: 3, name: "Kiểu tóc nam 3", image: "https://via.placeholder.com/150?text=Male+Hair+3" },
-    { id: 4, name: "Kiểu tóc nam 4", image: "https://via.placeholder.com/150?text=Male+Hair+4" },
-    { id: 5, name: "Kiểu tóc nam 5", image: "https://via.placeholder.com/150?text=Male+Hair+5" },
-    { id: 6, name: "Kiểu tóc nam 6", image: "https://via.placeholder.com/150?text=Male+Hair+6" },
-  ]);
-
-  const [femaleHairStyles, setFemaleHairStyles] = useState([
-    { id: 1, name: "Kiểu tóc nữ 1", image: "https://via.placeholder.com/150?text=Female+Hair+1" },
-    { id: 2, name: "Kiểu tóc nữ 2", image: "https://via.placeholder.com/150?text=Female+Hair+2" },
-    { id: 3, name: "Kiểu tóc nữ 3", image: "https://via.placeholder.com/150?text=Female+Hair+3" },
-    { id: 4, name: "Kiểu tóc nữ 4", image: "https://via.placeholder.com/150?text=Female+Hair+4" },
-    { id: 5, name: "Kiểu tóc nữ 5", image: "https://via.placeholder.com/150?text=Female+Hair+5" },
-    { id: 6, name: "Kiểu tóc nữ 6", image: "https://via.placeholder.com/150?text=Female+Hair+6" },
-  ]);
+  const [hairStyles, setHairStyles] = useState([]); // Danh sách mẫu tóc
+  const [loading, setLoading] = useState(false); // Trạng thái loading
 
   // Giải phóng bộ nhớ URL khi component unmount
   useEffect(() => {
@@ -38,6 +21,28 @@ const HairSwapApp = () => {
       if (refPreview) URL.revokeObjectURL(refPreview);
     };
   }, [idPreview, refPreview]);
+
+  // Lấy danh sách mẫu tóc khi giới tính thay đổi
+  useEffect(() => {
+    const fetchHairStyles = async () => {
+      if (!gender) return;
+      
+      setLoading(true);
+      try {
+        const response = await sampleImageService.getHairStyles(gender);
+        const styles = Array.isArray(response.data?.data) ? response.data.data : [];
+        setHairStyles(styles);
+      } catch (error) {
+        console.error("Error fetching hair styles:", error);
+        alert("Không thể tải danh sách mẫu tóc. Vui lòng thử lại sau!");
+        setHairStyles([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHairStyles();
+  }, [gender]);
 
   // Xử lý khi chọn ảnh mặt
   const handleIdImageChange = (e) => {
@@ -50,19 +55,8 @@ const HairSwapApp = () => {
 
   // Xử lý khi chọn ảnh tóc từ gallery
   const handleSelectHairStyle = (hairStyle) => {
-    // Trong thực tế, chúng ta sẽ fetch ảnh từ URL và chuyển thành File object
-    // Ở đây chúng ta sẽ giả lập bằng cách tạo một URL mới
-    setRefImage(hairStyle.image);
-    setRefPreview(hairStyle.image);
-  };
-
-  // Xử lý khi chọn ảnh tóc từ upload
-  const handleRefImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setRefImage(file);
-      setRefPreview(URL.createObjectURL(file));
-    }
+    setRefImage(hairStyle.avatar);
+    setRefPreview(hairStyle.avatar);
   };
 
   // Gửi API đổi tóc
@@ -97,7 +91,7 @@ const HairSwapApp = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          responseType: "blob", // Đảm bảo nhận file ảnh dạng blob
+          responseType: "blob",
         }
       );
 
@@ -112,11 +106,6 @@ const HairSwapApp = () => {
     }
   };
 
-  // Xử lý khi chọn giới tính
-  const handleGenderSelect = (selectedGender) => {
-    setGender(selectedGender);
-  };
-
   return (
     <Container className="py-5">
       <h2 className="mb-4">Hair Swap Application</h2>
@@ -127,13 +116,13 @@ const HairSwapApp = () => {
         <div className="d-flex gap-3">
           <Button 
             variant={gender === 'male' ? 'primary' : 'outline-primary'} 
-            onClick={() => handleGenderSelect('male')}
+            onClick={() => setGender('male')}
           >
             Nam
           </Button>
           <Button 
             variant={gender === 'female' ? 'primary' : 'outline-primary'} 
-            onClick={() => handleGenderSelect('female')}
+            onClick={() => setGender('female')}
           >
             Nữ
           </Button>
@@ -142,7 +131,7 @@ const HairSwapApp = () => {
 
       <Form>
         <Form.Group controlId="formIdImage" className="mb-3">
-          <Form.Label>Input your face</Form.Label>
+          <Form.Label>Upload ảnh mặt của bạn</Form.Label>
           <Form.Control
             type="file"
             accept="image/*"
@@ -150,85 +139,92 @@ const HairSwapApp = () => {
           />
         </Form.Group>
 
-        {/* Tabs để chọn giữa upload ảnh tóc hoặc chọn từ gallery */}
-        <Tabs
-          activeKey={activeTab}
-          onSelect={(k) => setActiveTab(k)}
-          className="mb-3"
-        >
-          <Tab eventKey="upload" title="Upload ảnh tóc">
-            <Form.Group controlId="formRefImage" className="mb-3">
-              <Form.Label>Input your expected hair</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={handleRefImageChange}
-              />
-            </Form.Group>
-          </Tab>
-          <Tab eventKey="gallery" title="Chọn từ gallery" disabled={!gender}>
-            {gender && (
-              <div className="mb-3">
-                <h5>Chọn kiểu tóc {gender === 'male' ? 'nam' : 'nữ'}:</h5>
-                <Row>
-                  {(gender === 'male' ? maleHairStyles : femaleHairStyles).map((style) => (
-                    <Col xs={6} sm={4} md={3} lg={2} key={style.id} className="mb-3">
-                      <Card 
-                        className="h-100 cursor-pointer" 
-                        onClick={() => handleSelectHairStyle(style)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Card.Img variant="top" src={style.image} />
-                        <Card.Body className="p-2">
-                          <Card.Title className="small text-center">{style.name}</Card.Title>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
+        {/* Hiển thị thư viện ảnh tóc */}
+        {gender && (
+          <div className="mb-3">
+            <h5>Chọn kiểu tóc {gender === 'male' ? 'nam' : 'nữ'}:</h5>
+            {loading ? (
+              <div className="text-center">
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
               </div>
-            )}
-            {!gender && (
+            ) : hairStyles.length === 0 ? (
               <div className="alert alert-info">
-                Vui lòng chọn giới tính trước khi xem các mẫu tóc
+                Không có mẫu tóc nào cho giới tính {gender === 'male' ? 'nam' : 'nữ'}
               </div>
+            ) : (
+              <Row>
+                {hairStyles.map((style) => (
+                  <Col xs={6} sm={4} md={3} lg={2} key={style.id} className="mb-3">
+                    <Card 
+                      className="h-100 cursor-pointer" 
+                      onClick={() => handleSelectHairStyle(style)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <Card.Img 
+                        variant="top" 
+                        src={style.avatar} 
+                        style={{ height: '150px', objectFit: 'cover' }}
+                        onError={(e) => {
+                          console.log("Image load error for:", style.avatar);
+                          e.target.onerror = null; // Prevent infinite loop
+                          e.target.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23999%3Bfont-weight%3Anormal%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23373940%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22108.5%22%20y%3D%2296.3%22%3ENo Image%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+                        }}
+                      />
+                      <Card.Body className="p-2">
+                        <Card.Title className="small text-center">{style.name}</Card.Title>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
             )}
-          </Tab>
-        </Tabs>
+          </div>
+        )}
 
         {(idPreview || refPreview) && (
           <div className="mb-4">
             <h5>Preview:</h5>
             <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
               {idPreview && (
-                <img
-                  src={idPreview}
-                  alt="Face Preview"
-                  style={{
-                    maxWidth: "45%",
-                    height: "auto",
-                    border: "1px solid #ddd",
-                  }}
-                />
+                <div>
+                  <p>Ảnh mặt của bạn:</p>
+                  <img
+                    src={idPreview}
+                    alt="Face Preview"
+                    style={{
+                      width: "300px",
+                      height: "300px",
+                      objectFit: "cover",
+                      border: "1px solid #ddd",
+                    }}
+                  />
+                </div>
               )}
               {refPreview && (
-                <img
-                  src={refPreview}
-                  alt="Hair Preview"
-                  style={{
-                    maxWidth: "45%",
-                    height: "auto",
-                    border: "1px solid #ddd",
-                  }}
-                />
+                <div>
+                  <p>Kiểu tóc đã chọn:</p>
+                  <img
+                    src={refPreview}
+                    alt="Hair Preview"
+                    style={{
+                      width: "300px",
+                      height: "300px",
+                      objectFit: "cover",
+                      border: "1px solid #ddd",
+                    }}
+                  />
+                </div>
               )}
             </div>
           </div>
         )}
+
         <Button
           variant="primary"
           onClick={handleHairSwap}
-          disabled={isProcessing}
+          disabled={isProcessing || !idImage || !refImage}
         >
           {isProcessing ? (
             <>
@@ -239,16 +235,17 @@ const HairSwapApp = () => {
                 role="status"
                 aria-hidden="true"
               />{" "}
-              Processing...
+              Đang xử lý...
             </>
           ) : (
-            "Swap Hair"
+            "Thử kiểu tóc mới"
           )}
         </Button>
       </Form>
+
       {resultImage && (
         <div className="mt-4">
-          <h5>Result:</h5>
+          <h5>Kết quả:</h5>
           <img
             src={resultImage}
             alt="Result"

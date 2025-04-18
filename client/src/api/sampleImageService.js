@@ -15,8 +15,9 @@ const sampleImageService = {
         const query = new URLSearchParams(params).toString();
         return apiHelper.get(`/staff/hairswap?${query}`);
     },
-
-
+    getHairStyles: (gender) => {
+        return apiHelper.get(`/staff/hairswap/gender/${gender}`);
+    }
 }
 
 export default sampleImageService;

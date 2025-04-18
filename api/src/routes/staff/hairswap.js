@@ -12,10 +12,10 @@ router.get('/', auth, hairswapController.getAll);
 //  Lấy kiểu tóc theo ID
 router.get('/:id', auth, hairswapController.getById);
 
-// //  Lấy kiểu tóc theo giới tính
-// router.get('/gender/:gender', auth, hairswapController.getByGender);
+//  Lấy kiểu tóc theo giới tính
+router.get('/gender/:gender', auth, hairswapController.getByGender);
 
-// //  Lấy kiểu tóc theo giới tính + ID
+//  Lấy kiểu tóc theo giới tính + ID
 // router.get('/gender/:gender/id/:id', auth, hairswapController.getByGenderAndId);
 
 //  Cập nhật kiểu tóc theo ID

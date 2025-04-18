@@ -34,7 +34,15 @@ exports.getById = async (req, res) => {
         return errorResponse(res, err.message);
     }
 };
-
+exports.getByGender = async (req, res) => {
+    try {
+        const { gender } = req.params;
+        const result = await HairswapServices.getByGender(gender);
+        return successResponse(res, { data: result }, 'Hair style found');
+    } catch (err) {
+        return errorResponse(res, err.message);
+    }
+}
 exports.create = async (req, res) => {
     try {
         const data = req.body;

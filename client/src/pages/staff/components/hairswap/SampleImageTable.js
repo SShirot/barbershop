@@ -16,7 +16,7 @@ const SampleImageTable = ({ sampleImages, openSampleImageModal, setSampleImageTo
             {sampleImages.map((image, index) => (
     <tr key={index}>
       <td>{image.name || 'Không có tên'}</td>
-      <td>{image.description || 'Không có mô tả'}</td>
+      <td>{image.gender || 'Không có mô tả'}</td>
       <td>
         {image.avatar && (
           <img src={image.avatar} alt="sample" width="100" />
