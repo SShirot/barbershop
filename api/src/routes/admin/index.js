@@ -18,5 +18,8 @@ router.use('/product-labels', require('./productLabel'));
 router.use('/slides', require('./slide'));
 router.use('/dashboard', require('./dashboard'));
 router.use('/work-preferences', require('./work_preferences'));
+router.use('/shifts', require('./shifts'));
+router.use('/work-schedule', require('./workSchedule'));
+router.use('/assigned-services', require('./assignedServices'));
 
 module.exports = router;

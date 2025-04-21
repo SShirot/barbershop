@@ -15,6 +15,9 @@ import InformationManage from "../pages/staff/setting/InformationManage";
 import AttributeManager from "../pages/staff/ecm/AttributeManager";
 import ProfileManager from "../pages/staff/account/ProfileManager";
 import SampleImageManager from "../pages/staff/SampleImageManager";
+import RegisterSchedule from '../components/staff/calendar/RegisterSchedule';
+import ViewSchedule from '../components/staff/calendar/ViewSchedule';
+
 const StaffRoutes = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(true);
@@ -65,6 +68,9 @@ const StaffRoutes = () => {
             <Route path="services/order" element={<ServiceUserManager />} />
             <Route path="setting/information" element={<InformationManage />} />
             <Route path="hairswap/manage" element={<SampleImageManager />} />
+            <Route path="/services/order" element={<ServiceUserManager />} />
+            <Route path="/calendar/register" element={<RegisterSchedule />} />
+            <Route path="/calendar/view" element={<ViewSchedule />} />
             {/* Add other Staff-only routes here */}
           </>
         )}

@@ -19,31 +19,11 @@ import VoteManager from "../pages/admin/ecm/VoteManager";
 import BrandManager from "../pages/admin/ecm/BrandManager";
 import InformationManage from "../pages/admin/setting/InformationManage";
 import AttributeManager from "../pages/admin/ecm/AttributeManager";
-import WorkSchedulesManager from "../pages/admin/account/WorkSchedulesManager";
+import CalendarView from '../pages/admin/calendar/CalendarView';
+import StaffRegisterView from '../pages/admin/calendar/StaffRegisterView';
+
 const AdminRoutes = () => {
-
-    const { isAuthenticated } = useSelector((state) => state.auth);
-    const [loading, setLoading] = useState(true);
-
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    useEffect(() => {
-        if(user) setLoading(false);
-    }, [user]);
-
-    if (loading) {
-        return <div>Đang tải trang...</div>; // Show a loading indicator while waiting for auth state
-    }
-
-    if (!user) {
-        return null; // Trả về null nếu không phải là customer
-        // return <Navigate to="/login" />; // Redirect to login if not authenticated
-    }
-
-    console.info("===========[AdminLayout] ===========[user] : ",user);
-    if(user && user.user_type !== "ADMIN") {
-        return <Navigate to="/unauthorized" />;
-    }
+    const { isAuthenticated, user } = useSelector((state) => state.auth);
 
     return (
         <Routes>
@@ -66,15 +46,16 @@ const AdminRoutes = () => {
                         <Route path="ecommerce/vote" element={<VoteManager />} />
                         <Route path="services/manage" element={<ServiceManager />} />
                         <Route path="services/order" element={<ServiceUserManager />} />
-                        <Route path="work-schedules" element={<WorkSchedulesManager />} />
                         <Route path="slides" element={<SlideManager />} />
                         <Route path="profile" element={<ProfileManager />} />
                         <Route path="setting/information" element={<InformationManage />} />
+                        <Route path="calendar/manage" element={<CalendarView />} />
+                        <Route path="calendar/staff-register" element={<StaffRegisterView />} />
                         {/* Add other admin-only routes here */}
                     </>
                 )}
                 <Route index element={<AdminDashboard />} />
-                {/* Staff trying to access admin-only routes should be redirected */}
+                
                 {/*{user.role === 'staff' && (*/}
                 {/*    <Route path="*" element={<Navigate to="/unauthorized" />} />*/}
                 {/*)}*/}

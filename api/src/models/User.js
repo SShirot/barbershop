@@ -1,7 +1,21 @@
 const db = require('./../config/dbMysql');
 
+const USER_STATUS = {
+    DISABLED: 0,
+    ACTIVE: 1,
+    VERIFIED: 2
+};
+
+const USER_TYPE = {
+    USER: 'USER',
+    ADMIN: 'ADMIN',
+    STAFF: 'STAFF'
+};
+
 const User = {
     tableName: 'users',  // Tên bảng
+    STATUS: USER_STATUS,
+    TYPE: USER_TYPE,
 
     columns: {
         id: 'bigint(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -20,51 +34,34 @@ const User = {
         updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     },
 
-    getAll: async (page = 1, pageSize = 10, name = null, user_type = null) => {
-        const offset = (page - 1) * pageSize;
-        let query = `SELECT * FROM ${User.tableName}`;
-        let countQuery = `SELECT COUNT(*) as total FROM ${User.tableName}`;
+    getAll: async (params = {}) => {
+        let query = `SELECT * FROM ${User.tableName} WHERE 1=1`;
         const queryParams = [];
-        const countParams = [];
 
-        const conditions = [];
-        if (name) {
-            conditions.push('name LIKE ?');
-            queryParams.push(`%${name}%`);
-            countParams.push(`%${name}%`);
-        }
-        if (user_type) {
-            conditions.push('user_type LIKE ?');
-            queryParams.push(`%${user_type}%`);
-            countParams.push(`%${user_type}%`);
+        if (params.name) {
+            query += ' AND name LIKE ?';
+            queryParams.push(`%${params.name}%`);
         }
 
-        if (conditions.length > 0) {
-            const whereClause = ` WHERE ${conditions.join(' AND ')}`;
-            query += whereClause;
-            countQuery += whereClause;
+        if (params.email) {
+            query += ' AND email LIKE ?';
+            queryParams.push(`%${params.email}%`);
         }
 
-        query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-        queryParams.push(pageSize, offset);
+        if (params.user_type) {
+            query += ' AND user_type = ?';
+            queryParams.push(params.user_type);
+        }
+
+        if (params.status) {
+            query += ' AND status = ?';
+            queryParams.push(params.status);
+        }
+
+        query += ' ORDER BY created_at DESC';
 
         const [rows] = await db.query(query, queryParams);
-        const [countResult] = await db.query(countQuery, countParams);
-        const total = countResult[0].total;
-
-        return {
-            data: rows,
-            meta: {
-                total,
-                perPage: pageSize,
-                page_size: pageSize,
-                currentPage: page,
-                page: page,
-                lastPage: Math.ceil(total / pageSize),
-                total_page: Math.ceil(total / pageSize),
-            }
-        };
-
+        return rows;
     },
 
     // Tạo phương thức findOne để tìm người dùng theo email
@@ -117,6 +114,52 @@ const User = {
         const [rows] = await db.query(query, [id]);
         return rows?.length > 0 ? rows[0] : null;
     },
+    // Thêm hàm mới để lấy danh sách nhân viên
+    getStaffList: async () => {
+        try {
+            console.log('=== User.getStaffList Model Start ===');
+            
+            const query = `
+                SELECT id, name, email, phone, avatar, status, user_type 
+                FROM ${User.tableName} 
+                WHERE user_type = ? 
+                AND status IN (?, ?)
+                ORDER BY name ASC
+            `;
+            
+            const params = [
+                USER_TYPE.STAFF,
+                USER_STATUS.ACTIVE,
+                USER_STATUS.VERIFIED
+            ];
+            
+            console.log('1. Executing query:', query);
+            console.log('2. With params:', params);
+            
+            const [rows] = await db.query(query, params);
+            console.log('3. Query executed successfully');
+            console.log('4. Found staff members:', rows?.length);
+            
+            if (rows?.length === 0) {
+                console.log('5. Warning: No active or verified staff found');
+            }
+            
+            // Map status to readable format
+            const staffList = rows.map(staff => ({
+                ...staff,
+                statusText: staff.status === USER_STATUS.ACTIVE ? 'Active' : 
+                           staff.status === USER_STATUS.VERIFIED ? 'Verified' : 
+                           staff.status === USER_STATUS.DISABLED ? 'Disabled' : 'Unknown'
+            }));
+            
+            console.log('=== User.getStaffList Model End ===');
+            return staffList;
+        } catch (error) {
+            console.error('Error in User.getStaffList:', error);
+            console.error('Error stack:', error.stack);
+            throw error;
+        }
+    }
 };
 
 module.exports = User;

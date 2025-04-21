@@ -71,6 +71,19 @@ const StaffLayout = ({ isAuthenticated, user, onLogout }) => {
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown as={Nav.Item}>
+              <Dropdown.Toggle as={Nav.Link} id="dropdown-schedule">
+                Lịch làm việc
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/staff/calendar/register">
+                  Đăng ký làm việc
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/staff/calendar/view">
+                  Xem lịch làm việc
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown as={Nav.Item}>
               <Dropdown.Toggle as={Nav.Link} id="dropdown-ecm">
                 Hair Swap
               </Dropdown.Toggle>

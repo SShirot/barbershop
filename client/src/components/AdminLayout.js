@@ -55,7 +55,13 @@ const AdminLayout = ({ isAuthenticated, user, onLogout }) => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <Nav.Link as={Link} to="/admin/work-schedules">Lịch làm việc</Nav.Link>
+                        <Dropdown as={Nav.Item}>
+                            <Dropdown.Toggle as={Nav.Link} id="dropdown-schedule">Lịch làm việc</Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={Link} to="/admin/calendar/staff-register">NV đăng ký lịch</Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/admin/calendar/manage">QL lịch làm việc</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
 
                         {/* 🚀 FIX lỗi vào website */}
                         <Nav.Link

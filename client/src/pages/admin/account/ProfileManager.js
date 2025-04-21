@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Breadcrumb, Nav, Form, Spinner, Tab, Tabs } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import userService from '../../../api/userService';
-import apiWorkPreferencesService from '../../../api/apiWorkPreferencesService';
 import apiUpload from "../../../api/apiUpload";
 import { toast } from 'react-toastify';
 
@@ -11,14 +10,6 @@ const ProfileManager = () => {
     const [loading, setLoading] = useState(true);
     const [avatar, setAvatar] = useState(null);
     const [previewAvatar, setPreviewAvatar] = useState(null);
-    const [workPreferences, setWorkPreferences] = useState({
-        shift_morning: false,
-        shift_afternoon: false,
-        shift_night: false,
-        full_week: false,
-        off_saturday: false,
-        off_sunday: false
-    });
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -28,15 +19,8 @@ const ProfileManager = () => {
                 const userResponse = await userService.getProfile();
                 setUser(userResponse.data);
                 setPreviewAvatar(userResponse.data.avatar);
-
-                // Lấy nguyện vọng làm việc
-                const workPreferencesResponse = await apiWorkPreferencesService.findByUser();
-                if (workPreferencesResponse?.data?.data) {
-                    console.log("============= ", workPreferencesResponse.data?.data);
-                    setWorkPreferences(workPreferencesResponse.data?.data);
-                }
             } catch (error) {
-                console.error("Error fetching user data or work preferences:", error);
+                console.error("Error fetching user data:", error);
             } finally {
                 setLoading(false);
             }
@@ -86,167 +70,92 @@ const ProfileManager = () => {
         }
     };
 
-    const toggleWorkPreference = (name) => {
-        setWorkPreferences((prevPreferences) => ({
-            ...prevPreferences,
-            [name]: !prevPreferences[name]
-        }));
-    };
-
-    const handleSaveWorkPreferences = async () => {
-        try {
-            setLoading(true);
-            console.info("===========[] ===========[workPreferences] : ",workPreferences);
-            await apiWorkPreferencesService.createOrUpdate(workPreferences);
-            toast.success("Cập nhật nguyện vọng thành công!");
-        } catch (error) {
-            console.error("Error updating work preferences:", error);
-            toast.error("Cập nhật nguyện vọng thất bại!");
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (loading) {
         return <Spinner animation="border" />;
     }
 
     return (
-        <Container>
-            <Row className="gutters mt-3">
-                <Col xl={12}>
-                    <Breadcrumb>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/admin/user">Tài khoản</Nav.Link>
-                        </Nav.Item>
-                        <Breadcrumb.Item active>Index</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Col>
-            </Row>
+        <Container fluid>
+            <Breadcrumb>
+                <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/admin" }}>
+                    Dashboard
+                </Breadcrumb.Item>
+                <Breadcrumb.Item active>Profile</Breadcrumb.Item>
+            </Breadcrumb>
 
-            <Tabs defaultActiveKey="profile" id="profile-tabs" className="mt-4">
-                {/* Tab cập nhật thông tin */}
-                <Tab eventKey="profile" title="Cập nhật thông tin">
-                    <Row className="mt-4">
-                        <Col md={8}>
-                            <h3>Thông tin người dùng</h3>
-                            <Form>
-                                <Row>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Họ tên</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="name"
-                                                value={user.name}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control
-                                                type="email"
-                                                name="email"
-                                                value={user.email}
-                                                onChange={handleInputChange}
-                                                readOnly
-                                            />
-                                        </Form.Group>
+            {loading ? (
+                <Spinner animation="border" />
+            ) : (
+                <Row>
+                    <Col md={12}>
+                        <Tabs defaultActiveKey="profile" className="mb-3">
+                            <Tab eventKey="profile" title="Thông tin cá nhân">
+                                <Row className="mt-4">
+                                    <Col md={8}>
+                                        <Form>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Avatar</Form.Label>
+                                                <div className="d-flex align-items-center">
+                                                    {previewAvatar && (
+                                                        <img
+                                                            src={previewAvatar}
+                                                            alt="Avatar preview"
+                                                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginRight: '20px' }}
+                                                        />
+                                                    )}
+                                                    <div>
+                                                        <input
+                                                            type="file"
+                                                            className="form-control"
+                                                            onChange={handleAvatarChange}
+                                                            accept="image/*"
+                                                        />
+                                                        <Button
+                                                            variant="primary"
+                                                            onClick={handleSaveProfile}
+                                                            className="mt-2"
+                                                            disabled={!avatar}
+                                                        >
+                                                            Upload Avatar
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </Form.Group>
+
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Name</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={user?.name || ''}
+                                                    readOnly
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Email</Form.Label>
+                                                <Form.Control
+                                                    type="email"
+                                                    value={user?.email || ''}
+                                                    readOnly
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Phone</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={user?.phone || ''}
+                                                    readOnly
+                                                />
+                                            </Form.Group>
+                                        </Form>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Số điện thoại</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="phone"
-                                                value={user.phone}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Ảnh đại diện</Form.Label>
-                                    <div className="mb-3">
-                                        <img
-                                            src={previewAvatar || 'https://via.placeholder.com/150'}
-                                            alt="Avatar"
-                                            className="img-fluid rounded-circle"
-                                            style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                                        />
-                                    </div>
-                                    <Form.Control type="file" onChange={handleAvatarChange} />
-                                </Form.Group>
-
-                                <Button variant="primary" onClick={handleSaveProfile} disabled={loading}>
-                                    {loading ? "Đang lưu..." : "Lưu thay đổi"}
-                                </Button>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Tab>
-
-                {/* Tab đăng ký lịch làm việc */}
-                <Tab eventKey="work-preferences" title="Đăng ký lịch làm việc">
-                    <Row className="mt-4">
-                        <Col md={8}>
-                            <h3>Nguyện vọng làm việc</h3>
-                            <Form>
-                                {[
-                                    { name: "shift_morning", label: "Làm ca sáng" },
-                                    { name: "shift_afternoon", label: "Làm ca chiều" },
-                                    { name: "shift_night", label: "Làm ca tối" },
-                                    { name: "full_week", label: "Làm cả tuần" },
-                                    { name: "off_saturday", label: "Nghỉ thứ 7" },
-                                    { name: "off_sunday", label: "Nghỉ chủ nhật" },
-                                ].map((item) => (
-                                    <Form.Group className="mb-3" key={item.name}>
-                                        <div
-                                            className="d-flex align-items-center"
-                                            onClick={() => toggleWorkPreference(item.name)}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <Form.Check
-                                                type="checkbox"
-                                                name={item.name}
-                                                checked={workPreferences[item?.name]}
-                                                readOnly
-                                                id={item.name}
-                                            />
-                                            <Form.Label htmlFor={item.name} className="ms-2 mb-0">
-                                                {item.label}
-                                            </Form.Label>
-                                        </div>
-                                    </Form.Group>
-                                ))}
-                                <Button variant="primary" onClick={handleSaveWorkPreferences} disabled={loading}>
-                                    {loading ? "Đang lưu..." : "Lưu nguyện vọng"}
-                                </Button>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Tab>
-
-
-
-                {/* Tab quản lý lịch làm việc */}
-                <Tab eventKey="work-schedule" title="Quản lý lịch làm việc">
-                    <Row className="mt-4">
-                        <Col md={8}>
-                            <h3>Quản lý lịch làm việc</h3>
-                            <p>Hiển thị bảng quản lý lịch làm việc ở đây...</p>
-                        </Col>
-                    </Row>
-                </Tab>
-            </Tabs>
+                            </Tab>
+                        </Tabs>
+                    </Col>
+                </Row>
+            )}
         </Container>
     );
 };

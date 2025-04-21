@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/slices/authSlice";
 import SearchBar from "./SearchBar";
 const BookingModal = React.lazy(() =>
-  import("../../../pages/guest/BookingModal")
+  import("../../../components/include/BookingModal")
 );
 const API = process.env.REACT_APP_API_BASE_URL;
 
