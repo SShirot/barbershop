@@ -23,8 +23,27 @@ import CalendarView from '../pages/admin/calendar/CalendarView';
 import StaffRegisterView from '../pages/admin/calendar/StaffRegisterView';
 
 const AdminRoutes = () => {
-    const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const { isAuthenticated } = useSelector((state) => state.auth);
+    const [loading, setLoading] = useState(true);
+    const user = JSON.parse(localStorage.getItem("user"));
 
+    useEffect(() => {
+      if (user) setLoading(false);
+    }, [user]);
+  
+    if (loading) {
+      return <div>Đang tải trang...</div>; // Show a loading indicator while waiting for auth state
+    }
+  
+    if (!user) {  
+      return null; // Trả về null nếu không phải là customer
+      // return <Navigate to="/login" />; // Redirect to login if not authenticated
+    }
+  
+    console.info("===========[AdminLayout] ===========[user] : ", user);
+    if (user && user.user_type !== "ADMIN") {
+      return <Navigate to="/unauthorized" />;
+    }
     return (
         <Routes>
             <Route element={<AdminLayout isAuthenticated={isAuthenticated} user={user} />}>

@@ -24,7 +24,21 @@ exports.findById = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+exports.getServiceByUserId = async (req, res) => {
+    try {
+        const user_id = parseInt(req.query.user_id);
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 10;  // nếu undefined hoặc không phải số => mặc định 10
 
+        console.log('Received params:', { user_id, page, pageSize });
+
+        const result = await ServiceUser.getServiceByUserId(Number(user_id), Number(page), Number(pageSize));
+        return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+}
 exports.registerService = async (req, res) => {
     try {
         // Lưu thông tin đăng ký dịch vụ vào cơ sở dữ liệu

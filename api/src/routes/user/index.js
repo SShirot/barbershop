@@ -8,5 +8,6 @@ router.use('/order', require('./order'));
 router.use('/vote', require('./vote'));
 router.use('/products', require('./product'));
 router.use('/dashboard', require('./dashboard'));
+router.use('/staff-list', require('./staffview'));
 
 module.exports = router;

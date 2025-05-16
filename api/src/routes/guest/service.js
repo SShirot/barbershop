@@ -6,5 +6,5 @@ const serviceController = require('../../controllers/guest/serviceController');
 router.get('/', serviceController.getAll);
 router.get('/show/:id', serviceController.findById);
 router.post('/register', serviceController.registerService);
-
+router.get('/user', serviceController.getServiceByUserId);
 module.exports = router;

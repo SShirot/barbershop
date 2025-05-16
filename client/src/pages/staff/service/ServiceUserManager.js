@@ -7,7 +7,7 @@ import {formatCurrencyInput} from "../../../helpers/formatters";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
 import {FaPlusCircle} from "react-icons/fa";
 import ServiceUserTable from "../components/service/ServiceUserTable";
-
+import toastr from "toastr";
 const ServiceUserManager = () => {
     const [services, setServices] = useState([]);
     const [meta, setMeta] = useState({ total: 0, total_page: 1, page: 1, page_size: 10 });
@@ -24,7 +24,8 @@ const ServiceUserManager = () => {
 
     const fetchServiceWithParams = async (params) => {
         try {
-            const response = await serviceService.getListsRegister(params);
+            const user = JSON.parse(localStorage.getItem("user"));
+            const response = await serviceService.getServiceByStaffId({...params, staff_id: user.id});
             setServices(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
@@ -81,7 +82,18 @@ const ServiceUserManager = () => {
             console.error("Error deleting product:", error);
         }
     };
-
+    const handleComplete = async (id) => {
+        try {
+            await serviceService.completeService(id);
+            toastr.success("Đã hoàn thành đặt lịch", "Thành công");
+            const params = Object.fromEntries([...searchParams]);
+            await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
+        } catch (error) {
+            console.error("Error completing service:", error);
+            toastr.error("Không thể hoàn thành đặt lịch", "Lỗi");
+        }
+    };
+    
     return (
         <Container>
             <Row className="gutters mt-3">
@@ -100,14 +112,13 @@ const ServiceUserManager = () => {
             <Row className="gutters">
                 <Col>
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h2>Quản lý dịch vụ</h2>
+                        <h2>Quản lý dịch vụ khách đăng ký</h2>
                     </div>
 
                     <ServiceUserTable
                         services={services}
                         openServiceModal={openServiceModal}
-                        setServiceToDelete={setServiceToDelete}
-                        setShowDeleteModal={setShowDeleteModal}
+                        onComplete={handleComplete}
                     />
 
                     <Pagination>

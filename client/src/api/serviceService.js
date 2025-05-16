@@ -39,9 +39,33 @@ const serviceService = {
     updateStaffService: (id, serviceData) => {
         return apiHelper.put(`staff/services/${id}`, serviceData);
     },
-
+    getServiceByStaffId: (params) => {
+        const paramsSearch = new URLSearchParams(params);
+        return apiHelper.get(`staff/services/staff?${paramsSearch.toString()}`);
+    },
     deleteStaffService: (id) => {
         return apiHelper.delete(`staff/services/${id}`);
+    },
+    // 🔵 USER APIs
+    getServiceUserByUserId: (params) => {
+        const paramsSearch = new URLSearchParams(params);
+        return apiHelper.get(`service/user?${paramsSearch.toString()}`);
+    },
+    // Approve service booking
+    approveService: (id, staffId = null) => {
+        return apiHelper.post(`admin/assigned-services/${id}/approve`, {
+            staff_id: staffId
+    });
+    },
+
+    // Reject service booking
+    rejectService: (id) => {
+        return apiHelper.post(`admin/assigned-services/${id}/reject`);
+    },
+
+    // Complete service booking
+    completeService: (id) => {
+        return apiHelper.post(`admin/assigned-services/${id}/complete`);
     },
 };
 

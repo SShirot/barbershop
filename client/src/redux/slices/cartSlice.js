@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const getCartKey = () => {
+    const token = localStorage.getItem('token');
+    return token ? `cart_${token}` : 'cart_guest';
+};
+
 const initialState = {
     items: [],
     itemCount: 0,
@@ -8,7 +13,8 @@ const initialState = {
 // Khôi phục trạng thái giỏ hàng từ localStorage
 const loadCartFromLocalStorage = () => {
     try {
-        const serializedCart = localStorage.getItem('cart');
+        const cartKey = getCartKey();
+        const serializedCart = localStorage.getItem(cartKey);
         if (serializedCart === null) {
             return initialState;
         }
@@ -25,8 +31,9 @@ const loadCartFromLocalStorage = () => {
 
 const saveCartToLocalStorage = (state) => {
     try {
+        const cartKey = getCartKey();
         const serializedCart = JSON.stringify(state);
-        localStorage.setItem('cart', serializedCart);
+        localStorage.setItem(cartKey, serializedCart);
     } catch (e) {
         console.error("Could not save cart to localStorage", e);
     }
@@ -37,47 +44,48 @@ const cartSlice = createSlice({
     initialState: loadCartFromLocalStorage(),
     reducers: {
         addToCart: (state, action) => {
-            state.items = state.items || [];
-            const existingProductIndex = state.items.findIndex(item => item.id === action.payload.id);
-
-            if (existingProductIndex >= 0) {
-                // Nếu sản phẩm đã tồn tại, tăng số lượng
-                state.items[existingProductIndex].quantity += action.payload.quantity;
-            } else {
-                // Nếu sản phẩm chưa tồn tại, thêm vào mảng items
-                state.items.push({ ...action.payload, quantity: action.payload.quantity });
+            // Kiểm tra xem user đã đăng nhập chưa
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // Nếu chưa đăng nhập, không thêm vào cart
+                return state;
             }
 
-            // Tính lại itemCount bằng cách tính tổng số lượng các sản phẩm trong giỏ hàng
-            state.itemCount = state.items.reduce((count, item) => count + item.quantity, 0);
+            const newItem = action.payload;
+            const existingItem = state.items.find(item => item.id === newItem.id);
 
-            // Lưu trạng thái giỏ hàng vào localStorage
+            if (existingItem) {
+                existingItem.quantity += newItem.quantity || 1;
+            } else {
+                state.items.push({ ...newItem, quantity: newItem.quantity || 1 });
+            }
+
+            state.itemCount = state.items.reduce((count, item) => count + item.quantity, 0);
             saveCartToLocalStorage(state);
         },
         removeFromCart: (state, action) => {
-            state.items = state.items || [];
-            const updatedItems = state.items?.filter(item => item.id !== action.payload.id);
-            state.items = updatedItems;
-
-            // Tính lại itemCount sau khi xóa sản phẩm
+            const id = action.payload;
+            state.items = state.items.filter(item => item.id !== id);
             state.itemCount = state.items.reduce((count, item) => count + item.quantity, 0);
-
             saveCartToLocalStorage(state);
         },
         clearCart: (state) => {
             state.items = [];
             state.itemCount = 0;
-
             saveCartToLocalStorage(state);
         },
         setAllCart: (state, action) => {
-            console.info("===========[] ===========[action.payload] : ", action.payload);
-            // state.items = action.payload;
-            let items =  action.payload || [];
-            state.itemCount = items.reduce((count, item) => count + item.quantity, 0);
+            state.items = action.payload;
+            state.itemCount = action.payload.reduce((count, item) => count + item.quantity, 0);
+            saveCartToLocalStorage(state);
         },
-    },
+        loadUserCart: (state) => {
+            const newState = loadCartFromLocalStorage();
+            state.items = newState.items;
+            state.itemCount = newState.itemCount;
+        }
+    }
 });
 
-export const { addToCart, removeFromCart, clearCart, setAllCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, setAllCart, loadUserCart } = cartSlice.actions;
 export default cartSlice.reducer;

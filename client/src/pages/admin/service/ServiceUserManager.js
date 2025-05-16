@@ -7,6 +7,7 @@ import {formatCurrencyInput} from "../../../helpers/formatters";
 import ModelConfirmDeleteData from "../../components/model-delete/ModelConfirmDeleteData";
 import {FaPlusCircle} from "react-icons/fa";
 import ServiceUserTable from "../components/service/ServiceUserTable";
+import toastr from "toastr";
 
 const ServiceUserManager = () => {
     const [services, setServices] = useState([]);
@@ -22,19 +23,22 @@ const ServiceUserManager = () => {
         name: searchParams.get('name') || '',
     });
 
+
+    
     const fetchServiceWithParams = async (params) => {
         try {
             const response = await serviceService.getListsRegister(params);
             setServices(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {
-            console.error("Error fetching menus:", error);
+            console.error("Error fetching services:", error);
+            toastr.error("Không thể tải danh sách đặt lịch", "Lỗi");
         }
     };
 
     useEffect(() => {
         const params = Object.fromEntries([...searchParams]);
-        fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10}).then(r =>{});
+        fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
     }, [searchParams]);
 
     const handlePageChange = (newPage) => {
@@ -82,6 +86,42 @@ const ServiceUserManager = () => {
         }
     };
 
+    const handleApprove = async (id, staffId = null) => {
+        try {
+            await serviceService.approveService(id, staffId);
+            toastr.success("Đã duyệt đặt lịch thành công", "Thành công");
+            const params = Object.fromEntries([...searchParams]);
+            await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
+        } catch (error) {
+            console.error("Error approving service:", error);
+            toastr.error("Không thể duyệt đặt lịch", "Lỗi");
+        }
+    };
+
+    const handleReject = async (id) => {
+        try {
+            await serviceService.rejectService(id);
+            toastr.success("Đã từ chối đặt lịch", "Thành công");
+            const params = Object.fromEntries([...searchParams]);
+            await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
+        } catch (error) {
+            console.error("Error rejecting service:", error);
+            toastr.error("Không thể từ chối đặt lịch", "Lỗi");
+        }
+    };
+
+    const handleComplete = async (id) => {
+        try {
+            await serviceService.completeService(id);
+            toastr.success("Đã hoàn thành đặt lịch", "Thành công");
+            const params = Object.fromEntries([...searchParams]);
+            await fetchServiceWithParams({...params, page: params.page || 1, page_size: params.page_size || 10});
+        } catch (error) {
+            console.error("Error completing service:", error);
+            toastr.error("Không thể hoàn thành đặt lịch", "Lỗi");
+        }
+    };
+    const API = process.env.REACT_APP_API_URL;
     return (
         <Container>
             <Row className="gutters mt-3">
@@ -93,21 +133,21 @@ const ServiceUserManager = () => {
                         <Nav.Item>
                             <Nav.Link as={Link} to="/admin/services">Dịch vụ</Nav.Link>
                         </Nav.Item>
-                        <Breadcrumb.Item active>Index</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Danh sách đặt lịch</Breadcrumb.Item>
                     </Breadcrumb>
                 </Col>
             </Row>
             <Row className="gutters">
                 <Col>
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h2>Quản lý dịch vụ</h2>
+                        <h2>Quản lý khách đăng ký dịch vụ</h2>
                     </div>
-
                     <ServiceUserTable
                         services={services}
-                        openServiceModal={openServiceModal}
-                        setServiceToDelete={setServiceToDelete}
-                        setShowDeleteModal={setShowDeleteModal}
+                        onApprove={handleApprove}
+                        onReject={handleReject}
+                        onComplete={handleComplete}
+                        API={API}
                     />
 
                     <Pagination>

@@ -6,6 +6,7 @@ const auth = require("../../middleware/auth");
 // Get all menus
 router.get('/', auth, serviceController.getAllServices);
 router.get('/register', auth, serviceController.getAllServicesRegister);
+router.get('/staff', auth, serviceController.getServiceByStaffId);
 router.delete('/register/:id', auth, serviceController.deleteServiceUser);
 
 // Get a specific menu by ID

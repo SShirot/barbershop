@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Row, Col, Card, Badge } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col, Card } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import serviceService from "../../api/serviceService";
 import toastr from "toastr";
 import { useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
@@ -13,56 +12,57 @@ import { vi } from "date-fns/locale";
 
 const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
   const [services, setServices] = useState([]);
-  const [admins, setAdmins] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [is_home_service, setIsHomeVisit] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    fetchServices();
-    fetchAdmins();
-  }, [API]);
+    if (show) {
+      fetchServices();
+      fetchStaff();
+    }
+  }, [show, API]);
 
   const fetchServices = async () => {
     try {
       const response = await axios.get(`${API}service`);
-      setServices(response.data.data.data);
+      if (response.data?.data?.data) {
+        setServices(response.data.data.data);
+      } else {
+        setServices([]);
+      }
     } catch (error) {
       console.error("Error fetching services:", error);
       toastr.error("Không thể tải danh sách dịch vụ", "Lỗi");
+      setServices([]);
     }
   };
 
-  const fetchAdmins = async () => {
+  const fetchStaff = async (date, time) => {
+    if (!date || !time) return;
+  
     try {
-      const response = await axios.get(`${API}users?page=1&page_size=1000`);
-      setAdmins(response.data.data.data.data);
-    } catch (error) {
-      console.error("Error fetching admins:", error);
-      toastr.error("Không thể tải danh sách nhân viên", "Lỗi");
-    }
-  };
-
-  const fetchAvailableSlots = async (adminId, date) => {
-    if (!adminId || !date) return;
-    
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API}admin/assigned-services/staff-available-slots`, {
+      const formattedDate = format(date, "yyyy-MM-dd");
+      const formattedTime = format(time, "HH:mm:ss");
+  
+      const response = await axios.get(`${API}user/staff-list/by-date`, {
         params: {
-          staff_id: adminId,
-          date: format(date, 'yyyy-MM-dd')
-        }
+          date: formattedDate,
+          time: formattedTime,
+        },
       });
-      setAvailableSlots(response.data.data);
+  
+      if (response.data?.data) {
+        setStaff(response.data.data);
+      } else {
+        setStaff([]);
+      }
     } catch (error) {
-      console.error("Error fetching available slots:", error);
-      toastr.error("Không thể tải khung giờ trống", "Lỗi");
-    } finally {
-      setLoading(false);
+      console.error("Error fetching staff:", error);
+      toastr.error("Không thể tải danh sách nhân viên", "Lỗi");
+      setStaff([]);
     }
   };
 
@@ -71,41 +71,33 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
     setSelectedService(service);
   };
 
-  const handleAdminChange = (adminId) => {
-    const admin = admins.find(a => a.id === parseInt(adminId));
-    setSelectedAdmin(admin);
-  };
-
-  const handleDateChange = (date, setFieldValue) => {
-    setFieldValue('date', date);
-    if (selectedAdmin) {
-      fetchAvailableSlots(selectedAdmin.id, date);
-    }
-  };
-
   const handleBookingSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const bookingData = {
         user_id: user.id,
         service_id: values.service,
-        admin_id: values.admin,
+        staff_id: values.staff ? parseInt(values.staff) : null,
         name: selectedService.name,
         price: selectedService.price,
         status: "pending",
         date: format(values.date, 'yyyy-MM-dd'),
         time: format(values.time, 'HH:mm'),
-        is_home_service: values.is_home_service,
+        is_home_service: values.is_home_service || 0,
         address: values.is_home_service ? values.address : null,
         note: values.note
       };
 
-      const response = await serviceService.register(bookingData);
+      await axios.post(`${API}admin/assigned-services/register`, bookingData);
+
       handleClose();
       resetForm();
-      toastr.success("Đặt lịch thành công!", "Thành công");
+      toastr.success("Đặt lịch thành công! Vui lòng chờ admin duyệt.", "Thành công");
+      if (setSuccessMessage) {
+        setSuccessMessage("Đặt lịch thành công! Vui lòng chờ admin duyệt.");
+      }
     } catch (error) {
       console.error("Error booking appointment:", error);
-      toastr.error("Có lỗi xảy ra, vui lòng thử lại", "Lỗi");
+      toastr.error(error.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại", "Lỗi");
     } finally {
       setSubmitting(false);
     }
@@ -113,7 +105,6 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
 
   const validationSchema = Yup.object().shape({
     service: Yup.string().required("Vui lòng chọn dịch vụ"),
-    admin: Yup.string().required("Vui lòng chọn nhân viên"),
     date: Yup.date().required("Vui lòng chọn ngày"),
     time: Yup.date().required("Vui lòng chọn giờ"),
     address: Yup.string().when("is_home_service", {
@@ -132,9 +123,9 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
         <Formik
           initialValues={{
             service: "",
-            admin: "",
+            staff: "",
             date: null,
-            time: null,
+            time: "",
             is_home_service: false,
             address: "",
             note: ""
@@ -158,26 +149,26 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                   <Form.Group className="mb-3">
                     <Form.Label>Chọn kiểu tóc</Form.Label>
                     <Form.Select
-                      name="service"
-                      value={values.service}
+                  name="service"  
+                      value={values.service || ""}
                       onChange={(e) => {
                         handleChange(e);
                         handleServiceChange(e.target.value);
                       }}
-                      onBlur={handleBlur}
-                      isInvalid={touched.service && !!errors.service}
-                    >
+                  onBlur={handleBlur}
+                  isInvalid={touched.service && !!errors.service}
+                >
                       <option value="">Chọn kiểu tóc...</option>
-                      {services.map((service) => (
-                        <option key={service.id} value={service.id}>
+                      {Array.isArray(services) && services.map((service) => (
+                    <option key={service.id} value={service.id}>
                           {service.name} - {service.price.toLocaleString('vi-VN')}đ
-                        </option>
-                      ))}
+                    </option>
+                  ))}
                     </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.service}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                <Form.Control.Feedback type="invalid">
+                  {errors.service}
+                </Form.Control.Feedback>
+              </Form.Group>
 
                   {selectedService && (
                     <Card className="mb-3">
@@ -194,89 +185,68 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
 
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Chọn thợ cắt</Form.Label>
-                    <Form.Select
-                      name="admin"
-                      value={values.admin}
-                      onChange={(e) => {
-                        handleChange(e);
-                        handleAdminChange(e.target.value);
+                    <Form.Label>Chọn ngày cắt</Form.Label>
+                    <DatePicker
+                      selected={values.date}
+                      onChange={(date) => {
+                        setFieldValue('date', date)
+                        if (values.time) fetchStaff(date, values.time);
                       }}
-                      onBlur={handleBlur}
-                      isInvalid={touched.admin && !!errors.admin}
-                    >
-                      <option value="">Chọn thợ cắt...</option>
-                      {admins.map((admin) => (
-                        <option key={admin.id} value={admin.id}>
-                          {admin.name}
-                        </option>
-                      ))}
-                    </Form.Select>
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                      locale={vi}
+                      className="form-control"
+                      placeholderText="Chọn ngày cắt"
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.date}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Chọn giờ cắt</Form.Label>
+                    <DatePicker
+                      selected={values.time}
+                      onChange={(time) => {
+                        setFieldValue('time', time)
+                        if (values.date) fetchStaff(values.date, time);
+                      }}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={30}
+                      timeCaption="Giờ"
+                      dateFormat="HH:mm"
+                      className="form-control"
+                      placeholderText="Chọn giờ cắt"
+                    />
                     <Form.Control.Feedback type="invalid">
-                      {errors.admin}
+                      {errors.time}
                     </Form.Control.Feedback>
                   </Form.Group>
-
-                  {selectedAdmin && (
-                    <Card className="mb-3">
-                      <Card.Body>
-                        <h5>Thông tin thợ cắt</h5>
-                        <p><strong>Tên:</strong> {selectedAdmin.name}</p>
-                        <p><strong>Kinh nghiệm:</strong> {selectedAdmin.experience} năm</p>
-                        <p><strong>Đánh giá:</strong> {selectedAdmin.rating}/5</p>
-                      </Card.Body>
-                    </Card>
-                  )}
                 </Col>
               </Row>
 
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Chọn ngày cắt</Form.Label>
-                    <DatePicker
-                      selected={values.date}
-                      onChange={(date) => handleDateChange(date, setFieldValue)}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={new Date()}
-                      locale={vi}
-                      className="form-control"
-                      placeholderText="Chọn ngày cắt"
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.date}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Chọn giờ cắt</Form.Label>
+                    <Form.Label>Chọn thợ cắt (tùy chọn)</Form.Label>
                     <Form.Select
-                      name="time"
-                      value={values.time}
-                      onChange={handleChange}
+                      name="staff"
+                      value={values.staff || ""}
+                      onChange={(e) => {
+                        console.log("Selected staff ID:", e.target.value); // 👈 log tại đây
+                        handleChange(e);
+                      }}
                       onBlur={handleBlur}
-                      isInvalid={touched.time && !!errors.time}
-                      disabled={!values.date || loading}
                     >
-                      <option value="">Chọn giờ cắt...</option>
-                      {availableSlots.map((slot) => (
-                        <option key={slot.id} value={slot.start_time}>
-                          {format(new Date(`2000-01-01T${slot.start_time}`), 'HH:mm')} - 
-                          {format(new Date(`2000-01-01T${slot.end_time}`), 'HH:mm')}
+                      <option value="">Chọn thợ cắt...</option>
+                      {Array.isArray(staff) && staff.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name}
                         </option>
                       ))}
+                      <option value="any">Chọn thợ nào cũng được</option>
                     </Form.Select>
-                    {loading && <small className="text-muted">Đang tải khung giờ...</small>}
-                    {!loading && values.date && availableSlots.length === 0 && (
-                      <div className="text-danger mt-2">
-                        Hiện tại đã hết lịch, quý khách vui lòng đăng kí lại vào ngày khác
-                      </div>
-                    )}
-                    <Form.Control.Feedback type="invalid">
-                      {errors.time}
-                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
               </Row>
@@ -290,6 +260,9 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                   onChange={(e) => {
                     handleChange(e);
                     setIsHomeVisit(e.target.checked);
+                    if (e.target.checked) {
+                      setFieldValue('staff', null);
+                    }
                   }}
                 />
               </Form.Group>
@@ -328,13 +301,10 @@ const BookingModal = ({ show, handleClose, API, setSuccessMessage }) => {
                 <Button 
                   variant="primary" 
                   type="submit" 
-                  disabled={isSubmitting || loading || (!loading && values.date && availableSlots.length === 0)}
+                  disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Đang xử lý..." : 
-                   loading ? "Đang tải lịch..." :
-                   (!loading && values.date && availableSlots.length === 0) ? "Không có lịch trống" :
-                   "Đặt lịch cắt"}
-                </Button>
+                  {isSubmitting ? "Đang xử lý..." : "Đặt lịch cắt"}
+              </Button>
               </div>
             </Form>
           )}

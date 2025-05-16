@@ -99,6 +99,66 @@ exports.getStaffAvailableSlots = async (req, res) => {
     }
 };
 
+exports.getAvailableStaff = async (req, res) => {
+    try {
+        const { date } = req.query;
+        if (!date) {
+            return errorResponse(res, 'Date is required');
+        }
+        const data = await AssignedServicesService.getAvailableStaff(date);
+        return successResponse(res, { data }, 'Successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+};
+
+exports.registerService = async (req, res) => {
+    try {
+        const serviceData = req.body;
+        const data = await AssignedServicesService.registerService(serviceData);
+        return successResponse(res, { data }, 'Service request registered successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, err.message);
+    }
+};
+
+exports.approveService = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { staff_id } = req.body;
+        const data = await AssignedServicesService.approveService(id, staff_id);
+        return successResponse(res, { data }, 'Service request approved successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, err.message);
+    }
+};
+
+exports.rejectService = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { staff_id } = req.body;
+        const data = await AssignedServicesService.rejectService(id, staff_id);
+        return successResponse(res, { data }, 'Service request rejected successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, err.message);
+    }
+};
+
+exports.completeService = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await AssignedServicesService.completeService(id);
+        return successResponse(res, { data }, 'Service request completed successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res, err.message);
+    }
+};
+
 exports.assignService = async (req, res) => {
     try {
         const { service_id, staff_id, schedule_id, note } = req.body;
@@ -109,3 +169,14 @@ exports.assignService = async (req, res) => {
         return errorResponse(res, err.message);
     }
 }; 
+exports.findAllWithDetails = async (req, res) => {
+    try {
+
+        const data = await AssignedServicesService.findAllWithDetails();
+        console.log('Service users data:', data);
+        return successResponse(res, { data }, 'Successfullyyyy ');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+};

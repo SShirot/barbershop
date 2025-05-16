@@ -34,34 +34,51 @@ const User = {
         updated_at: 'timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     },
 
-    getAll: async (params = {}) => {
-        let query = `SELECT * FROM ${User.tableName} WHERE 1=1`;
+    getAll: async (page = 1, pageSize = 10, name = null, user_type = null) => {
+        const offset = (page - 1) * pageSize;
+        let query = `SELECT * FROM ${User.tableName}`;
+        let countQuery = `SELECT COUNT(*) as total FROM ${User.tableName}`;
         const queryParams = [];
+        const countParams = [];
 
-        if (params.name) {
-            query += ' AND name LIKE ?';
-            queryParams.push(`%${params.name}%`);
+        const conditions = [];
+        if (name) {
+            conditions.push('name LIKE ?');
+            queryParams.push(`%${name}%`);
+            countParams.push(`%${name}%`);
+        }
+        if (user_type) {
+            conditions.push('user_type LIKE ?');
+            queryParams.push(`%${user_type}%`);
+            countParams.push(`%${user_type}%`);
         }
 
-        if (params.email) {
-            query += ' AND email LIKE ?';
-            queryParams.push(`%${params.email}%`);
+        if (conditions.length > 0) {
+            const whereClause = ` WHERE ${conditions.join(' AND ')}`;
+            query += whereClause;
+            countQuery += whereClause;
         }
 
-        if (params.user_type) {
-            query += ' AND user_type = ?';
-            queryParams.push(params.user_type);
-        }
-
-        if (params.status) {
-            query += ' AND status = ?';
-            queryParams.push(params.status);
-        }
-
-        query += ' ORDER BY created_at DESC';
+        query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
 
         const [rows] = await db.query(query, queryParams);
-        return rows;
+        const [countResult] = await db.query(countQuery, countParams);
+        const total = countResult[0].total;
+
+        return {
+            data: rows,
+            meta: {
+                total,
+                perPage: pageSize,
+                page_size: pageSize,
+                currentPage: page,
+                page: page,
+                lastPage: Math.ceil(total / pageSize),
+                total_page: Math.ceil(total / pageSize),
+            }
+        };
+
     },
 
     // Tạo phương thức findOne để tìm người dùng theo email
@@ -157,6 +174,68 @@ const User = {
         } catch (error) {
             console.error('Error in User.getStaffList:', error);
             console.error('Error stack:', error.stack);
+            throw error;
+        }
+    },
+    getStaffListByDate: async ({ role, is_active, date, time }) => {
+        try {
+            console.log('=== UserRepository.getStaffList Start ===');
+            
+            let query = `
+                SELECT 
+                    u.id AS staff_id,
+                    u.name AS staff_name,
+                    COUNT(su.id) AS assigned_count,
+                    s.name AS shift_name,
+                    s.start_time,
+                    s.end_time
+                FROM users u
+                JOIN work_schedule ws ON ws.staff_id = u.id
+                JOIN shifts s ON s.id = ws.shift_id
+                LEFT JOIN services_user su 
+                    ON su.staff_id = u.id 
+                    AND su.date = ws.work_date 
+                    AND su.status IN ('PENDING', 'APPROVED')
+                WHERE 
+                    u.user_type = ?
+                    AND u.status = 2  -- Đã sửa lại cho đúng với giá trị trong DB
+            `;
+    
+            const params = [role];
+    
+            if (is_active) {
+                query += " AND u.status IN (2, 'VERIFIED')"; // Nếu active là true, chỉ lấy những staff đang hoạt động
+            }
+    
+            if (date && time) {
+                query += `
+                    AND ws.work_date = ?
+                    AND ? BETWEEN s.start_time AND s.end_time
+                `;
+                params.push(date, time);
+            }
+    
+            query += `
+                GROUP BY u.id, u.name, s.name, s.start_time, s.end_time
+                HAVING assigned_count < 5
+                ORDER BY u.name ASC;
+            `;
+            
+            console.log('1. Executing query:', query);
+            console.log('2. With params:', params);
+            
+            const [rows] = await db.query(query, params);
+            console.log('3. Query executed successfully');
+            console.log('4. Found staff members:', rows?.length);
+            
+            if (rows?.length === 0) {
+                console.log('5. Warning: No staff found available for the specified time.');
+            }
+    
+            console.log('=== UserRepository.getStaffList End ===');
+            return rows; // Trả về kết quả là danh sách nhân viên
+        } catch (error) {
+            console.error('Error in UserRepository.getStaffList:', error);
             throw error;
         }
     }

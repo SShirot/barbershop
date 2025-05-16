@@ -1,48 +1,65 @@
 import React, {useState, useEffect, startTransition} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { Container, Row, Col, Button, Table, Form, Modal } from 'react-bootstrap';
-import {setAllCart} from "../../../redux/slices/cartSlice";
+import {setAllCart, loadUserCart} from "../../../redux/slices/cartSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {FaTrashAlt, FaCheckCircle, FaHome} from 'react-icons/fa';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
-    const [itemCount, setItemCount] = useState(0); // Thêm state cho itemCount
-
-
+    const [itemCount, setItemCount] = useState(0);
     const user = useSelector((state) => state.auth.user);
-
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
+    // Kiểm tra đăng nhập khi component mount
     useEffect(() => {
-        const savedCart = localStorage.getItem('cart');
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+    }, [user, navigate]);
+
+    // Load cart khi component mount hoặc user thay đổi
+    useEffect(() => {
+        if (!user) return; // Không load cart nếu chưa đăng nhập
+        
+        dispatch(loadUserCart());
+        const token = localStorage.getItem('token');
+        const cartKey = token ? `cart_${token}` : 'cart_guest';
+        const savedCart = localStorage.getItem(cartKey);
+        
         if (savedCart) {
             try {
                 const parsedCart = JSON.parse(savedCart);
                 if (parsedCart && Array.isArray(parsedCart.items)) {
                     setCartItems(parsedCart.items);
-                    setItemCount(parsedCart.itemCount || 0); // Cập nhật itemCount từ localStorage
-                } else {
-                    console.error("Giỏ hàng không có items hợp lệ", parsedCart);
+                    setItemCount(parsedCart.itemCount || 0);
                 }
             } catch (error) {
                 console.error("Không thể phân tích dữ liệu từ localStorage", error);
             }
         }
-    }, []);
+    }, [user, dispatch]);
 
+    // Nếu chưa đăng nhập, không render gì cả
+    if (!user) {
+        return null;
+    }
 
     // Hàm cập nhật giỏ hàng vào localStorage
     const updateCartInLocalStorage = (items) => {
+        const token = localStorage.getItem('token');
+        const cartKey = token ? `cart_${token}` : 'cart_guest';
+        
         const updatedCart = {
             items,
-            itemCount: items.reduce((count, item) => count + item.quantity, 0) // Tính lại itemCount
+            itemCount: items.reduce((count, item) => count + item.quantity, 0)
         };
-        setItemCount(updatedCart.itemCount); // Cập nhật itemCount trong state
+        
+        setItemCount(updatedCart.itemCount);
         dispatch(setAllCart(items));
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
     };
 
     const handleQuantityChange = (id, quantity) => {

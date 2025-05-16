@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {Container, Row, Col, Button, Badge, Form, ProgressBar, Nav} from 'react-bootstrap';
 import {FaStar, FaRegStar, FaTruck, FaShieldAlt, FaExchangeAlt, FaStarHalfAlt} from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,7 @@ const ProductDetail = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [isLoadingRelated, setIsLoadingRelated] = useState(true);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -73,6 +74,11 @@ const ProductDetail = () => {
     }
 
     const handleAddToCart = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
         dispatch(addToCart({ ...product, quantity }));
     };
 

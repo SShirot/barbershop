@@ -1,3 +1,4 @@
+const db = require('../config/dbMysql');
 const AssignedService = {
     tableName: 'assigned_services',
     columns: {
@@ -5,6 +6,7 @@ const AssignedService = {
         services_user_id: 'BIGINT UNSIGNED NOT NULL',
         staff_id: 'BIGINT UNSIGNED NOT NULL',
         schedule_id: 'BIGINT UNSIGNED NOT NULL',
+        status: "ENUM('pending', 'assigned', 'completed', 'cancelled') DEFAULT 'pending",
         assigned_at: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         note: 'TEXT'
     },

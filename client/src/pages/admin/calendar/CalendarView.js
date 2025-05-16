@@ -26,6 +26,7 @@ const CalendarView = () => {
     const [events, setEvents] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState('');
     const [staffList, setStaffList] = useState([]);
+    const [viewType, setViewType] = useState('week');
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [showEventModal, setShowEventModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ const CalendarView = () => {
         if (selectedStaff) {
             fetchCalendarEvents();
         }
-    }, [selectedStaff]);
+    }, [selectedStaff, viewType]);
 
     const fetchStaffList = async () => {
         try {
@@ -78,14 +79,38 @@ const CalendarView = () => {
             setLoading(true);
             console.log('1. Fetching calendar events for staff:', selectedStaff);
 
-            // Tính toán date range cho tháng hiện tại
+            // Tính toán date range dựa trên view type
+            let startDate, endDate;
             const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            const startDate = format(firstDay, 'yyyy-MM-dd');
-            const endDate = format(lastDay, 'yyyy-MM-dd');
 
-            console.log('2. Date range:', { startDate, endDate });
+            switch (viewType) {
+                case 'day':
+                    startDate = format(today, 'yyyy-MM-dd');
+                    endDate = format(today, 'yyyy-MM-dd');
+                    break;
+                case 'week':
+                    // Lấy ngày đầu tuần (Thứ 2)
+                    const start = startOfWeek(today, { weekStartsOn: 1 });
+                    // Lấy ngày cuối tuần (Chủ nhật)
+                    const end = new Date(start);
+                    end.setDate(end.getDate() + 6);
+                    startDate = format(start, 'yyyy-MM-dd');
+                    endDate = format(end, 'yyyy-MM-dd');
+                    break;
+                case 'month':
+                    // Lấy ngày đầu tháng
+                    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+                    // Lấy ngày cuối tháng
+                    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                    startDate = format(firstDay, 'yyyy-MM-dd');
+                    endDate = format(lastDay, 'yyyy-MM-dd');
+                    break;
+                default:
+                    startDate = format(today, 'yyyy-MM-dd');
+                    endDate = format(today, 'yyyy-MM-dd');
+            }
+
+            console.log('2. Date range:', { startDate, endDate, viewType });
             
             const response = await calendarService.getStaffSchedule(selectedStaff, startDate, endDate);
             console.log('3. Calendar API response:', response);
@@ -188,6 +213,7 @@ const CalendarView = () => {
         }
     };
 
+    // Thêm useEffect để log khi events thay đổi
     useEffect(() => {
         console.log('Events state updated:', events);
     }, [events]);
@@ -201,18 +227,19 @@ const CalendarView = () => {
     const eventStyleGetter = (event) => {
         let backgroundColor = '#ffc107'; // Default color
 
+        // Màu sắc dựa trên status
         switch(event.status) {
             case 'approved':
-                backgroundColor = '#28a745';
+                backgroundColor = '#28a745'; // Green for approved
                 break;
             case 'rejected':
-                backgroundColor = '#dc3545';
+                backgroundColor = '#dc3545'; // Red for rejected
                 break;
             case 'pending':
-                backgroundColor = '#ffc107';
+                backgroundColor = '#ffc107'; // Yellow for pending
                 break;
             default:
-                backgroundColor = '#6c757d';
+                backgroundColor = '#6c757d'; // Grey for unknown status
         }
 
         return {
@@ -238,6 +265,7 @@ const CalendarView = () => {
             await calendarService.approveRequest(scheduleId);
             toast.success('Đã duyệt ca làm việc');
             handleCloseModal();
+            // Refresh calendar data
             await fetchCalendarEvents();
         } catch (error) {
             console.error('Error approving schedule:', error);
@@ -253,6 +281,7 @@ const CalendarView = () => {
             await calendarService.rejectRequest(scheduleId);
             toast.success('Đã từ chối ca làm việc');
             handleCloseModal();
+            // Refresh calendar data
             await fetchCalendarEvents();
         } catch (error) {
             console.error('Error rejecting schedule:', error);
@@ -293,7 +322,7 @@ const CalendarView = () => {
                     <Card>
                         <Card.Body>
                             <Row>
-                                <Col md={8}>
+                                <Col md={4}>
                                     <Form.Group>
                                         <Form.Label>Chọn nhân viên</Form.Label>
                                         <Form.Select
@@ -306,6 +335,19 @@ const CalendarView = () => {
                                                     {staff.name}
                                                 </option>
                                             ))}
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={4}>
+                                    <Form.Group>
+                                        <Form.Label>Chế độ xem</Form.Label>
+                                        <Form.Select
+                                            value={viewType}
+                                            onChange={(e) => setViewType(e.target.value)}
+                                        >
+                                            <option value="day">Ngày</option>
+                                            <option value="week">Tuần</option>
+                                            <option value="month">Tháng</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -336,7 +378,9 @@ const CalendarView = () => {
                                 style={{ height: 500 }}
                                 onSelectEvent={handleEventClick}
                                 eventPropGetter={eventStyleGetter}
-                                defaultView="month"
+                                views={['day', 'week', 'month']}
+                                defaultView={viewType}
+                                onView={(newView) => setViewType(newView)}
                                 messages={{
                                     next: "Tiếp",
                                     previous: "Trước",

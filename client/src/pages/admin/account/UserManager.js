@@ -29,6 +29,11 @@ const UserManager = () => {
     const fetchUsersWithParams = async (params) => {
         try {
             const response = await userService.getLists(params);
+            console.log('API response:', response); // Log toàn bộ response
+
+            if (response?.meta) {
+                console.log('Meta Data:', response.meta); // Log chỉ meta
+            }
             setUsers(response.data.data);
             setMeta(response.data.meta);
         } catch (error) {

@@ -87,6 +87,13 @@ const authSlice = createSlice( {
 	reducers: {
 		logout: ( state ) =>
 		{
+			// Xóa cart khi logout
+			const token = localStorage.getItem( 'token' );
+			if ( token )
+			{
+				localStorage.removeItem( `cart_${token}` );
+			}
+			
 			localStorage.removeItem( 'token' );
 			localStorage.removeItem( 'user' );
 			state.token = null;
@@ -125,6 +132,14 @@ const authSlice = createSlice( {
 				console.info( "===========[] ===========[payload] : ", payload );
 				if ( payload?.token && payload?.user )
 				{
+					// Lưu cart hiện tại của guest
+					const guestCart = localStorage.getItem( 'cart_guest' );
+					if ( guestCart )
+					{
+						localStorage.setItem( `cart_${payload.token}`, guestCart );
+						localStorage.removeItem( 'cart_guest' );
+					}
+					
 					localStorage.setItem( 'token', payload.token );
 					localStorage.setItem( 'user', JSON.stringify( payload.user ) );
 					state.token = payload.token;

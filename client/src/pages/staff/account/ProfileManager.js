@@ -76,12 +76,12 @@ const ProfileManager = () => {
 
     return (
         <Container fluid>
-            <Breadcrumb>
+                    <Breadcrumb>
                 <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/staff" }}>
                     Dashboard
                 </Breadcrumb.Item>
                 <Breadcrumb.Item active>Profile</Breadcrumb.Item>
-            </Breadcrumb>
+                    </Breadcrumb>
 
             {loading ? (
                 <Spinner animation="border" />
@@ -90,9 +90,9 @@ const ProfileManager = () => {
                     <Col md={12}>
                         <Tabs defaultActiveKey="profile" className="mb-3">
                             <Tab eventKey="profile" title="Thông tin cá nhân">
-                                <Row className="mt-4">
-                                    <Col md={8}>
-                                        <Form>
+                    <Row className="mt-4">
+                        <Col md={8}>
+                            <Form>
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Avatar</Form.Label>
                                                 <div className="d-flex align-items-center">
@@ -122,39 +122,39 @@ const ProfileManager = () => {
                                                 </div>
                                             </Form.Group>
 
-                                            <Form.Group className="mb-3">
+                                        <Form.Group className="mb-3">
                                                 <Form.Label>Name</Form.Label>
-                                                <Form.Control
-                                                    type="text"
+                                            <Form.Control
+                                                type="text"
                                                     value={user?.name || ''}
                                                     readOnly
-                                                />
-                                            </Form.Group>
+                                            />
+                                        </Form.Group>
 
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Email</Form.Label>
-                                                <Form.Control
-                                                    type="email"
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Email</Form.Label>
+                                            <Form.Control
+                                                type="email"
                                                     value={user?.email || ''}
-                                                    readOnly
-                                                />
-                                            </Form.Group>
+                                                readOnly
+                                            />
+                                        </Form.Group>
 
-                                            <Form.Group className="mb-3">
+                                        <Form.Group className="mb-3">
                                                 <Form.Label>Phone</Form.Label>
-                                                <Form.Control
-                                                    type="text"
+                                            <Form.Control
+                                                type="text"
                                                     value={user?.phone || ''}
                                                     readOnly
-                                                />
-                                            </Form.Group>
-                                        </Form>
-                                    </Col>
-                                </Row>
-                            </Tab>
+                                            />
+                                        </Form.Group>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Tab>
                         </Tabs>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
             )}
         </Container>
     );

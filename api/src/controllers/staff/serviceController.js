@@ -41,7 +41,21 @@ exports.getServiceById = async (req, res) => {
         return errorResponse(res);
     }
 };
+exports.getServiceByStaffId = async (req, res) => {
+    try {
+        const staff_id = parseInt(req.query.staff_id);
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 10;  // nếu undefined hoặc không phải số => mặc định 10
 
+        console.log('Received params:', { staff_id, page, pageSize });
+
+        const result = await ServiceUser.getServiceByStaffId(Number(staff_id), Number(page), Number(pageSize));
+        return successResponse(res, { meta: result.meta, data: result.data }, 'Get Lists menu successfully');
+    } catch (err) {
+        console.error(err);
+        return errorResponse(res);
+    }
+}
 // Create new menu
 exports.createService = async (req, res) => {
     try {
