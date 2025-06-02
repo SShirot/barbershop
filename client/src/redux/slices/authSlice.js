@@ -79,19 +79,19 @@ const authSlice = createSlice( {
 	name: 'auth',
 	initialState: {
 		token: localStorage.getItem( 'token' ),
-		isAuthenticated: false,
-		user: null,
+		isAuthenticated: !!localStorage.getItem( 'token' ),
+		user: JSON.parse( localStorage.getItem( 'user' ) ),
 		loading: false,
 		error: null,
 	},
 	reducers: {
 		logout: ( state ) =>
 		{
-			// Xóa cart khi logout
-			const token = localStorage.getItem( 'token' );
-			if ( token )
+			// Lưu cart hiện tại trước khi logout
+			const currentCart = localStorage.getItem( 'cart' );
+			if ( currentCart )
 			{
-				localStorage.removeItem( `cart_${token}` );
+				localStorage.setItem( 'cart_guest', currentCart );
 			}
 			
 			localStorage.removeItem( 'token' );
@@ -136,7 +136,7 @@ const authSlice = createSlice( {
 					const guestCart = localStorage.getItem( 'cart_guest' );
 					if ( guestCart )
 					{
-						localStorage.setItem( `cart_${payload.token}`, guestCart );
+						localStorage.setItem( 'cart', guestCart );
 						localStorage.removeItem( 'cart_guest' );
 					}
 					

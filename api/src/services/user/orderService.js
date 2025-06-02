@@ -1,4 +1,4 @@
-const Repository = require('./../../repositories/OrderRepository');
+const Repository = require('./../../repositories/orderRepository');
 
 const OrderService = {
     updateStatus: async (id, updateData) => {

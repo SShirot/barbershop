@@ -6,7 +6,7 @@ exports.uploadFile = (req, res) => {
         return res.status(400).json(formatResponse('error', null, 'No file uploaded'));
     }
 
-    const fileUrl = `http://localhost:3014/uploads/images/${req.file.filename}`;
+    const fileUrl = `${process.env.IMAGE_BASE_URL}/${req.file.filename}`;
     res.status(201).json({
         status: "success",
         errorCode: 0,

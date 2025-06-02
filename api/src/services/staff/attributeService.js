@@ -1,5 +1,5 @@
-const AttributeRepository = require('./../../repositories/AttributeRepository');
-const AttributeValueRepository = require('./../../repositories/attributeValueRepository');
+const AttributeRepository = require('../../repositories/attributeRepository');
+const AttributeValueRepository = require('../../repositories/attributeValueRepository');
 
 const AttributeService = {
     getAll: async (page, pageSize, name) => {

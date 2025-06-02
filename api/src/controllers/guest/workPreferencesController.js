@@ -1,4 +1,4 @@
-const WorkPreferencesService = require('./../../services/admin/WorkPreferencesService');
+const WorkPreferencesService = require('./../../services/admin/workPreferencesService');
 const { successResponse, errorResponse } = require("../../utils/response");
 
 exports.findByUserId = async (req, res) => {

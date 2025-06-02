@@ -11,6 +11,7 @@ import { clearCart } from '../../../redux/slices/cartSlice';
 const Checkout = () => {
 
     const user = useSelector((state) => state.auth.user);
+    const cartFromRedux = useSelector((state) => state.cart.items);
     const [userInfo, setUserInfo] = useState({
         name: user?.name || '',
         phone: user?.phone || '',
@@ -18,8 +19,6 @@ const Checkout = () => {
         email: user?.email || '',
     });
     const dispatch = useDispatch();
-
-    console.info("===========[] ===========[userInfo] : ",userInfo);
 
     const [cartItems, setCartItems] = useState([]); // Danh sách sản phẩm trong giỏ hàng
     const [shippingMethod, setShippingMethod] = useState('localPickup');
@@ -34,19 +33,29 @@ const Checkout = () => {
 
     const navigate = useNavigate();
 
-    // Lấy giỏ hàng từ localStorage (giả định giỏ hàng lưu ở localStorage)
+    // Load cart data from both localStorage and Redux
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
+        let parsedCart = [];
+        
         if (savedCart) {
-            console.log("=========== CART: ", savedCart);
             try {
-                const parsedCart = JSON.parse(savedCart);
-                setCartItems(parsedCart.items || []);
+                parsedCart = JSON.parse(savedCart);
             } catch (error) {
-                console.error('Không thể phân tích dữ liệu giỏ hàng từ localStorage:', error);
+                console.error('Error parsing cart from localStorage:', error);
             }
         }
-    }, []);
+
+        if (cartFromRedux && cartFromRedux.length > 0) {
+            setCartItems(cartFromRedux);
+        }
+        else if (parsedCart && parsedCart.length > 0) {
+            setCartItems(parsedCart);
+        }
+        else {
+            setCartItems([]);
+        }
+    }, [cartFromRedux]);
 
     // Lấy phương thức thanh toán từ API
     useEffect(() => {
@@ -74,11 +83,7 @@ const Checkout = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Thông tin người dùng:', userInfo);
-        console.log('Phương thức vận chuyển:', shippingMethod);
-        console.log('Phương thức thanh toán:', paymentMethod);
-
-        setIsLoading(true); // Hiển thị loading
+        setIsLoading(true);
         try {
             const orderData = {
                 user_id: user?.id,
@@ -92,7 +97,6 @@ const Checkout = () => {
             };
 
             const response = await apiOrderService.add(orderData);
-            console.info("===========[] ===========[response.status] : ",response.status);
             if (response.status === "success") {
                 setCartItems([]);
                 dispatch(clearCart());
@@ -108,14 +112,12 @@ const Checkout = () => {
                         }
                         const responsePayment = await axios.post("https://123code.net/api/v1/payment/add", newData);
                         setIsLoading(false);
-                        console.info("===========[] ===========[123code] : ",response);
                         window.location.href = responsePayment.data.link
                         return;
                     } catch (err) {
-                        console.info("===========[] ===========[] : ",err);
+                        console.error('Payment error:', err);
                     }
                 }
-
                 navigate('/');
             } else {
                 alert("Error");
@@ -125,33 +127,32 @@ const Checkout = () => {
         } finally {
             setIsLoading(false);
         }
-
     };
 
-    // Tính tổng tiền tạm tính
     const getSubTotal = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        if (!cartItems || cartItems.length === 0) {
+            return 0;
+        }
+        return cartItems.reduce((total, item) => {
+            return total + (Number(item.price) * Number(item.quantity));
+        }, 0);
     };
 
-    // Tính thuế
     const calculateTax = (subtotal) => {
         return subtotal * taxRate;
     };
 
     const handlePaymentChange = (id) => {
-        console.log('Phương thức thanh toán được chọn:', id);
         setPaymentMethod(id);
     };
 
-    // Tính tổng tiền cuối cùng
     const calculateTotal = (subtotal, tax, shippingFee) => {
         return subtotal + tax + shippingFee - discountAmount;
     };
 
-    // Xử lý khi người dùng nhấn "Áp dụng" mã giảm giá
     const handleApplyDiscount = () => {
         if (discountCode === 'SALE10') {
-            setDiscountAmount(getSubTotal() * 0.1); // Giảm 10%
+            setDiscountAmount(getSubTotal() * 0.1);
         } else {
             alert('Mã giảm giá không hợp lệ!');
         }
@@ -161,9 +162,10 @@ const Checkout = () => {
     const tax = calculateTax(subtotal);
     const total = calculateTotal(subtotal, tax, shippingFee);
 
-    // // Tính tổng tiền sản phẩm
     const getTotalPrice = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+        return cartItems.reduce((total, item) => {
+            return total + (Number(item.price) * Number(item.quantity));
+        }, 0);
     };
 
     return (

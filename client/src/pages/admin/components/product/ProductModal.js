@@ -34,7 +34,7 @@ const ProductModal = ({
     const [attributeValues, setAttributeValues] = useState({});
     const [variants, setVariants] = useState([]);
 
-    const defaultImage = "http://localhost:3014/uploads/images/default.png";
+    const defaultImage = process.env.REACT_APP_IMAGE_BASE_URL + "/default.png";
 
     useEffect(() => {
         const fetchInitialData = async () => {

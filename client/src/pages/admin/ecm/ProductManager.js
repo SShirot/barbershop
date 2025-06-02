@@ -21,7 +21,7 @@ const ProductManager = () => {
     const [previewAlbumImages, setPreviewAlbumImages] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const defaultImage = "http://localhost:3014/uploads/images/default.png";
+    const defaultImage = process.env.REACT_APP_IMAGE_BASE_URL + "/default.png";
 
     const fetchProducts = async (params) => {
         try {
